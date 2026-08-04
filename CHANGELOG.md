@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-04] style: atur .gitignore untuk mengabaikan node_modules, build output, dan file env
+- [2026-08-04] refactor: buat panduan demonstrasi dan pengujian evaluasi juri di DEMO_GUIDE.md
