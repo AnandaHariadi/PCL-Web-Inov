@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-07] refactor: dokumentasikan roadmap arsitektur backend REST API di backend/README.md
+- [2026-08-07] feat: tambahkan dataset spasial 31 kecamatan Surabaya beserta koordinat centroid
