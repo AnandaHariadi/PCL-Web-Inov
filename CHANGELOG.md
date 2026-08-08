@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-09] atur aturan tokenomik EcoPoints dan formula perputaran insentif sirkular
+- [2026-08-09] feat: masukkan data benchmark konsumsi listrik PLN rata-rata rumah tangga Surabaya
