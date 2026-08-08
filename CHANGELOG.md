@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-09] style: tambahkan dataset spasial 31 kecamatan Surabaya beserta koordinat centroid
+- [2026-08-09] refactor: definisikan daftar kategori Aksi Hijau dan matriks poin EcoPoints
