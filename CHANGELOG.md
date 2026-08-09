@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-10] style: masukkan data baseline statistik awal untuk 31 kecamatan di Surabaya
+- [2026-08-10] refactor: tambahkan daftar mitra merchant UMKM percontohan lokal Surabaya
