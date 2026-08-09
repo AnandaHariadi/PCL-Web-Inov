@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-09] feat: masukkan data benchmark konsumsi listrik PLN rata-rata rumah tangga Surabaya
+- [2026-08-09] perbaikan: definisikan antarmuka tipe data TypeScript untuk domain aksi hijau
