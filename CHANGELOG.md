@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-10] perbaikan: definisikan palet warna tematik Surabaya dan ikon penanda peta
+- [2026-08-10] style: masukkan data baseline statistik awal untuk 31 kecamatan di Surabaya
