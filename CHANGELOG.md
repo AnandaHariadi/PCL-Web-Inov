@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-07] refactor: dokumentasikan roadmap arsitektur backend REST API di backend/README.md
+- [2026-08-12] perbaikan: masukkan data baseline statistik awal untuk 31 kecamatan di Surabaya
