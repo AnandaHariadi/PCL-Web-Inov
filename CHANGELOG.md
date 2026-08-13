@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-12] perbaikan: masukkan data baseline statistik awal untuk 31 kecamatan di Surabaya
+- [2026-08-13] feat: buat store auth untuk mengelola sesi dan token warga di localStorage
