@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-14] perbaikan: tambahkan hook useHydrated untuk mencegah error hydration mismatch SSR
+- [2026-08-14] style: tambahkan hook useOfflineDetection untuk memantau status jaringan pengguna
