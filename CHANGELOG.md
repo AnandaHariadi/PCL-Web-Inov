@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-16] feat: buat store greenAction untuk alur pengunggahan bukti aksi dan audit
+- [2026-08-16] perbaikan: buat store ecoPoints untuk kalkulasi saldo poin dan log transaksi
