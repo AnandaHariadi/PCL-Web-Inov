@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-15] perbaikan: buat store stepTracker untuk akumulasi langkah kaki dan target harian
+- [2026-08-15] style: buat store govAuth khusus autentikasi petugas dinas lingkungan hidup
