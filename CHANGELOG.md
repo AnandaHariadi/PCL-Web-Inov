@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-16] buat store voucher untuk penukaran kupon reward UMKM dan generator QR
+- [2026-08-17] feat: buat store stepTracker untuk akumulasi langkah kaki dan target harian
