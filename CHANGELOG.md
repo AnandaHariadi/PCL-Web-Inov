@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-16] refactor: buat store collaboration untuk postingan dinding gotong royong komunitas
+- [2026-08-16] buat store voucher untuk penukaran kupon reward UMKM dan generator QR
