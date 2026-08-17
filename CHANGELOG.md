@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-18] perbaikan: buat store wasteReport dengan dukungan upvote dan status penanganan
+- [2026-08-18] style: buat store collaboration untuk postingan dinding gotong royong komunitas
