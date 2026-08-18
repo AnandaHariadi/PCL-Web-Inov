@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-18] feat: buat store ecoPoints untuk kalkulasi saldo poin dan log transaksi
+- [2026-08-18] perbaikan: buat store wasteReport dengan dukungan upvote dan status penanganan
