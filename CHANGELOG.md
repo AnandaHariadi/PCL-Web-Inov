@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-20] perbaikan: implementasi kompresi foto otomatis di browser via canvas (maks 800KB)
+- [2026-08-20] style: buat pengecekan hash SHA-256 untuk mendeteksi foto duplikat atau berulang
