@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-21] feat: integrasikan Google Cloud Vision API untuk deteksi label objek pada foto bukti
+- [2026-08-21] perbaikan: implementasi kompresi foto otomatis di browser via canvas (maks 800KB)
