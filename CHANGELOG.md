@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-24] perbaikan: tambahkan simulasi fallback offline transparan untuk keperluan evaluasi juri
+- [2026-08-24] style: buat route handler POST /api/eco-action/verify dengan validasi multi-lapisan
