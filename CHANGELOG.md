@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-25] refactor: pasang middleware dual-session untuk proteksi rute warga dan rute pemkot
+- [2026-08-25] feat: buat hook pendeteksi sensor gerak DeviceMotion untuk hitung langkah kaki
