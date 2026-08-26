@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-26] refactor: buat Sidebar navigasi warga dengan penanda rute halaman aktif
+- [2026-08-26] bangun Footer informatif dengan tautan Surabaya bebas sampah dan SDGs
