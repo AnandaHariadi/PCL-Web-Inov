@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-27] perbaikan: implementasi algoritma peak detection agar deteksi langkah lebih akurat
+- [2026-08-28] style: hitung konversi jarak langkah kaki menjadi gram reduksi emisi karbon
