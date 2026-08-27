@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-27] feat: buat hook pendeteksi sensor gerak DeviceMotion untuk hitung langkah kaki
+- [2026-08-27] perbaikan: implementasi algoritma peak detection agar deteksi langkah lebih akurat
