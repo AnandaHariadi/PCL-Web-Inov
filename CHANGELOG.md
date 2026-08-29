@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-29] style: hitung konversi jarak langkah kaki menjadi gram reduksi emisi karbon
+- [2026-08-29] refactor: sediakan mode simulasi langkah untuk perangkat laptop tanpa akselerometer
