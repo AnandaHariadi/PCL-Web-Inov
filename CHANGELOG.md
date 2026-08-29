@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-30] style: hitung faktor emisi listrik berdasarkan jaringan listrik Jawa-Madura-Bali
+- [2026-08-30] refactor: bangun komponen DataListrik untuk menampilkan ringkasan hasil scan struk
