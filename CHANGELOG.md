@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-31] perbaikan: bangun RiwayatEmisiChart untuk grafik tren jejak karbon bulanan
+- [2026-08-31] style: buat modal CatatAktivitasBaru untuk pencatatan manual emisi harian warga
