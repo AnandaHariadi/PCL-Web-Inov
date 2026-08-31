@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-08-31] feat: buat komponen BreakdownKategori untuk porsi emisi listrik, sampah, dan mobilitas
+- [2026-08-31] perbaikan: bangun RiwayatEmisiChart untuk grafik tren jejak karbon bulanan
