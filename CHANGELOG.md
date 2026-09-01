@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-01] feat: buat modal CatatAktivitasBaru untuk pencatatan manual emisi harian warga
+- [2026-09-01] perbaikan: buat route handler /api/ocr/scan-bill untuk ekstraksi teks rekening listrik PLN
