@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-03] perbaikan: buat komponen BenchmarkEmisiSurabaya perbandingan dengan rata-rata kota
+- [2026-09-03] style: buat komponen BreakdownKategori untuk porsi emisi listrik, sampah, dan mobilitas
