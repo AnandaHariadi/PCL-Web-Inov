@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-08] style: buat peta WasteReportMap penanda sebaran titik tumpukan sampah publik
+- [2026-09-08] refactor: buat ReportDetailModal dengan tombol upvote warga dan status penanganan dinas
