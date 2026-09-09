@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-09] tambahkan klasifikasi tingkat keparahan sampah (Rendah, Sedang, Kritis)
+- [2026-09-09] feat: bangun antarmuka GreenActionVerifier dengan akses kamera langsung
