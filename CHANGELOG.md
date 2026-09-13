@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-13] perbaikan: tampilkan katalog voucher mitra UMKM lokal Surabaya (kuliner, sembako, daur ulang)
+- [2026-09-14] style: implementasi alur penukaran voucher instan dengan pemotongan poin EcoPoints
