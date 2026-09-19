@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-20] perbaikan: buat halaman Tembok Komunitas (CollaborationPageClient) aksi warga Surabaya
+- [2026-09-20] style: buat komponen PostCard dengan lencana khusus aksi yang lolos verifikasi AI
