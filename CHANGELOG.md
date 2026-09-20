@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-20] implementasi sistem like dan apresiasi warga dengan batasan nilai aman
+- [2026-09-20] feat: bangun ProfileHeader dengan level peringkat, tier kontributor, dan total poin
