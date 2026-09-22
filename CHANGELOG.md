@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-22] feat: buat panel Achievements berisi daftar lencana medali pencapaian lingkungan
+- [2026-09-22] perbaikan: buat Leaderboard peringkat warga teraktif dalam menjaga kebersihan kota
