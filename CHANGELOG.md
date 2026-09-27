@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-28] perbaikan: buat GovSidebar dengan identitas resmi DLH dan navigasi ringkas antar fitur
+- [2026-09-28] style: tambahkan strip indikator KPI operasional (laporan kritis, aksi, waktu respon)
