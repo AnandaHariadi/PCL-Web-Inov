@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-28] perbaikan: tambahkan fitur ekspor data laporan kebersihan ke format CSV
+- [2026-09-28] style: tampilkan ucapan sambutan resmi pemkot lengkap dengan tanggal bahasa Indonesia
