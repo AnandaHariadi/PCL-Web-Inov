@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-29] style: buat filter wilayah prioritas berdasarkan 31 kecamatan di kota Surabaya
+- [2026-09-29] refactor: buat grafik peredaran EcoPoints untuk memantau poin terbit vs terserap di UMKM
