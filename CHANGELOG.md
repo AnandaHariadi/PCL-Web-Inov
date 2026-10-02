@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-02] feat: desain ornamen daun laurel emas (golden wreath) melingkari medali prestasi
+- [2026-10-03] perbaikan: buat gradien radial kaya warna emas, zamrud, dan ruby untuk kasta lencana
