@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-02] feat: buat gradien radial kaya warna emas, zamrud, dan ruby untuk kasta lencana
+- [2026-10-02] perbaikan: rancang ikon gembok 3D proporsional untuk menandai medali yang masih terkunci
