@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-03] tambahkan tooltip informatif sisa poin yang dibutuhkan untuk membuka lencana
+- [2026-10-03] feat: bangun komponen Badge3DIcon bergaya claymorphic 3D dengan efek specular highlight
