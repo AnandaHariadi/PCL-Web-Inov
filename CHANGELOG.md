@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-04] feat: atur ambang batas poin berjenjang: 70, 300, 500, 750, 1000, 1250, 1500, 2000 poin
+- [2026-10-04] perbaikan: tambahkan tooltip informatif sisa poin yang dibutuhkan untuk membuka lencana
