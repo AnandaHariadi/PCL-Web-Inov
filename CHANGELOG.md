@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-10] perbaikan: tambahkan tombol akses cepat demo portal warga dan portal dinas lingkungan
+- [2026-10-10] style: bangun LandingSections dengan latar ambient glow hijau hutan mendalam
