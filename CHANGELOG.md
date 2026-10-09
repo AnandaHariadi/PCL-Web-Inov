@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-09-17] feat: buat generator kode QR dinamis pada modal klaim voucher untuk kasir toko
+- [2026-10-10] perbaikan: integrasikan pilar kearifan lokal Surabaya (Gotong Royong & Kampung Bersih)
