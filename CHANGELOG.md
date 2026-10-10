@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-10] perbaikan: integrasikan pilar kearifan lokal Surabaya (Gotong Royong & Kampung Bersih)
+- [2026-10-10] feat: perbaiki parser regex OCR agar tidak menghapus koma desimal pada satuan kWh
