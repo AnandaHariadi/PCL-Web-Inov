@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-10] tambahkan strip statistik 4-kolom (31 Kecamatan, 5 Aksi, 100% Warga, 24/7 Terbuka)
+- [2026-10-10] feat: desain kartu fitur bergaya Bento grid dengan border halus dan transisi hover
