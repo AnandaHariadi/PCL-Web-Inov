@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-11] feat: perbaiki parser regex OCR agar tidak menghapus koma desimal pada satuan kWh
+- [2026-10-12] perbaikan: bedakan pemisah ribuan Rupiah (Rp 412.350) dengan koma desimal kWh (248,5 kWh)
