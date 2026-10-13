@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-10] perbaikan: integrasikan pilar kearifan lokal Surabaya (Gotong Royong & Kampung Bersih)
+- [2026-10-14] perbaikan: bedakan pemisah ribuan Rupiah (Rp 412.350) dengan koma desimal kWh (248,5 kWh)
