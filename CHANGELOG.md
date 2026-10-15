@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-15] perbaikan: pastikan penghapusan akun membersihkan seluruh cookie dan localStorage
+- [2026-10-15] style: tambahkan tombol Sign Out responsif di footer sidebar navigasi portal warga
