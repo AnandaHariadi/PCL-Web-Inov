@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-17] sanitasi data profil lama petugas pemkot pada store govAuth saat login
+- [2026-10-17] feat: pisahkan secara tegas pacul_token (warga) dan pacul_gov_token (dinas pemkot)
