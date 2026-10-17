@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-18] feat: pisahkan secara tegas pacul_token (warga) dan pacul_gov_token (dinas pemkot)
+- [2026-10-18] perbaikan: pastikan penghapusan akun membersihkan seluruh cookie dan localStorage
