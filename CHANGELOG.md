@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-14] perbaikan: bedakan pemisah ribuan Rupiah (Rp 412.350) dengan koma desimal kWh (248,5 kWh)
+- [2026-10-18] sanitasi data profil lama petugas pemkot pada store govAuth saat login
