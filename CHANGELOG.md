@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-19] refactor: ganti grafik horizontal bar menjadi Donut Gauge interaktif dan kartu dampak
+- [2026-10-20] batasi banner operasional pemkot agar hanya tampil pada tab Ikhtisar Utama
