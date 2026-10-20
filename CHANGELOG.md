@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-21] style: tambahkan strip 3 metrik sirkulasi poin di bawah grafik batang peredaran
+- [2026-10-21] refactor: ganti grafik horizontal bar menjadi Donut Gauge interaktif dan kartu dampak
