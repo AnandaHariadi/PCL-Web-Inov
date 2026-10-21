@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-18] sanitasi data profil lama petugas pemkot pada store govAuth saat login
+- [2026-10-22] batasi banner operasional pemkot agar hanya tampil pada tab Ikhtisar Utama
