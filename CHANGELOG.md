@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-22] batasi banner operasional pemkot agar hanya tampil pada tab Ikhtisar Utama
+- [2026-10-23] feat: terapkan code splitting dan dynamic import pada Recharts dan Leaflet
