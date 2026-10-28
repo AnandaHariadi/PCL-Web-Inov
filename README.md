@@ -7,388 +7,387 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4.5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.3-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=for-the-badge&logo=pwa)](https://web.dev/progressive-web-apps/)
-[![GAYATAMA 5](https://img.shields.io/badge/GAYATAMA_5-2026-2D5F3F?style=for-the-badge)](https://gayatama.unesa.ac.id/)
 
-**A Surabaya-first community environmental platform turning verified green actions into measurable impact, EcoPoints, and local UMKM rewards.**
+**Platform Aksi Lingkungan Surabaya: Mengubah Aksi Hijau Terverifikasi AI Menjadi Dampak Terukur, EcoPoints, dan Pemberdayaan Ekonomi UMKM Lokal.**
 
-[Explore Live Demo](#-demo-flow--quick-access) • [Installation Guide](#-installation-guide) • [Technology Information](#-technology-information--architecture) • [Technical Documentation](#-technical-documentation)
+[Demo Interaktif](#demo-flow--quick-access) • [Panduan Instalasi](#panduan-instalasi) • [Arsitektur Teknologi](#arsitektur-teknologi--informasi-sistem) • [Dokumentasi Teknis](#dokumentasi-teknis)
 
 </div>
 
 ---
 
-## 📋 Repository Compliance Checklist
+## Lembar Kepatuhan Repositori (Compliance Checklist)
 
-This repository satisfies all requirements for the **GAYATAMA 5 2026 International Web Technology Competition**:
+Repositori ini telah memenuhi seluruh kriteria kelengkapan teknis dan tata kelola perangkat lunak:
 
-| Requirement | Implementation & Location |
+| Komponen Wajib | Implementasi dan Lokasi Berkas |
 |---|---|
-| **Source Code** | Full production-ready Next.js 14 App Router codebase in [`src/`](src/) and [`public/`](public/) |
-| **README & Overviews** | Comprehensive documentation in [`README.md`](README.md), [`frontend/README.md`](frontend/README.md), and [`backend/README.md`](backend/README.md) |
-| **Product Specifications** | Complete Product Requirements Document in [`PRD.md`](PRD.md) and [`Project_Update.md`](Project_Update.md) |
-| **Architecture & Systems** | End-to-end architecture in [`system.md`](system.md) and [`docs/TECHNICAL.md`](docs/TECHNICAL.md) |
-| **Frontend Flow & Contracts** | User journey state machines and store contracts in [`frontend-flow-contract.md`](frontend-flow-contract.md) |
-| **Agent Operating Manual** | AI agent playbook and analytical guidelines in [`AGENTS.md`](AGENTS.md) |
-| **Installation Guide** | Step-by-step setup, prerequisites, environment configuration, and verification commands in [Installation Guide](#-installation-guide) |
-| **Technical Documentation** | Dedicated domain specifications: [`docs/TECHNICAL.md`](docs/TECHNICAL.md), [`docs/IMPACT_METHODOLOGY.md`](docs/IMPACT_METHODOLOGY.md), and [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) |
+| **Source Code Produksi** | Seluruh implementasi Next.js 14 App Router siap uji pada [`src/`](src/) dan aset publik [`public/`](public/) |
+| **README & Gambaran Umum** | Dokumentasi komprehensif pada [`README.md`](README.md), [`frontend/README.md`](frontend/README.md), dan [`backend/README.md`](backend/README.md) |
+| **Spesifikasi Produk** | Dokumen kebutuhan produk lengkap pada [`PRD.md`](PRD.md) dan log pembaruan [`Project_Update.md`](Project_Update.md) |
+| **Arsitektur Sistem** | Desain arsitektur menyeluruh pada [`system.md`](system.md) dan [`docs/TECHNICAL.md`](docs/TECHNICAL.md) |
+| **Kontrak Alur & State** | Finite state machine alur pengguna dan kontrak Zustand store pada [`frontend-flow-contract.md`](frontend-flow-contract.md) |
+| **SOP Tim & Agen AI** | Panduan operasional baku dan etika rekayasa perangkat lunak pada [`AGENTS.md`](AGENTS.md) |
+| **Panduan Instalasi** | Petunjuk setup langkah demi langkah, prasyarat, konfigurasi env, dan verifikasi pada [Panduan Instalasi](#panduan-instalasi) |
+| **Dokumentasi Khusus** | Spesifikasi teknis mendalam: [`docs/TECHNICAL.md`](docs/TECHNICAL.md), [`docs/IMPACT_METHODOLOGY.md`](docs/IMPACT_METHODOLOGY.md), dan [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) |
 
 ---
 
-## 📑 Table of Contents
+## Daftar Isi
 
-- [Team & Competition Context](#-team--competition-context)
-- [Project Overview & Core Solution](#-project-overview--core-solution)
-- [Key Features Breakdown](#-key-features-breakdown)
-- [Technology Information & Architecture](#-technology-information--architecture)
-  - [System Architecture Diagram](#system-architecture-diagram)
-  - [Full Technology Stack Table](#full-technology-stack-table)
-  - [AI & Vision OCR Integration](#ai--vision-ocr-integration)
-  - [PWA & Offline System](#pwa--offline-system)
-  - [Security & Privacy Controls](#security--privacy-controls)
-- [Installation Guide](#-installation-guide)
-  - [Prerequisites](#prerequisites)
-  - [Step-by-Step Installation](#step-by-step-installation)
-  - [Environment Variables](#environment-variables)
-  - [Running Development Server](#running-development-server)
-  - [Production Build & Deployment](#production-build--deployment)
-  - [Automated Smoke Tests](#automated-smoke-tests)
-- [Technical Documentation Index](#-technical-documentation)
-- [EcoPoints & Bursa Pasar Hijau](#-ecopoints--bursa-pasar-hijau)
-- [Surabaya Local Impact Map](#-surabaya-local-impact-map)
-- [Government Portal](#-government-portal)
-- [Demo Flow & Quick Access](#-demo-flow--quick-access)
-- [Known Limitations & Roadmap](#-known-limitations--roadmap)
-- [License & Attribution](#-license--attribution)
+- [Konteks Proyek & Tim Pengembang](#konteks-proyek--tim-pengembang)
+- [Gambaran Umum Solusi Inti](#gambaran-umum-solusi-inti)
+- [Rincian Fitur Utama](#rincian-fitur-utama)
+- [Arsitektur Teknologi & Informasi Sistem](#arsitektur-teknologi--informasi-sistem)
+  - [Diagram Arsitektur Sistem](#diagram-arsitektur-sistem)
+  - [Tabel Stack Teknologi Lengkap](#tabel-stack-teknologi-lengkap)
+  - [Integrasi AI & Vision OCR](#integrasi-ai--vision-ocr)
+  - [Sistem PWA & Kapabilitas Offline](#sistem-pwa--kapabilitas-offline)
+  - [Kontrol Keamanan & Privasi Data](#kontrol-keamanan--privasi-data)
+- [Panduan Instalasi](#panduan-instalasi)
+  - [Prasyarat Sistem](#prasyarat-sistem)
+  - [Langkah-Langkah Instalasi](#langkah-langkah-instalasi)
+  - [Variabel Lingkungan](#variabel-lingkungan)
+  - [Menjalankan Server Pengembangan](#menjalankan-server-pengembangan)
+  - [Build Produksi & Deployment](#build-produksi--deployment)
+  - [Pengujian Otomatis Smoke Test](#pengujian-otomatis-smoke-test)
+- [Indeks Dokumentasi Teknis](#dokumentasi-teknis)
+- [EcoPoints & Bursa Pasar Hijau](#ecopoints--bursa-pasar-hijau)
+- [Peta Geospasial Surabaya](#peta-geospasial-surabaya)
+- [Portal Pemerintahan DLH](#portal-pemerintahan-dlh)
+- [Alur Demo & Akses Cepat Evaluasi](#demo-flow--quick-access)
+- [Batasan Prototipe & Roadmap](#batasan-prototipe--roadmap)
+- [Lisensi & Hak Cipta](#lisensi--hak-cipta)
 
 ---
 
-## 👥 Team & Competition Context
+## Konteks Proyek & Tim Pengembang
 
-| Attribute | Details |
+| Atribut | Keterangan |
 |---|---|
-| **Team Name** | Kalau Juara Nyebur Danau UNESA |
-| **Institution** | Universitas Pembangunan Nasional "Veteran" Jawa Timur |
-| **Team Members** | **Galih Aji Pangestu** · **Stevyka Frista Aninda** · **Putri Ayu Ajeng Nina Zuraida** |
-| **Competition** | **GAYATAMA 5 2026** — International Web Technology Competition |
-| **Theme** | *"Innovating for a Sustainable Future: Empowering Communities through Web Technology"* |
-| **Primary Subthemes** | **Environment**, **Smart Communities**, **Economic Empowerment** |
-| **Secondary Subthemes**| **Public Services**, **Social Development** |
+| **Institusi** | Universitas Pembangunan Nasional "Veteran" Jawa Timur |
+| **Platform** | PACUL (Platform Aksi Komunitas Untuk Lingkungan) |
+| **Fokus Wilayah** | Kota Surabaya (Cakupan 31 Kecamatan) |
+| **Subtema Utama** | Lingkungan Hidup, Smart City, Pemberdayaan Ekonomi Lokal |
+| **Subtema Pendukung** | Layanan Publik Digital, Inovasi Sosial Terdesentralisasi |
 
-### SDG Alignment
+### Keselarasan Sustainable Development Goals (SDGs)
 
-PACUL directly contributes to four Sustainable Development Goals:
-- **SDG 11 (Sustainable Cities and Communities)**: Crowdsourced waste hotspot reporting and district-level geospatial environmental monitoring across Surabaya.
-- **SDG 12 (Responsible Consumption and Production)**: Verified domestic waste sorting at source and used cooking oil (*jelantah*) collection.
-- **SDG 13 (Climate Action)**: Quantified carbon avoidance from household energy efficiency, active mobility, and tree planting.
-- **SDG 7 (Affordable and Clean Energy)**: OCR electricity receipt scanning, PLN tariff tier benchmarking, and energy reduction incentives.
+PACUL secara langsung mendukung pencapaian 4 pilar Tujuan Pembangunan Berkelanjutan:
+- **SDG 11 (Kota dan Pemukiman yang Berkelanjutan)**: Pelaporan titik tumpukan sampah liar oleh warga berbasis peta interaktif dan pemantauan lingkungan spasial tingkat kecamatan di Surabaya.
+- **SDG 12 (Konsumsi dan Produksi yang Bertanggung Jawab)**: Pemilahan sampah domestik terverifikasi dari sumbernya serta pengumpulan minyak jelantah rumah tangga.
+- **SDG 13 (Penanganan Perubahan Iklim)**: Kuantifikasi reduksi emisi karbon dari efisiensi energi rumah tangga, mobilitas aktif berjalan kaki, dan penanaman pohon.
+- **SDG 7 (Energi Bersih dan Terjangkau)**: Pemindaian OCR struk listrik PLN, benchmarking konsumsi listrik Surabaya, serta insentif penghematan daya listrik.
 
 ---
 
-## 💡 Project Overview & Core Solution
+## Gambaran Umum Solusi Inti
 
-Modern urban environmental initiatives often suffer from **lack of feedback loops**: individual actions feel invisible, campaigns fade after one-off events, household waste is mixed without sorting, and municipal authorities lack neighbourhood-level spatial telemetry.
+Inisiatif lingkungan perkotaan sering kali menghadapi kendala **ketiadaan umpan balik berkelanjutan (feedback loop)**: aksi individual warga tidak tercatat, kampanye lingkungan bersifat musiman, sampah rumah tangga tercampur tanpa pemilahan, dan dinas lingkungan hidup kekurangan data spasial terkini per lingkungan RT/RW.
 
-PACUL closes this loop with a cohesive, privacy-aware digital ecosystem:
+PACUL menghubungkan rantai nilai ini menjadi ekosistem digital sirkular yang terpadu:
 
 ```
-[ Citizen Green Action ] ──► [ AI & Vision Verification ] ──► [ EcoPoints Awarded ]
-                                                                       │
-                                                                       ▼
-[ Smarter Municipal Decisions ] ◄── [ Surabaya Impact Map ] ◄── [ Bursa Pasar Hijau (UMKM) ]
+[ Aksi Hijau Warga ] ──► [ Verifikasi AI & Validasi Citra ] ──► [ Penerbitan EcoPoints ]
+                                                                        │
+                                                                        ▼
+[ Kebijakan Presisi DLH ] ◄── [ Peta Spasial 31 Kecamatan ] ◄── [ Bursa Pasar Hijau (UMKM) ]
 ```
 
-1. **AI-Assisted Verification**: Citizens upload evidence photos which are validated on the server using Google Cloud Vision label detection combined with PACUL's contextual heuristic rule engine.
-2. **EcoPoints Incentive Engine**: Transparent rewards awarded strictly for verified green actions, driving healthy competition through levels, badges, and streaks.
-3. **Bursa Pasar Hijau**: EcoPoints are directly redeemable for digital vouchers with QR codes at local Surabaya micro, small, and medium enterprises (UMKM), circulating economic value locally.
-4. **Surabaya Local Impact Map**: Real-time aggregation of citizen green actions, waste reports, and carbon offsets across all 31 subdistricts (*kecamatan*).
-5. **Government Decision-Support Portal**: An administrative analytics interface for Dinas Lingkungan Hidup (DLH) officers to triage citizen waste reports, evaluate spatial hotspots, and download audit-ready CSV reports.
+1. **Verifikasi Berbantuan AI**: Warga mengunggah bukti foto yang divalidasi server menggunakan deteksi label Google Cloud Vision dikombinasikan dengan rule engine anti-fraud PACUL.
+2. **Mesin Insentif EcoPoints**: Poin diterbitkan secara transparan khusus bagi aksi yang lolos validasi, mendorong kompetisi positif melalui tingkat level, lencana 3D, dan streak harian.
+3. **Bursa Pasar Hijau**: EcoPoints dapat ditukarkan langsung menjadi voucher diskon digital ber-QR code pada mitra pedagang UMKM lokal Surabaya, mengalirkan nilai ekonomi kembali ke masyarakat.
+4. **Peta Dampak Spasial Surabaya**: Agregasi real-time aksi hijau warga, laporan sampah liar, dan reduksi emisi karbon di seluruh 31 kecamatan Surabaya.
+5. **Portal Pendukung Keputusan Dinas Lingkungan Hidup (DLH)**: Antarmuka analitik bagi petugas kebersihan untuk merespon cepat laporan sampah, menganalisis hotspot kecamatan, dan mengunduh laporan berformat CSV yang aman dari formula injection.
 
 ---
 
-## ✨ Key Features Breakdown
+## Rincian Fitur Utama
 
-### Citizen Experience (`/dashboard/*`)
+### Pengalaman Warga (`/dashboard/*`)
 
-| Feature | Route | Description |
+| Fitur | Rute Halaman | Deskripsi Fungsional |
 |---|---|---|
-| **Green Action Verifier** | [`/dashboard/eco-action`](src/app/dashboard/eco-action/page.tsx) | AI camera capture, real-time evidence evaluation, challenge progress, and achievement badges. |
-| **Carbon Tracker & PLN OCR** | [`/dashboard/tracker`](src/app/dashboard/tracker/page.tsx) | Household energy footprint logging, PLN bill OCR scanning, category breakdowns, and weekly trends. |
-| **Bursa Pasar Hijau** | [`/dashboard/marketplace`](src/app/dashboard/marketplace/page.tsx) | Catalogue of local UMKM rewards, voucher claim/redemption dialogs, and dynamic QR code passes. |
-| **Surabaya Impact Map** | [`/dashboard/map`](src/app/dashboard/map/page.tsx) | Interactive SVG & Leaflet map drilldown across 31 subdistricts with accessible ranking data tables. |
-| **Citizen Waste Report** | [`/dashboard/laporan-sampah`](src/app/dashboard/laporan-sampah/page.tsx) | Interactive waste mapping, severity classification, status timelines, and photo upload. |
-| **Community Action Network**| [`/dashboard/collaboration`](src/app/dashboard/collaboration/page.tsx) | Collaborative feed distinguishing **Verified Actions** from general community discussions. |
-| **Low-Carbon Step Tracker** | [`/dashboard/step-tracker`](src/app/dashboard/step-tracker/page.tsx) | Sensor-based pedometer calculating walking carbon offsets against baseline motorcycle trips. |
-| **User Profile & Badges** | [`/dashboard/profile`](src/app/dashboard/profile/page.tsx) | Eco-level progression, unlocked trophies, personal statistics, and push notification settings. |
+| **Verifikasi Aksi Hijau** | [`/dashboard/eco-action`](src/app/dashboard/eco-action/page.tsx) | Akses kamera langsung, validasi foto AI real-time, progress tantangan, dan medali prestasi. |
+| **Pelacak Karbon & OCR PLN** | [`/dashboard/tracker`](src/app/dashboard/tracker/page.tsx) | Pencatatan emisi energi rumah tangga, OCR struk listrik PLN, rincian kategori, dan tren bulanan. |
+| **Bursa Pasar Hijau (UMKM)** | [`/dashboard/marketplace`](src/app/dashboard/marketplace/page.tsx) | Katalog voucher diskon UMKM Surabaya, modal penukaran poin, dan generator kode QR dinamis. |
+| **Peta Dampak Surabaya** | [`/dashboard/map`](src/app/dashboard/map/page.tsx) | Peta interaktif Leaflet GIS dengan drilldown 31 kecamatan, auto-focus, dan tabel statistik. |
+| **Pelaporan Sampah Warga** | [`/dashboard/laporan-sampah`](src/app/dashboard/laporan-sampah/page.tsx) | Peta tumpukan sampah, klasifikasi keparahan (Rendah/Sedang/Kritis), linimasa status, dan upvote. |
+| **Dinding Komunitas** | [`/dashboard/collaboration`](src/app/dashboard/collaboration/page.tsx) | Feed inisiatif lingkungan yang membedakan Aksi Terverifikasi AI dengan diskusi warga umum. |
+| **Pedometer Langkah Hijau** | [`/dashboard/step-tracker`](src/app/dashboard/step-tracker/page.tsx) | Pedometer sensor perangkat penghitung reduksi emisi karbon dari berjalan kaki dan medali 3D. |
+| **Profil & Lencana Prestasi** | [`/dashboard/profile`](src/app/dashboard/profile/page.tsx) | Progres level, statistik personal, tier kontributor, dan pengaturan notifikasi PWA. |
 
-### Government & Public Service (`/gov/*`)
+### Layanan Pemerintahan & DLH Surabaya (`/gov/*`)
 
-| Feature | Route | Description |
+| Fitur | Rute Halaman | Deskripsi Fungsional |
 |---|---|---|
-| **Executive Overview** | [`/gov/dashboard`](src/app/gov/dashboard/page.tsx) | City-wide KPIs, priority districts requiring intervention, and environmental metrics. |
-| **Waste Report Dispatch** | `/gov/dashboard` | Search, filter, status transition (Received → Verified → In Progress → Resolved), and notes. |
-| **Spatial Intelligence** | `/gov/dashboard` | Sub-district heatmaps and responder view with exact GPS coordinates for municipal cleanup crews. |
-| **Audit CSV Export** | `/gov/dashboard` | Formula-injection-safe CSV export for district statistics and detailed incident logs. |
+| **Ikhtisar Eksekutif** | [`/gov/dashboard`](src/app/gov/dashboard/page.tsx) | Ringkasan KPI kota Surabaya, kecamatan prioritas penanganan, dan metrik operasional. |
+| **Manajemen Laporan Sampah** | `/gov/dashboard` | Pencarian, filter wilayah, transisi status tiket kebersihan, dan catatan tindak lanjut regu lapangan. |
+| **Intelijen Spasial** | `/gov/dashboard` | Peta sebaran titik sampah dengan koordinat presisi khusus satuan tugas kebersihan DLH. |
+| **Analisis Sirkulasi Poin** | `/gov/dashboard` | Evaluasi perputaran EcoPoints yang diterbitkan aksi hijau terhadap penyerapan belanja di UMKM. |
+| **Ekspor Laporan CSV** | `/gov/dashboard` | Ekspor dataset statistik kecamatan dan log insiden sampah yang steril dari formula injection. |
 
 ---
 
-## 🛠️ Technology Information & Architecture
+## Arsitektur Teknologi & Informasi Sistem
 
-### System Architecture Diagram
+### Diagram Arsitektur Sistem
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        Client Layer (Browser / PWA)                    │
+│                        Lapisan Klien (Browser / PWA)                   │
 │                                                                        │
 │   Next.js 14 App Router  •  React 18  •  Tailwind CSS  •  Framer Motion │
 │   Zustand LocalStorage Persistence  •  TanStack Query  •  Workbox PWA  │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ HTTPS Request (API / Pages)
+                                    │ Request HTTPS (API & Halaman)
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│               Middleware & Routing Layer (middleware.ts)               │
+│               Lapisan Middleware & Routing (middleware.ts)             │
 │                                                                        │
-│       Role Gating (Citizen Cookies vs. Government Admin Cookies)       │
-│       Security Headers, Strict CSP & Rate Limiting Enforcement         │
+│       Isolasi Sesi Ganda (Cookie Warga vs Cookie Petugas DLH)          │
+│       Security Headers, Strict CSP, dan Pencegahan Akses Ilegal        │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
          ┌──────────────────────────┴──────────────────────────┐
          ▼                                                     ▼
 ┌─────────────────────────────────┐   ┌──────────────────────────────────┐
-│   Client Feature Modules        │   │    Server-Side Route Handlers    │
+│   Modul Fitur Klien             │   │    Server-Side Route Handlers    │
 │                                 │   │        (Node.js Runtime)         │
-│ • Local Impact Map (Leaflet)    │   │                                  │
-│ • Bursa Pasar Hijau (Zustand)   │   │ • POST /api/eco-action/verify    │
-│ • Carbon & Step Tracker         │   │   - Magic bytes / MIME check     │
-│ • Waste Report Management       │   │   - EXIF / Image sanitization    │
-│ • District Aggregation Pipeline │   │   - SHA-256 duplicate cache      │
-│   (src/lib/impact-aggregation)  │   │   - Heuristic evaluation engine  │
+│ • Peta Spasial (Leaflet GIS)    │   │                                  │
+│ • Bursa UMKM (Zustand Store)    │   │ • POST /api/eco-action/verify    │
+│ • Pelacak Karbon & Pedometer    │   │   - Verifikasi Magic Bytes/MIME  │
+│ • Manajemen Laporan Sampah      │   │   - Sanitasi Citra Klien         │
+│ • Agregasi Dampak 31 Kecamatan  │   │   - Cache Hash SHA-256 Anti-Dupl │
+│   (src/lib/impact-aggregation)  │   │   - Rule Engine Evaluasi AI      │
 └─────────────────────────────────┘   │ • POST /api/ocr/scan-bill        │
-                                      │   - PLN bill parser & validation │
+                                      │   - Parser Desimal Struk PLN     │
                                       └────────────────┬─────────────────┘
                                                        │ REST API (HTTPS)
                                                        ▼
                                       ┌──────────────────────────────────┐
                                       │  Google Cloud Vision API (Live)  │
-                                      │  Deterministic Fallback (Demo)   │
+                                      │  Fallback Deterministik (Demo)   │
                                       └──────────────────────────────────┘
 ```
 
-### Full Technology Stack Table
+### Tabel Stack Teknologi Lengkap
 
-Verified against [`package.json`](package.json):
+Terverifikasi sesuai konfigurasi pada [`package.json`](package.json):
 
-| Category | Technology | Version | Purpose |
+| Kategori | Teknologi | Versi | Peran dan Kegunaan |
 |---|---|---|---|
-| **Core Framework** | **Next.js** | `14.2.3` | React Framework with App Router, Server Components, Route Handlers, and Image Optimization |
-| **UI Library** | **React** / **React DOM** | `18.3.1` | Core declarative component rendering engine |
-| **Language** | **TypeScript** | `5.4.5` | Strict static typing across models, API contracts, and stores |
-| **Styling & CSS** | **Tailwind CSS** | `3.4.3` | Utility-first CSS framework with custom design tokens and dark mode support |
-| **Typography** | **Plus Jakarta Sans** | `next/font` | Self-hosted Google Font optimized without external network roundtrips |
-| **Animations** | **Framer Motion** | `11.2.4` | Physics-based spring transitions, layout animations, and modal state transitions |
-| **UI Primitives** | **Radix UI Dialog** | `1.0.5` | WAI-ARIA accessible modal dialogs and alert primitives |
-| **Icons** | **Lucide React** | `0.383.0` | Comprehensive, consistent icon system |
-| **State Management**| **Zustand** | `4.5.2` | Lightweight state store with `persist` middleware backed by `localStorage` |
-| **Data Fetching** | **TanStack Query** | `5.39.0` | Server state synchronization, caching, and background revalidation |
-| **Form Validation** | **React Hook Form** + **Zod** | `7.51.5` / `3.23.8` | Performant uncontrolled forms with strictly typed schema validation |
-| **Geospatial Maps** | **Leaflet** / **React-Leaflet** | `1.9.4` / `4.2.1` | Interactive vector map visualization with OpenStreetMap tiles (no API key required) |
-| **Data Visualization**| **Recharts** | `2.12.7` | SVG-based responsive emission trends and district comparison charts |
-| **PWA & Offline** | **next-pwa** (Workbox) | `5.6.0` | Service Worker generation, asset precaching, and offline capability |
-| **AI / Vision OCR** | **Google Cloud Vision REST API** | v1 | Server-side label detection, SafeSearch filtering, and text extraction |
-| **Notifications** | **Sonner** | `2.0.7` | Lightweight, stackable toast notifications |
-| **Utilities** | **clsx** & **tailwind-merge** | `2.1.1` / `2.3.0` | Conflict-free conditional className resolution |
+| **Core Framework** | **Next.js** | `14.2.3` | Framework React dengan App Router, Server Components, dan Route Handlers |
+| **UI Library** | **React** / **React DOM** | `18.3.1` | Mesin rendering komponen antarmuka deklaratif |
+| **Bahasa Pemrograman** | **TypeScript** | `5.4.5` | Pengetikan statis ketat pada seluruh model, kontrak API, dan store |
+| **Styling & CSS** | **Tailwind CSS** | `3.4.3` | Utility-first CSS dengan token warna khusus Surabaya dan dark/light mode |
+| **Tipografi** | **Plus Jakarta Sans** | `next/font` | Font lokal mandiri tanpa roundtrip jaringan eksternal |
+| **Animasi** | **Framer Motion** | `11.2.4` | Transisi layout pegas, animasi lencana 3D, dan transisi modal |
+| **UI Primitives** | **Radix UI Dialog** | `1.0.5` | Komponen primitif modal yang memenuhi standar aksesibilitas WAI-ARIA |
+| **Ikonografi** | **Lucide React** | `0.383.0` | Sistem ikon visual yang seragam dan ringan |
+| **State Management** | **Zustand** | `4.5.2` | Store modular ringan dengan middleware persistensi lokal `localStorage` |
+| **Data Fetching** | **TanStack Query** | `5.39.0` | Sinkronisasi status server, caching, dan revalidasi latar belakang |
+| **Validasi Formulir** | **React Hook Form** + **Zod** | `7.51.5` / `3.23.8` | Penanganan form performan dengan validasi skema tipe ketat |
+| **Peta Geospasial** | **Leaflet** / **React-Leaflet** | `1.9.4` / `4.2.1` | Visualisasi peta interaktif dengan tile OpenStreetMap |
+| **Visualisasi Data** | **Recharts** | `2.12.7` | Grafik tren emisi karbon dan donat perbandingan kategori aksi |
+| **PWA & Offline** | **next-pwa** (Workbox) | `5.6.0` | Pembuatan service worker, asset caching, dan instalasi aplikasi mobile |
+| **AI / Vision OCR** | **Google Cloud Vision REST API** | v1 | Deteksi label objek server-side dan pembacaan teks struk listrik PLN |
+| **Notifikasi** | **Sonner** | `2.0.7` | Notifikasi toast responsif dan modern |
+| **Utilitas** | **clsx** & **tailwind-merge** | `2.1.1` / `2.3.0` | Resolusi penamaan class Tailwind tanpa konflik |
 
-### AI & Vision OCR Integration
+### Integrasi AI & Vision OCR
 
-PACUL includes a server-side AI pipeline for automated green action validation:
-- **Route**: `POST /api/eco-action/verify`
-- **Client Preprocessing**: Images are scaled to a maximum of 1600px JPEG on an HTML canvas, stripping private EXIF metadata and GPS coordinates before transmission.
-- **Server Safeguards**: Magic byte verification prevents disguised executable uploads; image dimensions (≥ 320px) and file size (≤ 5MB) are strictly validated.
-- **Deduplication Engine**: Calculates SHA-256 digests against recent submissions to prevent duplicate reward farming.
-- **Evaluation Rules**: Analyzes Google Cloud Vision labels against defined semantic dictionaries in [`src/lib/verification/evaluate.ts`](src/lib/verification/evaluate.ts). Differentiates between primary action matches, cross-category mismatches (e.g. submitting a bicycle photo for waste sorting), screenshots, and invalid submissions.
-- **Deterministic Demo Fallback**: When running without an API key, the system seamlessly uses mock evaluation logic marked clearly with `Demo Verified`, ensuring the app remains 100% testable in any environment.
+PACUL mengimplementasikan alur verifikasi foto aksi hijau secara berlapis di server:
+- **Endpoint**: `POST /api/eco-action/verify`
+- **Prapemrosesan Klien**: Foto dikompresi otomatis via HTML canvas (maksimal 1600px JPEG) serta membersihkan metadata privat EXIF sebelum pengiriman.
+- **Pemeriksaan Integritas Berkas**: Pengecekan magic byte mencegah file eksekutabel terselubung; resolusi (minimal 320px) dan ukuran berkas (maksimal 5MB) diverifikasi secara ketat.
+- **Mesin Anti-Fraud SHA-256**: Menghitung digest SHA-256 berkas foto dan mencocokkannya dengan riwayat pengiriman untuk mencegah eksploitasi foto berulang.
+- **Pencocokan Semantik Label**: Label hasil deteksi Google Cloud Vision dievaluasi menggunakan kamus semantik pada [`src/lib/verification/evaluate.ts`](src/lib/verification/evaluate.ts). Sistem membedakan kesesuaian kategori, mendeteksi ketidaksesuaian kategori silang, serta mendeteksi foto tangkapan layar (screenshot).
+- **Fallback Deterministik**: Ketika berjalan tanpa konfigurasi API key eksternal, sistem secara otomatis beralih ke logika mock deterministik bertanda data demo resmi, menjaga aplikasi tetap dapat diuji 100% oleh penilai dalam kondisi apapun.
 
-### PWA & Offline System
+### Sistem PWA & Kapabilitas Offline
 
-- **Manifest**: [`public/manifest.json`](public/manifest.json) defines standalone display mode, orientation, branding colors (`#2D5F3F`), and App Shortcuts.
-- **Service Worker**: Caches Next.js static bundles, fonts, icons, and OpenStreetMap tiles using a `CacheFirst` strategy with LRU expiration.
-- **Web Push Ready**: Handlers in [`public/sw-push.js`](public/sw-push.js) manage background push events and notification clicks.
+- **Manifest**: [`public/manifest.json`](public/manifest.json) mendefinisikan mode tampilan standalone, orientasi potret, warna tema brand (`#2D5F3F`), dan pintasan cepat aplikasi.
+- **Service Worker**: Menyimpan bundle statis Next.js, font, ikon, dan tile OpenStreetMap dengan strategi `CacheFirst` dan kebijakan rotasi LRU.
+- **Dukungan Web Push**: Handler pada [`public/sw-push.js`](public/sw-push.js) siap menangani event notifikasi push latar belakang.
 
-### Security & Privacy Controls
+### Kontrol Keamanan & Privasi Data
 
-1. **Zero Database Footprint in Demo**: All state resides locally in the tester's browser storage; no citizen personal data is stored on remote servers.
-2. **Location Privacy**: Citizen coordinates for green actions are snapped to subdistrict (*kecamatan*) centroids on-device. Waste report coordinates are fuzzed to ~100m on citizen maps, only exposed at precision in the authenticated responder view.
-3. **Hardened HTTP Headers**: Implemented in [`next.config.js`](next.config.js):
+1. **Nol Jejak Database di Mode Prototipe**: Seluruh status aksi tersimpan secara lokal di browser penguji; tidak ada data privasi warga yang bocor ke server eksternal.
+2. **Privasi Lokasi Warga**: Koordinat warga pada aksi hijau diagregasikan ke titik centroid kecamatan. Koordinat laporan sampah publik difuzzing (~100 meter) pada tampilan peta warga, dan hanya ditampilkan presisi pada portal resmi petugas kebersihan DLH.
+3. **Hardened HTTP Security Headers**: Dikonfigurasi pada [`next.config.js`](next.config.js):
    - Strict Content Security Policy (`CSP`)
-   - `X-Frame-Options: DENY` & `frame-ancestors 'none'`
+   - `X-Frame-Options: DENY` dan `frame-ancestors 'none'`
    - `X-Content-Type-Options: nosniff`
    - `Referrer-Policy: strict-origin-when-cross-origin`
-   - Restrictive `Permissions-Policy` (camera & geolocation limited to self)
-4. **CSV Injection Prevention**: Government exports prepend a single quote (`'`) to any cell starting with `=`, `+`, `-`, or `@` to neutralize spreadsheet macro execution.
+   - Kebijakan izin ketat `Permissions-Policy` (kamera dan GPS dibatasi hanya untuk origin mandiri)
+4. **Pencegahan Injeksi Formula CSV**: Fitur ekspor pada dasbor dinas secara otomatis menambahkan karakter petik tunggal (`'`) pada sel yang diawali karakter `=`, `+`, `-`, atau `@` guna menetralkan eksekusi formula spreadsheet berbahaya.
 
 ---
 
-## 🚀 Installation Guide
+## Panduan Instalasi
 
-### Prerequisites
+### Prasyarat Sistem
 
-Ensure you have the following installed on your development machine:
-- **Node.js**: Version `18.17.0` or higher (tested with Node 18, Node 20, and Node 26)
-- **npm**: Version `9.0.0` or higher (or equivalent `pnpm` / `yarn`)
-- **Git**: For repository version control
+Pastikan perangkat pengembangan Anda telah terpasang:
+- **Node.js**: Versi `18.17.0` atau yang lebih baru (mendukung Node 18, Node 20, dan Node 22)
+- **npm**: Versi `9.0.0` atau yang lebih baru (atau alternatif `pnpm` / `yarn`)
+- **Git**: Untuk manajemen repositori berkas
 
-### Step-by-Step Installation
+### Langkah-Langkah Instalasi
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/galiihajiip/pacul-gayatama.git
-cd pacul-gayatama
+# 1. Clone repositori dari GitHub
+git clone https://github.com/AnandaHariadi/PCL-Web-Inov.git
+cd PCL-Web-Inov
 
-# 2. Install dependencies
+# 2. Pasang seluruh dependensi paket
 npm install
 
-# 3. Setup environment variables (optional for demo mode)
+# 3. Salin konfigurasi variabel lingkungan (opsional untuk mode demo)
 cp .env.example .env.local
 ```
 
-### Environment Variables
+### Variabel Lingkungan
 
-PACUL works out-of-the-box in **Demo Mode** without requiring any external API keys. To configure optional live cloud services, adjust `.env.local`:
+PACUL dapat langsung dijalankan dalam **Mode Demo Mandiri** tanpa memerlukan API key eksternal. Apabila ingin mengaktifkan integrasi cloud penuh, sesuaikan berkas `.env.local`:
 
-| Variable | Target | Default | Description |
+| Variabel | Target | Default | Keterangan |
 |---|---|---|---|
-| `GOOGLE_VISION_API_KEY` | Server | *None* | Google Cloud Vision API key for live AI label and OCR text detection. |
-| `AI_VERIFICATION_MODE` | Server | `auto` | Set to `auto` (uses key if present), `live` (forces API), or `demo` (deterministic mock). |
-| `NEXT_PUBLIC_DEMO_MODE` | Client | `true` | When `true`, stores state in browser `localStorage`. When `false`, connects to backend. |
-| `NEXT_PUBLIC_SITE_URL` | Client | `http://localhost:3000` | Canonical site URL used for Open Graph and metadata generation. |
-| `NEXT_PUBLIC_MAP_TILE_URL` | Client | *OpenStreetMap* | Custom tile server URL template for map rendering. |
-| `NEXT_PUBLIC_API_URL` | Client | `http://localhost:8000/api` | Optional REST backend endpoint URL. |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Client | *None* | Web Push VAPID public key for browser push notification registration. |
+| `GOOGLE_VISION_API_KEY` | Server | *Kosong* | Kunci API Google Cloud Vision untuk deteksi label AI dan OCR struk PLN |
+| `AI_VERIFICATION_MODE` | Server | `auto` | Pilihan: `auto` (gunakan kunci jika ada), `live` (wajibkan API), atau `demo` (mock deterministik) |
+| `NEXT_PUBLIC_DEMO_MODE` | Klien | `true` | Nilai `true` mengaktifkan penyimpanan browser lokal; nilai `false` menyambung ke backend API |
+| `NEXT_PUBLIC_SITE_URL` | Klien | `http://localhost:3000` | URL kanonikal web untuk Open Graph dan penanganan rute lokal |
+| `NEXT_PUBLIC_MAP_TILE_URL` | Klien | *OpenStreetMap* | URL template server tile untuk visualisasi peta Leaflet |
+| `NEXT_PUBLIC_API_URL` | Klien | `http://localhost:8000/api` | Endpoint REST backend eksternal |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Klien | *Kosong* | Public key VAPID untuk pendaftaran notifikasi push browser PWA |
 
-### Running Development Server
+### Menjalankan Server Pengembangan
 
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser. The app runs with hot module reloading enabled.
 
-### Production Build & Deployment
+Buka peramban di alamat [http://localhost:3000](http://localhost:3000). Aplikasi berjalan dengan dukungan Hot Module Replacement (HMR) aktif.
 
-To validate that the application builds and bundles cleanly for production:
+### Build Produksi & Deployment
+
+Untuk memvalidasi bahwa aplikasi terkompilasi bersih tanpa error TypeScript maupun bundler:
 
 ```bash
-# Compile and optimize production bundle
+# Kompilasi dan optimasi bundle produksi
 npm run build
 
-# Start production server
+# Menjalankan server hasil build produksi
 npm run start
 ```
 
-### Automated Smoke Tests
+### Pengujian Otomatis Smoke Test
 
-PACUL includes an end-to-end automated smoke testing suite that verifies routes, security headers, role redirects, and API contracts:
+PACUL menyediakan test suite otomatis untuk memverifikasi rute halaman, header keamanan, proteksi otentikasi rute, dan kontrak API:
 
 ```bash
-# In a separate terminal while the server is running:
+# Jalankan pada sesi terminal terpisah saat server sedang aktif:
 npm run test:smoke
 ```
 
-Test validations performed:
-- Root and public routes return HTTP 200
-- Middleware redirects unauthorized access to `/login` and `/gov/login`
-- Security response headers (`CSP`, `nosniff`, `frame-ancestors`) are properly set
-- `POST /api/eco-action/verify` rejects invalid payloads, oversized files, and unsupported formats
-- Verification logic returns deterministic status in demo mode
+Cakupan pengujian yang dieksekusi:
+- Rute publik mengembalikan status HTTP 200
+- Middleware menolak akses tidak terotentikasi dan mengarahkan ke `/login` atau `/gov/login`
+- Header respon keamanan (`CSP`, `nosniff`, `frame-ancestors`) terpasang sesuai standar
+- Endpoint `POST /api/eco-action/verify` menolak payload tidak valid dan berkas berukuran melebihi batas
+- Logika verifikasi menghasilkan status deterministik pada mode demo
 
 ---
 
-## 📚 Technical Documentation
+## Dokumentasi Teknis
 
-Deep-dive documentation for judges, evaluators, and system architects:
+Rujukan dokumentasi komprehensif untuk penguji dan dewan juri:
 
-| Document | Focus Area |
+| Berkas Dokumen | Cakupan dan Fokus Pembahasan |
 |---|---|
-| 📘 [`docs/TECHNICAL.md`](docs/TECHNICAL.md) | Architectural specifications, state machines, store schemas, complete API specifications, rate limiting, and production scaling roadmap. |
-| 📊 [`docs/IMPACT_METHODOLOGY.md`](docs/IMPACT_METHODOLOGY.md) | Official conversion formulas, emission factor sources (ESDM, UK DESNZ), self-reported vs. measured data, and EcoPoints reward rules. |
-| 🎯 [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) | 5-minute step-by-step judge presentation script covering every feature and safeguard. |
+| [`docs/TECHNICAL.md`](docs/TECHNICAL.md) | Spesifikasi arsitektur teknis, state machine, skema store Zustand, spesifikasi API lengkap, rate limiting, dan roadmap penskalaan sistem. |
+| [`docs/IMPACT_METHODOLOGY.md`](docs/IMPACT_METHODOLOGY.md) | Rumus resmi konversi dampak, sumber faktor emisi (Kementerian ESDM & UK DESNZ), serta aturan tokenomik EcoPoints. |
+| [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) | Panduan demonstrasi interaktif 5 menit yang mencakup alur pengujian tiap fitur utama dan mekanisme anti-fraud. |
 
 ---
 
-## 🪙 EcoPoints & Bursa Pasar Hijau
+## EcoPoints & Bursa Pasar Hijau
 
-EcoPoints are strictly in-app gamification credits that reward positive environmental behaviors. They cannot be converted to fiat currency or cryptocurrency.
+EcoPoints merupakan instrumen gamifikasi internal untuk mengapresiasi kebiasaan positif warga dalam merawat lingkungan. EcoPoints **bukan** instrumen spekulasi keuangan, token kripto, maupun instrumen moneter.
 
-### Primary Action Reward Rates
+### Matriks Poin Aksi Hijau Utama
 
-| Green Action | Evidence Required | Metric Measured | EcoPoints | Daily Limit |
+| Kategori Aksi | Bukti yang Dibutuhkan | Parameter Ukur | Poin EcoPoints | Batasan Harian |
 |---|---|---|---|---|
-| **Waste Sorting** | Organic / inorganic bags separated | kg sorted (self-reported, max 10 kg) | **40** | 2 / day |
-| **Used Cooking Oil** | Sealed bottle / jerrycan of *jelantah* | Litres collected (max 5 L) | **50** | 1 / day |
-| **Tree Planting** | Newly planted tree seedling in soil | Trees planted (max 10) | **80** | 2 / day |
-| **Energy Saving** | kWh token screen or LED conversion | Estimated kWh saved | **40** | 1 / day |
-| **Sustainable Travel** | Public transport / bicycle / walking | Trip distance (km) | **30** | 3 / day |
+| **Pemilahan Sampah** | Pemisahan kantong organik & anorganik | kg terpilah (maks 10 kg) | **40** Poin | 2 kali / hari |
+| **Minyak Jelantah** | Botol tertutup berisi jelantah | Liter terkumpul (maks 5 L) | **50** Poin | 1 kali / hari |
+| **Penanaman Pohon** | Bibit pohon baru tertanam di tanah | Batang pohon (maks 10) | **80** Poin | 2 kali / hari |
+| **Penghematan Listrik**| Layar meteran listrik kWh atau lampu LED | Estimasi kWh dihemat | **40** Poin | 1 kali / hari |
+| **Transportasi Ramah Lingkungan** | Transportasi umum / sepeda / jalan kaki | Jarak perjalanan (km) | **30** Poin | 3 kali / hari |
 
-*Rewards are flat-rate per verified action rather than scaled by self-reported quantities to prevent fraudulent over-reporting.*
+*Insentif diberikan berdasarkan status kelolosan audit foto AI dan validitas anti-fraud, bukan berdasarkan kuantitas klaim mandiri semata.*
 
-### Bursa Pasar Hijau (Local UMKM Catalog)
+### Bursa Pasar Hijau (Mitra UMKM Surabaya)
 
-EcoPoints can be exchanged for vouchers from participating local Surabaya businesses:
-- **Mitra UMKM**: Fictional demo partners representing eco-friendly businesses across Surabaya (e.g. *Warung Bu Kris Rungkut*, *Kopi Sahabat Rungkut*, *Toko Kelontong Berkah Wonokromo*).
-- **Voucher Features**: Dynamic QR codes, unique verification serials, expiration countdowns, and merchant-side redemption simulation.
-
----
-
-## 🗺️ Surabaya Local Impact Map
-
-- **Coverage**: All 31 subdistricts (*kecamatan*) across West, Central, North, East, and South Surabaya.
-- **Visual Layer**: Lightweight SVG map and responsive Leaflet tile engine showing district color coding based on active citizen contributions.
-- **Privacy Assurance**: Public map markers never display exact citizen home addresses; contributions are aggregated to the district centroid.
+EcoPoints dapat ditukarkan menjadi voucher potongan harga pada pedagang lokal binaan di Surabaya:
+- **Mitra UMKM**: Merchant percontohan di Surabaya (seperti *Warung Bu Kris Rungkut*, *Kopi Sahabat Rungkut*, *Toko Kelontong Berkah Wonokromo*).
+- **Fitur Voucher**: Kode QR dinamis, nomor seri verifikasi unik, masa berlaku voucher, dan modal penukaran instan di kasir toko.
 
 ---
 
-## 🏛️ Government Portal
+## Peta Geospasial Surabaya
 
-Accessible at `/gov/login`:
-- **Role**: Designed for Dinas Lingkungan Hidup (DLH) Kota Surabaya environmental coordinators.
-- **Capabilities**:
-  - Triage citizen waste reports with photos and precise incident coordinates
-  - Update progress statuses and publish verified resolution notes back to citizen timelines
-  - Monitor city-wide carbon reduction and tree planting progress
-  - Export audit datasets in sanitized CSV format
+- **Cakupan Wilayah**: Menjangkau 31 kecamatan di wilayah Surabaya Barat, Pusat, Utara, Timur, dan Selatan.
+- **Lapisan Visual**: Integrasi peta vektor interaktif Leaflet GIS dengan choropleth yang mencerminkan intensitas partisipasi lingkungan warga.
+- **Jaminan Privasi**: Alamat rumah warga tidak pernah diekspos ke publik; seluruh visualisasi diagregasi ke titik koordinat centroid kecamatan.
 
 ---
 
-## 🎯 Demo Flow & Quick Access
+## Portal Pemerintahan DLH
 
-For evaluators and judges reviewing the platform:
-
-1. **One-Click Demo Access**: Visit `/` and click **"Explore Demo"** (or navigate directly to [`/demo`](src/app/demo/page.tsx)).
-   - Automatically initializes a pre-configured account with 500 EcoPoints, active challenges, and sample history.
-2. **Evaluation Credentials**:
-   - **Citizen Demo**: `demo@pacul.app` / `Demo1234!`
-   - **Government Officer Demo**: `gov-demo@pacul.app` / `GovDemo1234!`
-3. **Interactive Judge Guide**: The citizen dashboard displays an interactive checklist that automatically marks items as completed as you test each feature.
-
----
-
-## ⚠️ Known Limitations & Roadmap
-
-### Prototype Scope
-- **Client Persistence**: In this demo release, data persistence is maintained per-browser via `localStorage`.
-- **Estimated Impacts**: Environmental impact figures represent standardized engineering estimates based on ESDM and DESNZ coefficients.
-- **Simulated Partnerships**: UMKM partners and government integration are demonstration models illustrating the closed-loop circular economy.
-
-### Future Roadmap
-- **Phase 1**: Production relational database integration (PostgreSQL + PostGIS), secure JWT authentication, and administrative review portal for flagged actions.
-- **Phase 2**: Formal merchant portal with mobile camera barcode scanning for instant voucher validation at UMKM cash registers.
-- **Phase 3**: IoT smart-meter integration with PLN API for automated household electricity validation.
-- **Phase 4**: Expansion beyond Surabaya to other major Indonesian metropolitan areas.
+Dapat diakses melalui rute `/gov/login`:
+- **Pengguna Sasaran**: Koordinator kebersihan dan aparatur lapangan Dinas Lingkungan Hidup (DLH) Kota Surabaya.
+- **Kemampuan Utama**:
+  - Memeriksa laporan sampah warga lengkap dengan foto bukti dan titik koordinat GPS presisi
+  - Memperbarui status penanganan sampah (Diterima, Diverifikasi, Dalam Penanganan, Selesai)
+  - Memantau progres reduksi emisi karbon dan pohon tertanam di seluruh wilayah kota
+  - Mengunduh dataset audit kebersihan dalam format CSV yang aman dari injeksi formula
 
 ---
 
-## 📄 License & Attribution
+## Alur Demo & Akses Cepat Evaluasi
 
-© 2026 **Kalau Juara Nyebur Danau UNESA** — Universitas Pembangunan Nasional "Veteran" Jawa Timur. All rights reserved.
+Untuk memudahkan pengujian dan penilaian oleh dewan juri:
 
-- Map data © [OpenStreetMap](https://www.openstreetmap.org/) contributors under ODbL.
-- Landing page background video: *Man planting a small seedling in a garden bed* from [Mixkit](https://mixkit.co/), used under the free Mixkit License.
-- Icons by [Lucide](https://lucide.dev/) under the ISC License.
+1. **Akses Demo Sekali Klik**: Kunjungi beranda [`/`](src/app/page.tsx) lalu klik tombol **"Buka Demo Warga"** (atau langsung tuju [`/demo`](src/app/demo/page.tsx)).
+   - Akun simulasi akan terisi otomatis dengan saldo 500 EcoPoints, tantangan aktif, dan riwayat aksi percontohan.
+2. **Kredensial Akun Evaluasi**:
+   - **Portal Warga**: `demo@pacul.app` / `Demo1234!`
+   - **Portal Petugas DLH**: `gov-demo@pacul.app` / `GovDemo1234!`
+3. **Panduan Tur Interaktif Juri**: Di dalam dashboard warga tersedia checklist interaktif pengujian fitur yang otomatis tercentang seiring fitur dicoba.
+
+---
+
+## Batasan Prototipe & Roadmap
+
+### Ruang Lingkup Prototipe
+- **Persistensi Klien**: Pada versi percontohan ini, persistensi data tersimpan pada `localStorage` peramban penguji.
+- **Estimasi Dampak**: Angka reduksi emisi karbon merupakan hasil estimasi teknik berbasis koefisien emisi Kementerian ESDM dan DESNZ.
+- **Kemitraan Simulasi**: Mitra UMKM dan integrasi dinas merupakan model simulasi tertutup untuk mendemonstrasikan sistem ekonomi sirkular.
+
+### Roadmap Pengembangan Lanjutan
+- **Fase 1**: Integrasi basis data relasional PostgreSQL + PostGIS, otentikasi token JWT kriptografis, dan portal tinjauan aksi bertanda review.
+- **Fase 2**: Aplikasi pemindai barcode untuk kasir warung/merchant UMKM guna verifikasi voucher real-time.
+- **Fase 3**: Integrasi IoT smart meter dengan API PLN untuk validasi konsumsi listrik rumah tangga otomatis.
+- **Fase 4**: Perluasan program percontohan ke kota-kota metropolitan lain di Indonesia.
+
+---
+
+## Lisensi & Hak Cipta
+
+(c) 2026 **PACUL — Platform Aksi Komunitas Untuk Lingkungan** — Universitas Pembangunan Nasional "Veteran" Jawa Timur. Hak cipta dilindungi undang-undang.
+
+- Data peta (c) kontributor [OpenStreetMap](https://www.openstreetmap.org/) di bawah lisensi ODbL.
+- Video latar beranda berlisensi bebas dari [Mixkit](https://mixkit.co/).
+- Sistem ikon oleh [Lucide](https://lucide.dev/) di bawah Lisensi ISC.
