@@ -108,4 +108,24 @@ Berdasarkan permintaan arahan desain:
    - Menambahkan strip 3 metrik sirkulasi (Total Diterbitkan, Terserap di UMKM, Rasio Perputaran) di bawah grafik batang peredaran EcoPoints.
    - Mengatur ulang daftar Mitra UMKM menjadi grid bento 2-kolom ringkas (`sm:grid-cols-2`), menyeimbangkan ketinggian kedua panel dan menghilangkan area kosong secara permanen.
 
+---
+
+## 8. Optimalisasi Tata Letak Pelacak Karbon & Lokalisasi Bahasa Indonesia Penuh
+
+Berdasarkan tinjauan kendala antarmuka pada modul Pelacak Karbon & Struk Listrik PLN (`/dashboard/tracker`):
+1. **Penyelesaian Ruang Kosong (Empty Void Gap) Dua Kolom**:
+   - Menambahkan properti `items-start` pada kontainer grid responsif (`lg:grid-cols-[60fr_40fr] items-start`) di `TrackerPageClient.tsx`. Hal ini mencegah flex child meregang (*stretch*) mengikuti kolom grafik yang lebih tinggi, sehingga kartu form input manual maupun pindai struk OCR membungkus kontennya secara presisi tanpa sisa ruang kosong di bagian bawah.
+   - Mengganti seluruh emoji pada kartu Panduan Efisiensi Energi Warga dengan ikon SVG Lucide resmi (`Lightbulb`, `Bike`, `TreePine`), menjaga standar akademis zero-emoji.
+2. **Penyelesaian Tumpang-Tindih Label Garis Target Emisi (`TrendEmisiChart.tsx`)**:
+   - Memperbaiki posisi label `ReferenceLine` target dari `insideTopRight` menjadi `position: "top"` dengan pergeseran `dy: -6` dan format label tegas `"Batas Target: ${targetLine} kg CO₂e"`.
+   - Menaikkan margin atas grafik batang menjadi `margin={{ top: 22, right: 12, left: -10, bottom: 0 }}` dan memperlebar tinggi kanvas menjadi 290 px, sehingga teks batas target memiliki ruang lapang tersendiri di atas batang chart dan tidak akan pernah bertabrakan meskipun grafik mencapai nilai puncak (50 kg / 61 kg).
+3. **Translasi Menyeluruh ke Bahasa Indonesia Alami (100% Localization)**:
+   - **`RiwayatAktivitas.tsx`**: Menerjemahkan judul kartu, nama aktivitas sampel (misal: "Perjalanan Kereta Komuter (KRD Surabaya)", "Penghematan Rekening Listrik Rumah Tangga"), badge kategori, format tanggal (`Okt`), header tabel (`Aktivitas`, `Tanggal`, `Estimasi Dampak`), dan tombol navigasi riwayat.
+   - **`DataListrik.tsx`**: Menerjemahkan tab navigasi (`Input Manual`, `Pindai Struk (OCR)`, `Analisis Pemakaian`), status efisiensi (`Sangat Hemat`, `Hemat`, `Sesuai Acuan`, `Di Atas Acuan`), serta tabel riwayat 6 bulan.
+   - **`InputListrikManual.tsx`**: Menerjemahkan profil rumah tangga, pilihan hunian (Rumah Kecil, Rumah Sedang, Rumah Besar, Apartemen), sumber data, kartu tolok ukur (*benchmark*), perbandingan pemakaian Anda vs acuan warga, hingga pesan estimasi reduksi CO₂e dan poin reward.
+   - **`ScanStrukListrik.tsx`**: Menerjemahkan alur pemindaian OCR (tahapan ekstraksi teks Google Cloud Vision, instruksi pemotretan struk, modal kamera, pengisian field yang belum terbaca, peringatan batas ukuran berkas, hingga tombol simpan & pindai ulang).
+   - **`electricityBenchmark.ts`**: Menyesuaikan status label, teks kalkulasi persentase emisi, dan rekomendasi tips hemat energi ke dalam Bahasa Indonesia formal.
+   - **`CatatAktivitasBaru.tsx` & `page.tsx`**: Menyesuaikan skema kategori input harian ke Bahasa Indonesia (`Transportasi`, `Pangan`, `Pengelolaan Sampah`) serta metadata halaman HTML.
+   - **`profile/edit/page.tsx`**: Menyesuaikan teks dialog konfirmasi penghapusan akun dari kata kunci bahasa Inggris `DELETE` menjadi `HAPUS`.
+
 
