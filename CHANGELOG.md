@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-26] feat: terapkan code splitting dan dynamic import pada Recharts dan Leaflet
+- [2026-10-29] perbaikan: validasi konsistensi token sesi pacul_token dan pacul_gov_token
