@@ -25,13 +25,13 @@ interface TrendEmisiChartProps {
 }
 
 const mockWeeklyData: EmisiData[] = [
-  { day: "Mon", value: 45 },
-  { day: "Tue", value: 38 },
-  { day: "Wed", value: 52 },
-  { day: "Thu", value: 28 },
-  { day: "Fri", value: 61 },
-  { day: "Sat", value: 33 },
-  { day: "Sun", value: 47 },
+  { day: "Sen", value: 45 },
+  { day: "Sel", value: 38 },
+  { day: "Rab", value: 52 },
+  { day: "Kam", value: 28 },
+  { day: "Jum", value: 61 },
+  { day: "Sab", value: 33 },
+  { day: "Min", value: 47 },
 ];
 
 const mockMonthlyData: EmisiData[] = [
@@ -39,22 +39,22 @@ const mockMonthlyData: EmisiData[] = [
   { month: "Feb", value: 295 },
   { month: "Mar", value: 410 },
   { month: "Apr", value: 280 },
-  { month: "May", value: 350 },
+  { month: "Mei", value: 350 },
   { month: "Jun", value: 390 },
   { month: "Jul", value: 310 },
-  { month: "Aug", value: 265 },
+  { month: "Agu", value: 265 },
   { month: "Sep", value: 430 },
-  { month: "Oct", value: 380 },
+  { month: "Okt", value: 380 },
 ];
 
 const mockComparisonWeekly = [
-  { day: "Mon", you: 45, reference: 55 },
-  { day: "Tue", you: 38, reference: 52 },
-  { day: "Wed", you: 52, reference: 58 },
-  { day: "Thu", you: 28, reference: 50 },
-  { day: "Fri", you: 61, reference: 60 },
-  { day: "Sat", you: 33, reference: 48 },
-  { day: "Sun", you: 47, reference: 54 },
+  { day: "Sen", you: 45, reference: 55 },
+  { day: "Sel", you: 38, reference: 52 },
+  { day: "Rab", you: 52, reference: 58 },
+  { day: "Kam", you: 28, reference: 50 },
+  { day: "Jum", you: 61, reference: 60 },
+  { day: "Sab", you: 33, reference: 48 },
+  { day: "Min", you: 47, reference: 54 },
 ];
 
 const TARGET = 380;
@@ -132,11 +132,11 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
         </div>
 
         {/* Bar chart */}
-        <div role="img" aria-label={`Bar chart of sample ${view} footprint estimates in kg CO₂`}>
-        <ResponsiveContainer width="100%" height={280}>
+        <div role="img" aria-label={`Grafik batang sampel estimasi emisi ${view === "weekly" ? "mingguan" : "bulanan"} dalam kg CO₂e`}>
+        <ResponsiveContainer width="100%" height={290}>
           <BarChart
             data={chartData}
-            margin={{ top: 8, right: 8, left: -10, bottom: 0 }}
+            margin={{ top: 22, right: 12, left: -10, bottom: 0 }}
             barCategoryGap="30%"
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
@@ -151,7 +151,7 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
               axisLine={false}
               tickLine={false}
               label={{
-                value: "kg CO₂",
+                value: "kg CO₂e",
                 angle: -90,
                 position: "insideLeft",
                 offset: 14,
@@ -164,9 +164,10 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
               stroke="#EF4444"
               strokeDasharray="6 3"
               label={{
-                value: `Personal target: ${targetLine} kg`,
-                position: "insideTopRight",
-                style: { fontSize: 9, fill: "#EF4444" },
+                value: `Batas Target: ${targetLine} kg CO₂e`,
+                position: "top",
+                dy: -6,
+                style: { fontSize: 10, fill: "#DC2626", fontWeight: 600 },
               }}
             />
             <Bar

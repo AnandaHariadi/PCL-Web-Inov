@@ -8,10 +8,10 @@ import type { EmissionCategory } from "@/types/carbon";
 import DataBadge from "@/components/common/DataBadge";
 
 const CATEGORY_LABEL: Record<EmissionCategory, string> = {
-  Transportasi: "Transport",
-  Energi: "Energy",
-  Limbah: "Waste",
-  Pangan: "Food",
+  Transportasi: "Transportasi",
+  Energi: "Konsumsi Energi",
+  Limbah: "Daur Ulang Sampah",
+  Pangan: "Pangan Lokal",
 };
 
 /* ── Types ── */
@@ -37,42 +37,42 @@ const mockRiwayat: RiwayatItem[] = [
   {
     id: "1",
     icon: Train,
-    activity: "Took the commuter train",
+    activity: "Perjalanan Kereta Komuter (KRD Surabaya)",
     category: "Transportasi",
-    date: "26 Oct 2026",
-    impactLabel: "-2.4 kg CO₂",
+    date: "26 Okt 2026",
+    impactLabel: "-2,4 kg CO₂e",
   },
   {
     id: "2",
     icon: Zap,
-    activity: "Lower electricity bill than last month",
+    activity: "Penghematan Rekening Listrik Rumah Tangga",
     category: "Energi",
-    date: "25 Oct 2026",
-    impactLabel: "-8.1 kg CO₂",
+    date: "25 Okt 2026",
+    impactLabel: "-8,1 kg CO₂e",
   },
   {
     id: "3",
     icon: Trash2,
-    activity: "Recycled plastic waste",
+    activity: "Pilah & Setor Sampah Plastik ke Bank Sampah",
     category: "Limbah",
-    date: "24 Oct 2026",
-    impactLabel: "-1.8 kg CO₂",
+    date: "24 Okt 2026",
+    impactLabel: "-1,8 kg CO₂e",
   },
   {
     id: "4",
     icon: Leaf,
-    activity: "Ate locally grown vegetables",
+    activity: "Konsumsi Sayuran Segar Kebun Urban Farming",
     category: "Pangan",
-    date: "23 Oct 2026",
-    impactLabel: "-0.9 kg CO₂",
+    date: "23 Okt 2026",
+    impactLabel: "-0,9 kg CO₂e",
   },
   {
     id: "5",
     icon: Bike,
-    activity: "Cycled to campus",
+    activity: "Bersepeda ke Kampus / Tempat Kerja",
     category: "Transportasi",
-    date: "22 Oct 2026",
-    impactLabel: "-3.2 kg CO₂",
+    date: "22 Okt 2026",
+    impactLabel: "-3,2 kg CO₂e",
   },
 ];
 
@@ -103,15 +103,15 @@ export default function RiwayatAktivitas({
       {/* Card header */}
       <div className="mb-5 flex items-center justify-between">
         <h3 className="text-base font-semibold text-[#1A1A1A]">
-          Footprint activity history
+          Riwayat Aktivitas Emisi Karbon
         </h3>
-        <DataBadge variant="demo" label="Sample data" />
+        <DataBadge variant="demo" label="Data Sampel" />
         {canExpand && (
           <button
             onClick={() => setExpanded((v) => !v)}
             className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors"
           >
-            {expanded ? "Show less" : "Show all"}
+            {expanded ? "Tampilkan Lebih Sedikit" : "Lihat Semua Riwayat"}
           </button>
         )}
       </div>
@@ -121,7 +121,7 @@ export default function RiwayatAktivitas({
         <table className="w-full min-w-[520px] text-sm">
           <thead>
             <tr className="border-b border-[#E5E7EB]">
-              {["Activity", "Date", "Estimated impact"].map((h) => (
+              {["Aktivitas", "Tanggal", "Estimasi Dampak"].map((h) => (
                 <th
                   key={h}
                   className="pb-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400"

@@ -32,13 +32,13 @@ const DAYA_OPTIONS: { va: HouseholdProfile["daya"]; label: string; golongan: str
 ];
 
 const HUNIAN_OPTIONS: { value: HouseholdProfile["type"]; label: string; sub: string }[] = [
-  { value: "rumah_kecil",  label: "Small house",  sub: "< 36 m²" },
-  { value: "rumah_sedang", label: "Medium house", sub: "36–100 m²" },
-  { value: "rumah_besar",  label: "Large house",  sub: "> 100 m²" },
-  { value: "apartment",   label: "Apartment",    sub: "Any unit" },
+  { value: "rumah_kecil",  label: "Rumah Kecil",     sub: "< 36 m²" },
+  { value: "rumah_sedang", label: "Rumah Sedang",    sub: "36–100 m²" },
+  { value: "rumah_besar",  label: "Rumah Besar",     sub: "> 100 m²" },
+  { value: "apartment",    label: "Apartemen / Rusun", sub: "Semua Unit" },
 ];
 
-const SUMBER_OPTIONS = ["Manual entry", "From bill scan (OCR)", "From my PLN app"] as const;
+const SUMBER_OPTIONS = ["Input Manual", "Hasil Pindai Struk (OCR)", "Aplikasi PLN Mobile"] as const;
 type Sumber = typeof SUMBER_OPTIONS[number];
 
 const LS_KEY = "pacul-household-profile";
@@ -47,7 +47,7 @@ const LS_KEY = "pacul-household-profile";
 const fmtRp = (n: number) =>
   n ? "Rp " + n.toLocaleString("id-ID") : "";
 
-const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
 function currentMonthYear() {
   const d = new Date();
@@ -57,7 +57,7 @@ function currentMonthYear() {
 /* ─────────────── sample history (demo data, illustrative) ─────────────── */
 const MOCK_HISTORY = [
   { month: "Nov", usage: 220, avg: 260 },
-  { month: "Dec", usage: 195, avg: 260 },
+  { month: "Des", usage: 195, avg: 260 },
   { month: "Jan", usage: 240, avg: 260 },
   { month: "Feb", usage: 185, avg: 260 },
   { month: "Mar", usage: 210, avg: 260 },
@@ -73,7 +73,7 @@ function MemberStepper({ value, onChange }: { value: number; onChange: (v: numbe
         type="button"
         onClick={() => onChange(Math.max(1, value - 1))}
         className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-lg font-bold text-gray-500 hover:border-[#2D5F3F] hover:text-[#2D5F3F] transition-colors"
-        aria-label="Fewer household members"
+        aria-label="Kurangi anggota keluarga"
       >
         −
       </button>
@@ -93,11 +93,11 @@ function MemberStepper({ value, onChange }: { value: number; onChange: (v: numbe
         type="button"
         onClick={() => onChange(Math.min(6, value + 1))}
         className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-lg font-bold text-gray-500 hover:border-[#2D5F3F] hover:text-[#2D5F3F] transition-colors"
-        aria-label="More household members"
+        aria-label="Tambah anggota keluarga"
       >
         +
       </button>
-      <span className="text-sm font-semibold text-[#1A1A1A]">{value} {value === 1 ? "person" : "people"}</span>
+      <span className="text-sm font-semibold text-[#1A1A1A]">{value} orang</span>
     </div>
   );
 }
@@ -110,7 +110,7 @@ function ComparisonBar({ yourUsage, avgUsage, color }: { yourUsage: number; avgU
     <div className="flex flex-col gap-2">
       <div>
         <div className="mb-1 flex items-center justify-between text-xs">
-          <span className="font-semibold text-white/80">You</span>
+          <span className="font-semibold text-white/80">Pemakaian Anda</span>
           <span className="font-bold text-white">{yourUsage} kWh</span>
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-white/10">
@@ -125,7 +125,7 @@ function ComparisonBar({ yourUsage, avgUsage, color }: { yourUsage: number; avgU
       </div>
       <div>
         <div className="mb-1 flex items-center justify-between text-xs">
-          <span className="font-semibold text-white/60">Reference</span>
+          <span className="font-semibold text-white/60">Rata-rata Acuan</span>
           <span className="font-bold text-white/60">{avgUsage} kWh</span>
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-white/10">
@@ -156,7 +156,7 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
       <div className="flex flex-col items-center gap-2 px-6 py-6 text-center">
         <Gauge size={44} aria-hidden="true" />
         <p className="text-xl font-extrabold">{result.statusLabel}</p>
-        <p className="text-sm text-white/70">{result.message}</p>
+        <p className="text-sm text-white/80">{result.message}</p>
       </div>
 
       {/* Stats */}
@@ -167,13 +167,13 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
           color={result.statusColor}
         />
         <div className="mt-3 flex justify-between border-t border-white/10 pt-3 text-xs">
-          <span className="text-white/60">Difference</span>
+          <span className="text-white/60">Selisih Pemakaian</span>
           <span className={`font-bold ${result.difference < 0 ? "text-[#7AC74F]" : "text-red-300"}`}>
             {result.difference > 0 ? "+" : ""}{result.difference} kWh
           </span>
         </div>
         <p className="mt-2 text-[10px] text-white/50">
-          Reference values are illustrative prototype benchmarks, not official PLN statistics.
+          Nilai acuan merupakan standar komparasi prototipe untuk simulasi, bukan statistik mutlak PLN.
         </p>
       </div>
 
@@ -182,17 +182,17 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
         {isGood ? (
           <>
             <p className="font-semibold text-[#7AC74F]">
-              Estimated {Math.abs(result.co2Impact)} kg CO₂ below the reference this month
+              Estimasi {Math.abs(result.co2Impact)} kg CO₂e di bawah acuan bulan ini
             </p>
-            <p className="mt-1 text-white/60">Estimate uses the grid emission factor; not a measurement.</p>
+            <p className="mt-1 text-white/60">Estimasi menggunakan faktor emisi jaringan listrik; bukan pengukuran meter langsung.</p>
           </>
         ) : (
           <>
             <p className="font-semibold text-red-300">
-              Estimated +{result.co2Impact} kg CO₂ above the reference
+              Estimasi +{result.co2Impact} kg CO₂e di atas rata-rata acuan
             </p>
             <p className="mt-1 text-white/60">
-              Saving 10% of the excess ≈ {(Math.abs(result.co2Impact) * 0.1).toFixed(1)} kg CO₂ less
+              Penghematan 10% dari kelebihan ≈ {(Math.abs(result.co2Impact) * 0.1).toFixed(1)} kg CO₂e lebih rendah
             </p>
           </>
         )}
@@ -209,14 +209,14 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
           <Star size={24} className="text-[#7AC74F]" aria-hidden="true" />
           <div>
             <p className="text-lg font-extrabold text-[#7AC74F]">+{result.ecoPointsEarned} EcoPoints</p>
-            <p className="text-xs text-white/60">Awarded once per billing month when you save the report.</p>
+            <p className="text-xs text-white/60">Diberikan satu kali per bulan tagihan ketika Anda menyimpan laporan listrik.</p>
           </div>
         </motion.div>
       )}
 
       {/* Tips */}
       <div className="mx-4 mb-5 flex flex-col gap-2">
-        <p className="text-xs font-bold uppercase tracking-wider text-white/50">Tips for you</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-white/50">Tips Hemat Energi Untuk Anda</p>
         {result.tips.map((tip, i) => (
           <div key={i} className="flex items-start gap-2 rounded-xl bg-black/20 px-3 py-2.5 text-sm">
             <Lightbulb size={16} className="mt-0.5 shrink-0 text-amber-200" aria-hidden="true" />
@@ -244,7 +244,7 @@ export default function InputListrikManual() {
   const [kwh, setKwh] = useState("");
   const [tagihan, setTagihan] = useState("");
   const [tagihanDisplay, setTagihanDisplay] = useState("");
-  const [sumber, setSumber] = useState<Sumber>("Manual entry");
+  const [sumber, setSumber] = useState<Sumber>("Input Manual");
   const [selectedMonth, setSelectedMonth] = useState(currentMonthYear().month);
   const [selectedYear, setSelectedYear] = useState(currentMonthYear().year);
   const [saving, setSaving] = useState(false);
@@ -274,7 +274,7 @@ export default function InputListrikManual() {
       localStorage.setItem(LS_KEY, JSON.stringify(profile));
     setProfileSaved(true);
     setEditProfile(false);
-    toast.success("Household profile saved");
+    toast.success("Profil rumah tangga berhasil disimpan");
   };
 
   /* Debounce benchmark calc */
@@ -298,20 +298,20 @@ export default function InputListrikManual() {
 
   const handleSubmit = async () => {
     const kwhNum = parseFloat(kwh);
-    if (!kwhNum || kwhNum <= 0) { toast.error("Please enter your kWh usage first."); return; }
+    if (!kwhNum || kwhNum <= 0) { toast.error("Masukkan angka pemakaian kWh listrik terlebih dahulu."); return; }
     setSaving(true);
     await new Promise((r) => setTimeout(r, 600));
     // One benchmark reward per billing period (fraud mitigation).
     const periodRef = `elec-${selectedYear}-${String(selectedMonth).padStart(2, "0")}`;
     const alreadyRewarded = transactions.some((t) => t.source === "electricity_benchmark" && t.refId === periodRef);
     const reward = !alreadyRewarded && result?.ecoPointsEarned ? result.ecoPointsEarned : 0;
-    if (reward) earn(reward, "electricity_benchmark", `Electricity below reference in ${monthNames[selectedMonth - 1]} ${selectedYear}`, periodRef);
+    if (reward) earn(reward, "electricity_benchmark", `Efisiensi listrik di bawah acuan periode ${monthNames[selectedMonth - 1]} ${selectedYear}`, periodRef);
     toast.success(
       reward
-        ? `Report saved · +${reward} EcoPoints`
+        ? `Laporan tersimpan · +${reward} EcoPoints`
         : alreadyRewarded
-          ? "Report saved (this period was already rewarded)"
-          : "Electricity report saved"
+          ? "Laporan listrik tersimpan (periode ini telah menerima poin sebelumnya)"
+          : "Laporan listrik berhasil disimpan"
     );
     setSaving(false);
   };
@@ -335,15 +335,15 @@ export default function InputListrikManual() {
       <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-[#1A1A1A]">Household profile</h3>
-            <p className="text-xs text-gray-400">Used to pick a comparable reference value</p>
+            <h3 className="text-sm font-bold text-[#1A1A1A]">Profil Rumah Tangga</h3>
+            <p className="text-xs text-gray-400">Digunakan untuk menentukan nilai pembanding konsumsi listrik keluarga</p>
           </div>
           {profileSaved && !editProfile && (
             <button
               onClick={() => setEditProfile(true)}
               className="text-xs font-semibold text-[#2D5F3F] hover:underline"
             >
-              Edit
+              Ubah
             </button>
           )}
         </div>
@@ -353,7 +353,7 @@ export default function InputListrikManual() {
             {/* Members */}
             <div>
               <label className="mb-2 block text-xs font-semibold text-gray-600">
-                Household members
+                Jumlah Anggota Keluarga
               </label>
               <MemberStepper
                 value={members}
@@ -364,8 +364,8 @@ export default function InputListrikManual() {
             {/* Daya */}
             <div>
               <label className="mb-2 block text-xs font-semibold text-gray-600">
-                Power class{" "}
-                <span className="font-normal text-gray-400">(see your PLN bill)</span>
+                Golongan Daya Listrik{" "}
+                <span className="font-normal text-gray-400">(sesuai struk PLN Anda)</span>
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {DAYA_OPTIONS.map((opt) => (
@@ -390,7 +390,7 @@ export default function InputListrikManual() {
 
             {/* Hunian */}
             <div>
-              <label className="mb-2 block text-xs font-semibold text-gray-600">Home type</label>
+              <label className="mb-2 block text-xs font-semibold text-gray-600">Tipe Tempat Tinggal</label>
               <div className="grid grid-cols-2 gap-2">
                 {HUNIAN_OPTIONS.map((opt) => (
                   <button
@@ -419,14 +419,14 @@ export default function InputListrikManual() {
               onClick={saveProfile}
               className="rounded-xl bg-[#2D5F3F] py-2.5 text-sm font-bold text-white hover:bg-[#245033] transition-colors"
             >
-              Save profile
+              Simpan Profil Rumah Tangga
             </button>
           </div>
         ) : (
           /* Saved profile summary */
           <div className="flex flex-wrap items-center gap-3 rounded-xl bg-[#F9FAFB] px-4 py-3 text-sm">
             <Users size={16} className="text-[#2D5F3F]" aria-hidden="true" />
-            <span className="font-semibold text-[#1A1A1A]">{members} {members === 1 ? "person" : "people"}</span>
+            <span className="font-semibold text-[#1A1A1A]">{members} orang</span>
             <span className="text-gray-300">·</span>
             <span className="font-semibold text-[#1A1A1A]">
               {DAYA_OPTIONS.find((d) => d.va === daya)?.label}
@@ -441,12 +441,12 @@ export default function InputListrikManual() {
 
       {/* ── SECTION 2: Input Bulanan ── */}
       <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-bold text-[#1A1A1A]">Monthly usage</h3>
+        <h3 className="mb-4 text-sm font-bold text-[#1A1A1A]">Pemakaian Listrik Bulanan</h3>
 
         <div className="flex flex-col gap-4">
           {/* Month/year */}
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Billing period</label>
+            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Periode Tagihan</label>
             <div className="flex gap-2">
               <select
                 value={selectedMonth}
@@ -470,7 +470,7 @@ export default function InputListrikManual() {
           {/* kWh: BIG input */}
           <div>
             <label htmlFor="kwh-input" className="mb-1.5 block text-xs font-semibold text-gray-600">
-              Electricity used
+              Jumlah Pemakaian Listrik
             </label>
             <div className="flex items-center overflow-hidden rounded-xl border border-[#E5E7EB] focus-within:border-[#2D5F3F] focus-within:ring-2 focus-within:ring-[#2D5F3F]/20">
               <input
@@ -486,14 +486,14 @@ export default function InputListrikManual() {
               <span className="pr-4 text-base font-semibold text-gray-400">kWh</span>
             </div>
             <p className="mt-1.5 text-[11px] text-gray-400">
-              Tip: on a PLN bill this is &ldquo;Stand Kini minus Stand Lalu&rdquo;, the current meter reading minus the previous one.
+              Petunjuk: Pada struk tagihan PLN, nilai ini tertera sebagai Stand Meter Kini dikurangi Stand Meter Lalu.
             </p>
           </div>
 
           {/* Tagihan: optional */}
           <div>
             <label htmlFor="tagihan-input" className="mb-1.5 block text-xs font-semibold text-gray-600">
-              Bill total <span className="font-normal text-gray-400">(optional)</span>
+              Total Tagihan Rekening Listrik <span className="font-normal text-gray-400">(opsional)</span>
             </label>
             <input
               id="tagihan-input"
@@ -508,7 +508,7 @@ export default function InputListrikManual() {
 
           {/* Sumber */}
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Data source</label>
+            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Sumber Data</label>
             <div className="flex flex-col gap-2">
               {SUMBER_OPTIONS.map((s) => (
                 <label key={s} className="flex cursor-pointer items-center gap-2.5 text-sm">
@@ -542,7 +542,7 @@ export default function InputListrikManual() {
           className="flex items-center justify-center gap-2 rounded-2xl bg-[#2D5F3F] py-4 text-sm font-extrabold text-white shadow-md hover:bg-[#245033] disabled:opacity-60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
         >
           {saving ? (
-            <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Menyimpan…</>
+            <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Menyimpan Laporan…</>
           ) : (
             <>Simpan Laporan Listrik {monthNames[selectedMonth - 1]} {selectedYear}</>
           )}
@@ -591,8 +591,8 @@ export default function InputListrikManual() {
           </LineChart>
         </ResponsiveContainer>
         <div className="mt-2 flex items-center gap-4 text-[10px] text-gray-400">
-          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#2D5F3F]" /> You</span>
-          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#D1D5DB]" style={{ borderTop: "2px dashed #D1D5DB", background: "none" }} /> Illustrative reference</span>
+          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#2D5F3F]" /> Pemakaian Anda</span>
+          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#D1D5DB]" style={{ borderTop: "2px dashed #D1D5DB", background: "none" }} /> Batas Acuan Rata-rata</span>
         </div>
       </div>
 

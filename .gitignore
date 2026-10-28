@@ -39,3 +39,6 @@ next-env.d.ts
 
 # Laravel backend (local only, not deployed)
 pacul-backend/
+
+# Temporary competition proposal documents & generators
+Prroposal/

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import TrackerPageClient from "./TrackerPageClient";
 
 export const metadata: Metadata = {
-  title: "Personal Environmental Impact Tracker | PACUL",
-  description: "Estimate your personal footprint from transport, food, waste and electricity, including Electricity Bill OCR.",
+  title: "Pelacak Jejak Karbon & Emisi Lingkungan | PACUL Surabaya",
+  description: "Pantau estimasi jejak karbon pribadi dari transportasi, konsumsi energi, pengelolaan sampah, serta efisiensi struk listrik PLN secara terintegrasi.",
 };
 
 export default function TrackerPage() {

@@ -44,7 +44,7 @@ async function callOcrApi(file: File, onProgress: (p: number) => void): Promise<
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error((err as { message?: string }).message ?? "Could not reach the OCR service");
+      throw new Error((err as { message?: string }).message ?? "Gagal menghubungi layanan OCR");
     }
     const json = (await res.json()) as {
       success: boolean;
@@ -63,7 +63,7 @@ async function callOcrApi(file: File, onProgress: (p: number) => void): Promise<
       mode?: "live" | "demo";
     };
 
-    if (!json.success) throw new Error("The bill could not be read");
+    if (!json.success) throw new Error("Struk tagihan tidak dapat dibaca");
 
     return {
       kwh: json.kwh,
@@ -78,16 +78,16 @@ async function callOcrApi(file: File, onProgress: (p: number) => void): Promise<
     };
   } catch (err) {
     onProgress(100);
-    const msg = err instanceof Error ? err.message : "Could not reach the OCR service";
+    const msg = err instanceof Error ? err.message : "Gagal menghubungi layanan OCR";
     throw new Error(msg);
   }
 }
 
 /* ── Processing steps animation ── */
 const PROC_STEPS = [
-  "Image received",
-  "Sending to Google Cloud Vision OCR…",
-  "Extracting bill text…",
+  "Foto struk diterima",
+  "Mengirim ke OCR Google Cloud Vision…",
+  "Mengekstrak teks & angka kWh struk…",
 ];
 
 function ProcessingView() {
@@ -98,6 +98,7 @@ function ProcessingView() {
     );
     return () => timers.forEach(clearTimeout);
   }, []);
+
   return (
     <div className="flex flex-col items-center gap-5 py-6">
       <motion.div
@@ -125,7 +126,7 @@ function ProcessingView() {
           </motion.div>
         ))}
       </div>
-      <p className="text-xs text-gray-400">Usually takes 3–5 seconds</p>
+      <p className="text-xs text-gray-400">Biasanya membutuhkan waktu 3–5 detik</p>
     </div>
   );
 }
@@ -160,7 +161,7 @@ function CameraModal({ onCapture, onClose }: { onCapture: (file: File) => void; 
         streamRef.current = stream;
         if (videoRef.current) videoRef.current.srcObject = stream;
       } catch {
-        setError("Camera is not available. Please upload a file instead.");
+        setError("Kamera tidak tersedia pada perangkat. Silakan unggah berkas foto struk.");
       }
     })();
     return () => streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -198,7 +199,7 @@ function CameraModal({ onCapture, onClose }: { onCapture: (file: File) => void; 
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
     } catch {
-      setError("Could not restart the camera.");
+      setError("Tidak dapat menyalakan ulang kamera.");
     }
   };
 
@@ -212,11 +213,11 @@ function CameraModal({ onCapture, onClose }: { onCapture: (file: File) => void; 
         initial={{ scale: 0.92 }} animate={{ scale: 1 }} exit={{ scale: 0.92 }}
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-[#111] shadow-2xl"
-        role="dialog" aria-modal="true" aria-label="Camera for capturing the electricity bill"
+        role="dialog" aria-modal="true" aria-label="Kamera Pengambilan Foto Struk Listrik PLN"
       >
         <button
           onClick={onClose}
-          aria-label="Close camera"
+          aria-label="Tutup kamera"
           className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80"
         >
           <X size={16} />
@@ -233,44 +234,44 @@ function CameraModal({ onCapture, onClose }: { onCapture: (file: File) => void; 
         ) : preview ? (
           <div className="flex flex-col items-center gap-4 p-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={preview} alt="Captured electricity bill" className="w-full rounded-xl object-cover" />
+            <img src={preview} alt="Hasil foto struk listrik" className="w-full rounded-xl object-cover" />
             <div className="flex w-full gap-3">
               <button
                 onClick={retake}
                 className="flex-1 rounded-xl border border-white/20 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
               >
-                Retake
+                Ambil Ulang
               </button>
               <button
                 onClick={confirm}
                 className="flex-1 rounded-xl bg-[#7AC74F] py-2.5 text-sm font-bold text-black hover:bg-[#6ab344] transition-colors"
               >
-                Use photo
+                Gunakan Foto Ini
               </button>
             </div>
           </div>
         ) : (
           <div className="relative flex flex-col items-center gap-4 p-4">
             <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "4/3" }}>
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+              {/* eslint-disable-has-caption */}
               <video ref={videoRef} autoPlay playsInline className="h-full w-full object-cover" />
               {/* Crop guide overlay */}
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <div className="h-3/4 w-5/6 rounded-lg border-2 border-dashed border-white/50" />
               </div>
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-[10px] text-white/70">
-                Fit the bill inside the frame
+                Posisikan struk tagihan di dalam bingkai
               </div>
             </div>
             <canvas ref={canvasRef} className="hidden" />
             <button
               onClick={capture}
               className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg hover:bg-gray-100 active:scale-95 transition-transform"
-              aria-label="Capture photo"
+              aria-label="Ambil foto struk"
             >
               <Camera size={24} className="text-[#2D5F3F]" />
             </button>
-            <p className="text-xs text-white/40">Press the button to capture</p>
+            <p className="text-xs text-white/40">Tekan tombol untuk mengambil foto</p>
           </div>
         )}
       </motion.div>
@@ -294,11 +295,11 @@ export default function ScanStrukListrik() {
 
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.match(/image\/(jpeg|png|webp)/)) {
-      toast.error("Unsupported file type. Please use JPG, PNG or WebP.");
+      toast.error("Format berkas tidak didukung. Harap gunakan format JPG, PNG, atau WebP.");
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      toast.error("Maximum file size is 10 MB.");
+      toast.error("Ukuran berkas maksimal 10 MB.");
       return;
     }
 
@@ -315,14 +316,14 @@ export default function ScanStrukListrik() {
 
       if (res.confidence >= 60) {
         setScanState("success");
-        toast.success(`Bill read. ${res.confidence}% of the expected fields were found`);
+        toast.success(`Struk berhasil dipindai. ${res.confidence}% kolom data berhasil teridentifikasi.`);
       } else {
         setScanState("partial");
-        toast("Some fields could not be read. Please complete them manually.", { icon: <AlertTriangle size={16} aria-hidden="true" /> });
+        toast("Sebagian kolom struk belum terbaca sempurna. Silakan lengkapi secara manual.", { icon: <AlertTriangle size={16} aria-hidden="true" /> });
       }
     } catch (err) {
       setScanState("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong while processing the image.");
+      setErrorMsg(err instanceof Error ? err.message : "Terjadi kendala saat memproses gambar struk.");
     }
   }, []);
 
@@ -334,7 +335,7 @@ export default function ScanStrukListrik() {
     const alreadyToday = points.transactions.some((t) => t.source === "bill_scan" && new Date(t.timestamp).toDateString() === today);
     const src = SUPPORTING_ECOPOINT_SOURCES.BILL_SCAN;
     if (!alreadyToday) points.earn(src.amount, "bill_scan", src.label);
-    toast.success(`Electricity data saved: ${kwh ?? "-"} kWh${tagihan ? ` · Rp ${tagihan.toLocaleString("id-ID")}` : ""}${alreadyToday ? "" : ` · +${src.amount} EcoPoints`}`);
+    toast.success(`Data listrik tersimpan: ${kwh ?? "-"} kWh${tagihan ? ` · Rp ${tagihan.toLocaleString("id-ID")}` : ""}${alreadyToday ? "" : ` · +${src.amount} EcoPoints`}`);
     setScanState("idle");
     setResult(null);
   };
@@ -355,7 +356,7 @@ export default function ScanStrukListrik() {
       <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
         <div className="mb-5 flex items-center gap-2">
           <Camera size={18} className="text-[#2D5F3F]" />
-          <h3 className="text-base font-semibold text-[#1A1A1A]">Electricity Bill OCR</h3>
+          <h3 className="text-base font-semibold text-[#1A1A1A]">Pindai Struk Listrik PLN (OCR)</h3>
           <span className="ml-auto rounded-full bg-[#2D5F3F]/10 px-2 py-0.5 text-[10px] font-bold text-[#2D5F3F]">
             Google Cloud Vision OCR
           </span>
@@ -377,8 +378,8 @@ export default function ScanStrukListrik() {
               >
                 <Camera size={48} className="text-gray-300" />
                 <div>
-                  <p className="font-semibold text-gray-600">Upload or photograph your PLN electricity bill</p>
-                  <p className="mt-0.5 text-xs text-gray-400">JPG, PNG or WebP · max 10 MB · text extraction only</p>
+                  <p className="font-semibold text-gray-600">Unggah atau foto struk tagihan listrik PLN Anda</p>
+                  <p className="mt-0.5 text-xs text-gray-400">JPG, PNG, atau WebP · Maksimal 10 MB · Ekstraksi teks otomatis</p>
                 </div>
               </label>
 
@@ -387,20 +388,20 @@ export default function ScanStrukListrik() {
                   onClick={() => setShowCamera(true)}
                   className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#2D5F3F] py-2.5 text-sm font-semibold text-[#2D5F3F] hover:bg-[#F0FAF4] transition-colors"
                 >
-                  <Camera size={15} /> Take photo
+                  <Camera size={15} /> Ambil Foto
                 </button>
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#2D5F3F] py-2.5 text-sm font-semibold text-white hover:bg-[#245033] transition-colors"
                 >
-                  <Upload size={15} /> Upload file
+                  <Upload size={15} /> Unggah Berkas
                 </button>
               </div>
 
               <div className="mt-4 flex items-start gap-2 rounded-xl bg-yellow-50 border border-yellow-200 px-3 py-2.5">
                 <Lightbulb size={15} className="mt-0.5 shrink-0 text-yellow-700" aria-hidden="true" />
                 <p className="text-xs text-yellow-700">
-                  <strong>Tip:</strong> Make sure the photo is sharp and the bill text is fully visible. Good lighting improves text extraction.
+                  <strong>Tips:</strong> Pastikan foto struk terang, posisi tegak, dan teks angka kWh terlihat jelas untuk akurasi ekstraksi maksimal.
                 </p>
               </div>
 
@@ -429,7 +430,7 @@ export default function ScanStrukListrik() {
               className="flex flex-col items-center gap-4 py-8"
             >
               <Upload size={36} className="text-[#2D5F3F] animate-bounce" />
-              <p className="font-semibold text-gray-700">Uploading photo…</p>
+              <p className="font-semibold text-gray-700">Mengunggah foto struk…</p>
               <div className="w-full rounded-full bg-gray-100 h-2.5 overflow-hidden">
                 <motion.div
                   className="h-full rounded-full bg-[#7AC74F]"
@@ -459,23 +460,23 @@ export default function ScanStrukListrik() {
                     : <AlertTriangle size={18} className="text-yellow-600" />
                   }
                   <span className="font-semibold text-sm">
-                    {scanState === "success" ? "Bill read successfully" : "Some fields could not be read"}
+                    {scanState === "success" ? "Struk Berhasil Terbaca" : "Sebagian Data Perlu Dilengkapi"}
                   </span>
                 </div>
                 <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${result.confidence >= 80 ? "bg-[#2D5F3F] text-white" : "bg-yellow-200 text-yellow-800"}`}>
-                  {result.confidence}% fields found
+                  {result.confidence}% kolom terdeteksi
                 </span>
               </div>
               {result.mode === "demo" && (
                 <p className="mb-4 flex items-center gap-2 text-xs text-amber-800">
-                  <DataBadge variant="simulated" label="Demo result" />
-                  Google Vision is not configured, so sample bill data is shown.
+                  <DataBadge variant="simulated" label="Hasil Simulasi" />
+                  Kredensial Google Vision API belum diatur; menampilkan data struk PLN percontohan.
                 </p>
               )}
 
               {/* kWh highlight */}
               <div className="mb-4 rounded-xl bg-[#E3F2FD] border border-[#90CAF9] px-4 py-3">
-                <p className="text-xs text-blue-600 font-semibold uppercase tracking-wider">This month&apos;s usage</p>
+                <p className="text-xs text-blue-600 font-semibold uppercase tracking-wider">Pemakaian Listrik Bulan Ini</p>
                 {editMode ? (
                   <input
                     type="number"
@@ -492,31 +493,31 @@ export default function ScanStrukListrik() {
 
               {/* Grid of fields */}
               <div className="mb-4 grid grid-cols-2 gap-2">
-                <ResultRow label="Customer no." value={result.noPelanggan} />
-                <ResultRow label="Name" value={result.namaPelanggan} />
-                <ResultRow label="Period" value={result.bulanTagihan} />
-                <ResultRow label="Power" value={result.dayaVA} />
-                <ResultRow label="Usage" value={result.kwh ? `${result.kwh} kWh` : undefined} highlight />
-                <ResultRow label="Bill total" value={rp(result.tagihan)} />
+                <ResultRow label="No. Pelanggan" value={result.noPelanggan} />
+                <ResultRow label="Nama Pelanggan" value={result.namaPelanggan} />
+                <ResultRow label="Periode Tagihan" value={result.bulanTagihan} />
+                <ResultRow label="Daya Listrik" value={result.dayaVA} />
+                <ResultRow label="Pemakaian Listrik" value={result.kwh ? `${result.kwh} kWh` : undefined} highlight />
+                <ResultRow label="Total Tagihan" value={rp(result.tagihan)} />
               </div>
 
               {/* Partial: editable fields for missing data */}
               {scanState === "partial" && (
                 <div className="mb-4 rounded-xl bg-yellow-50 border border-yellow-200 p-3">
-                  <p className="mb-2 text-xs font-semibold text-yellow-700">Complete the missing fields:</p>
+                  <p className="mb-2 text-xs font-semibold text-yellow-700">Lengkapi kolom data yang belum terbaca:</p>
                   <div className="flex flex-col gap-2">
                     {!result.kwh && (
                       <div>
-                        <label htmlFor="edit-kwh" className="block text-xs font-medium text-gray-600 mb-1">Usage (kWh)</label>
+                        <label htmlFor="edit-kwh" className="block text-xs font-medium text-gray-600 mb-1">Pemakaian (kWh)</label>
                         <input id="edit-kwh" type="number" value={editKwh} onChange={(e) => setEditKwh(e.target.value)}
-                          placeholder="Enter kWh" className="w-full rounded-lg border border-yellow-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-300" />
+                          placeholder="Masukkan kWh" className="w-full rounded-lg border border-yellow-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-300" />
                       </div>
                     )}
                     {!result.tagihan && (
                       <div>
-                        <label htmlFor="edit-tagihan" className="block text-xs font-medium text-gray-600 mb-1">Bill total (Rp)</label>
+                        <label htmlFor="edit-tagihan" className="block text-xs font-medium text-gray-600 mb-1">Total Tagihan (Rp)</label>
                         <input id="edit-tagihan" type="number" value={editTagihan} onChange={(e) => setEditTagihan(e.target.value)}
-                          placeholder="Enter bill amount" className="w-full rounded-lg border border-yellow-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-300" />
+                          placeholder="Masukkan nominal tagihan" className="w-full rounded-lg border border-yellow-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-300" />
                       </div>
                     )}
                   </div>
@@ -529,20 +530,20 @@ export default function ScanStrukListrik() {
                   onClick={handleSave}
                   className="flex items-center justify-center gap-2 rounded-xl bg-[#2D5F3F] py-3 text-sm font-bold text-white hover:bg-[#245033] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
                 >
-                  <CheckCircle size={15} /> Save electricity data
+                  <CheckCircle size={15} /> Simpan Data Listrik
                 </button>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setEditMode((v) => !v)}
                     className="flex-1 rounded-xl border border-[#2D5F3F] py-2.5 text-sm font-semibold text-[#2D5F3F] hover:bg-[#F0FAF4] transition-colors"
                   >
-                    Edit manually
+                    Koreksi Manual
                   </button>
                   <button
                     onClick={reset}
                     className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 py-2.5 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-colors"
                   >
-                    <RefreshCw size={13} /> Scan again
+                    <RefreshCw size={13} /> Pindai Ulang
                   </button>
                 </div>
               </div>
@@ -551,7 +552,7 @@ export default function ScanStrukListrik() {
               {result.rawText && (
                 <details className="mt-3">
                   <summary className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600">
-                    <ZoomIn size={11} /> Show raw OCR text
+                    <ZoomIn size={11} /> Tampilkan teks mentah hasil OCR
                   </summary>
                   <pre className="mt-2 max-h-32 overflow-y-auto rounded-lg bg-gray-50 p-3 text-[10px] text-gray-500 whitespace-pre-wrap">
                     {result.rawText}
@@ -568,14 +569,14 @@ export default function ScanStrukListrik() {
             >
               <AlertTriangle size={36} className="text-red-500" />
               <div className="text-center">
-                <p className="font-semibold text-red-700">Could not read the bill</p>
+                <p className="font-semibold text-red-700">Struk Tidak Dapat Terbaca</p>
                 <p className="mt-1 text-sm text-red-500">{errorMsg}</p>
               </div>
               <button
                 onClick={reset}
                 className="flex items-center gap-2 rounded-xl bg-red-500 px-5 py-2.5 text-sm font-bold text-white hover:bg-red-600 transition-colors"
               >
-                <RefreshCw size={13} /> Try again
+                <RefreshCw size={13} /> Coba Pindai Lagi
               </button>
             </motion.div>
           )}

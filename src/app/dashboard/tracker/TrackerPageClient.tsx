@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BarChart3, ShieldCheck, Leaf } from "lucide-react";
+import { BarChart3, ShieldCheck, Leaf, Lightbulb, Bike, TreePine } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/common/PageWrapper";
 import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
@@ -111,7 +111,7 @@ export default function TrackerPageClient() {
 
         {/* Tab Aktivitas / Listrik: 2 Kolom Sejajar & Rapi (Tanpa Gap Kosong) */}
         {activeTab !== "riwayat" && (
-          <div className="grid gap-5 lg:gap-6 lg:grid-cols-[60fr_40fr]">
+          <div className="grid gap-5 lg:gap-6 lg:grid-cols-[60fr_40fr] items-start">
             {/* Kolom Kiri: Tren Grafik, Distribusi Kategori, & Target Pengurangan Emisi */}
             <div className="flex flex-col gap-5 lg:gap-6">
               <ErrorBoundary>
@@ -162,7 +162,9 @@ export default function TrackerPageClient() {
 
                 <div className="grid gap-2.5 text-xs text-gray-600">
                   <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="text-base leading-none">💡</span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-600 shrink-0 mt-0.5">
+                      <Lightbulb size={13} />
+                    </span>
                     <div className="flex-1">
                       <p className="font-bold text-gray-800">Efisiensi AC & Pendingin Ruangan</p>
                       <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
@@ -172,7 +174,9 @@ export default function TrackerPageClient() {
                   </div>
 
                   <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="text-base leading-none">🚲</span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-50 text-blue-600 shrink-0 mt-0.5">
+                      <Bike size={13} />
+                    </span>
                     <div className="flex-1">
                       <p className="font-bold text-gray-800">Mobilitas Jarak Dekat</p>
                       <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
@@ -182,7 +186,9 @@ export default function TrackerPageClient() {
                   </div>
 
                   <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="text-base leading-none">🌳</span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 shrink-0 mt-0.5">
+                      <TreePine size={13} />
+                    </span>
                     <div className="flex-1">
                       <p className="font-bold text-gray-800">Dampak Setara Lingkungan</p>
                       <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">

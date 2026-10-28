@@ -513,14 +513,14 @@ export default function ProfileEditPage() {
             >
               <h3 id="delete-dialog-title" className="text-base font-bold text-red-600">Hapus Akun Secara Permanen</h3>
               <p className="mt-2 text-sm text-gray-600">
-                Seluruh data sesi akun akan dibersihkan. Ketik <strong>DELETE</strong> untuk mengonfirmasi.
+                Seluruh data sesi akun akan dibersihkan. Ketik <strong>HAPUS</strong> untuk mengonfirmasi.
               </p>
               <input
                 type="text"
                 value={deleteInput}
                 onChange={(e) => setDeleteInput(e.target.value)}
-                placeholder="Ketik DELETE"
-                aria-label="Ketik DELETE untuk konfirmasi"
+                placeholder="Ketik HAPUS"
+                aria-label="Ketik HAPUS untuk konfirmasi"
                 className="mt-4 w-full rounded-lg border border-[#E5E7EB] px-3 py-2.5 text-sm outline-none focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
               />
               <div className="mt-4 flex gap-2">
@@ -533,7 +533,7 @@ export default function ProfileEditPage() {
                 </button>
                 <button
                   type="button"
-                  disabled={deleteInput !== "DELETE"}
+                  disabled={deleteInput.trim().toUpperCase() !== "HAPUS" && deleteInput.trim().toUpperCase() !== "DELETE"}
                   onClick={handleDeleteAccount}
                   className="flex-1 rounded-lg bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                 >

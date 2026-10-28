@@ -62,58 +62,58 @@ export function analyzePowerUsage(
 
   if (percentDiff <= -20) {
     status = "sangat_hemat";
-    statusLabel = "Very efficient";
+    statusLabel = "Sangat Hemat Energi";
     statusColor = "#10B981";
     statusBg = "linear-gradient(135deg,#064e3b,#065f46)";
     ecoPointsEarned = SUPPORTING_ECOPOINT_SOURCES.ELECTRICITY_VERY_EFFICIENT.amount;
     tips = [
-      "Excellent. You are an energy-saving role model for your neighbourhood.",
-      "Share your tips in the Community Action Network.",
-      "Keep it up: consistent savings add up every month.",
+      "Luar biasa! Keluarga Anda menjadi panutan efisiensi energi di lingkungan sekitar.",
+      "Bagikan tips hemat energi Anda di Dinding Kolaborasi Komunitas PACUL.",
+      "Pertahankan kebiasaan baik ini; konsistensi penghematan listrik memberi dampak nyata setiap bulan.",
     ];
   } else if (percentDiff <= -5) {
     status = "hemat";
-    statusLabel = "Below reference, efficient";
+    statusLabel = "Di Bawah Acuan, Hemat Energi";
     statusColor = "#7AC74F";
     statusBg = "linear-gradient(135deg,#14532d,#166534)";
     ecoPointsEarned = SUPPORTING_ECOPOINT_SOURCES.ELECTRICITY_EFFICIENT.amount;
     tips = [
-      "Keep up your good habits.",
-      "Try to save a further 10% next month.",
-      "Switch off lights in empty rooms to save even more.",
+      "Pertahankan pola penggunaan perangkat listrik hemat energi Anda.",
+      "Coba optimalkan penghematan tambahan 10% untuk periode tagihan berikutnya.",
+      "Matikan saklar lampu dan peralatan listrik di ruangan yang sedang kosong.",
     ];
   } else if (percentDiff <= 10) {
     status = "normal";
-    statusLabel = "Around reference";
+    statusLabel = "Sesuai Rata-Rata Acuan";
     statusColor = "#F59E0B";
     statusBg = "linear-gradient(135deg,#78350f,#92400e)";
     ecoPointsEarned = 0;
     tips = [
-      "Your usage is close to the reference value.",
-      "Switch the air conditioner off when a room is empty.",
-      "Replacing old bulbs with LEDs lowers lighting consumption.",
+      "Konsumsi listrik Anda berada di kisaran rata-rata acuan rumah tangga sejenis.",
+      "Gunakan pendingin ruangan (AC) secara bijak pada suhu 24–26 °C dengan fitur timer.",
+      "Ganti sisa lampu konvensional dengan lampu LED hemat energi untuk efisiensi lebih tinggi.",
     ];
   } else if (percentDiff <= 30) {
     status = "boros";
-    statusLabel = "Above reference, worth a closer look";
+    statusLabel = "Di Atas Acuan, Perlu Ditingkatkan";
     statusColor = "#F97316";
     statusBg = "linear-gradient(135deg,#7c2d12,#9a3412)";
     ecoPointsEarned = 0;
     tips = [
-      "Check for devices left on standby all day.",
-      "Air conditioning is often the largest load, so set it between 24 and 26 °C.",
-      "Use timers for water heaters and pumps.",
+      "Periksa perangkat elektronik yang menyala terus-menerus dalam mode siaga (standby).",
+      "Beban pendingin ruangan (AC) biasanya paling dominan, pastikan pintu & jendela tertutup rapat saat AC menyala.",
+      "Gunakan pengatur waktu (timer) pada pompa air dan pemanas air dispenser.",
     ];
   } else {
     status = "sangat_boros";
-    statusLabel = "Well above reference";
+    statusLabel = "Jauh Di Atas Acuan (Boros)";
     statusColor = "#EF4444";
     statusBg = "linear-gradient(135deg,#7f1d1d,#991b1b)";
     ecoPointsEarned = 0;
     tips = [
-      "Review which appliances run the longest each day.",
-      "Consider replacing an old fridge or AC with an efficient model.",
-      "Have your wiring checked for leakage current.",
+      "Evaluasi peralatan elektronik dengan durasi pengoperasian paling panjang setiap hari.",
+      "Pertimbangkan peremajaan kulkas atau AC lama ke model inverter hemat energi bintang 5.",
+      "Lakukan pengecekan instalasi kabel listrik rumah untuk mendeteksi kemungkinan arus bocor.",
     ];
   }
 
@@ -133,8 +133,8 @@ export function analyzePowerUsage(
     ecoPointsEarned,
     message:
       diff < 0
-        ? `You used ${Math.abs(Math.round(diff))} kWh (${absPct}%) less than the reference value.`
-        : `You used ${Math.round(diff)} kWh (${absPct}%) more than the reference value.`,
+        ? `Pemakaian Anda ${Math.abs(Math.round(diff))} kWh (${absPct}%) lebih hemat daripada rata-rata acuan.`
+        : `Pemakaian Anda ${Math.round(diff)} kWh (${absPct}%) lebih tinggi daripada rata-rata acuan.`,
     tips,
   };
 }

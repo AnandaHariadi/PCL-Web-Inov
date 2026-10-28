@@ -14,7 +14,7 @@ const MAX_REWARDED_LOGS_PER_DAY = 3;
 
 /* ── Zod schema ── */
 const aktivitasSchema = z.object({
-  category: z.enum(["Transport", "Food", "Waste"], {
+  category: z.enum(["Transportasi", "Pangan", "Pengelolaan Sampah"], {
     required_error: "Pilih kategori aktivitas",
   }),
   amount: z
@@ -27,20 +27,24 @@ const aktivitasSchema = z.object({
 
 type AktivitasForm = z.infer<typeof aktivitasSchema>;
 
-type AktivitasCategory = "Transport" | "Food" | "Waste";
+type AktivitasCategory = "Transportasi" | "Pangan" | "Pengelolaan Sampah";
 
-const CATEGORIES: AktivitasCategory[] = ["Transport", "Food", "Waste"];
+const CATEGORIES: { id: AktivitasCategory; label: string }[] = [
+  { id: "Transportasi", label: "Transportasi & Mobilitas" },
+  { id: "Pangan", label: "Pangan & Belanja Lokal" },
+  { id: "Pengelolaan Sampah", label: "Pengelolaan Sampah & Daur Ulang" },
+];
 
 const UNIT_MAP: Record<AktivitasCategory, string> = {
-  Transport: "km",
-  Food: "kg",
-  Waste: "kg",
+  Transportasi: "km",
+  Pangan: "kg",
+  "Pengelolaan Sampah": "kg",
 };
 
 const CATEGORY_COLORS: Record<AktivitasCategory, string> = {
-  Transport: "#2D5F3F",
-  Food: "#7AC74F",
-  Waste: "#10B981",
+  Transportasi: "#2D5F3F",
+  Pangan: "#7AC74F",
+  "Pengelolaan Sampah": "#10B981",
 };
 
 /* ── Toast mini ── */
@@ -144,11 +148,11 @@ export default function CatatAktivitasBaru({
               defaultValue=""
             >
               <option value="" disabled>
-                -- Pilih Kategori --
+                -- Pilih Kategori Aktivitas --
               </option>
               {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
                 </option>
               ))}
             </select>
