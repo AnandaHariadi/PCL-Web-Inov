@@ -82,7 +82,7 @@ function MemberStepper({ value, onChange }: { value: number; onChange: (v: numbe
           <motion.span
             key={i}
             animate={{ scale: i < value ? 1 : 0.7, opacity: i < value ? 1 : 0.25 }}
-            className="text-white"
+            className={i < value ? "text-[#2D5F3F]" : "text-gray-300"}
             aria-hidden
           >
             <UserRound size={18} />

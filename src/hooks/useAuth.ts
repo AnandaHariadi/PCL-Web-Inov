@@ -33,11 +33,11 @@ export function useAuth() {
     onSuccess: (data, vars) => {
       persistSession(data);
       setUser(data.user);
-      toast.success(`Welcome, ${data.user.name}!`);
-      router.push(vars.redirectTo ?? "/dashboard");
+      toast.success(`Selamat datang, ${data.user.name}!`);
+      router.replace(vars.redirectTo ?? "/dashboard");
     },
     onError: (error: ApiError) => {
-      toast.error(error.message || "Incorrect email or password");
+      toast.error(error.message || "Email atau kata sandi tidak sesuai.");
     },
   });
 
@@ -50,11 +50,11 @@ export function useAuth() {
     onSuccess: (data) => {
       persistSession(data);
       setUser(data.user);
-      toast.success(`Welcome to PACUL, ${data.user.name}!`);
+      toast.success(`Selamat datang di PACUL, ${data.user.name}!`);
     },
     onError: (error: ApiError) => {
       const firstError = Object.values(error.errors || {})[0]?.[0];
-      toast.error(firstError || error.message || "Could not create the account. Please try again.");
+      toast.error(firstError || error.message || "Tidak dapat membuat akun. Silakan coba lagi.");
     },
   });
 

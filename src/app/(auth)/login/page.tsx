@@ -43,6 +43,12 @@ function LoginContent() {
     else if (roleParam === "warga") setSelectedRole("warga");
   }, [searchParams]);
 
+  // Prefetch dasbor routes agar instan saat diklik tanpa jeda
+  useEffect(() => {
+    router.prefetch("/dashboard");
+    router.prefetch("/gov/dashboard");
+  }, [router]);
+
   // Auth Hooks
   const { demoLogin: citizenDemoLogin, loginMutation: citizenLoginMutation } = useAuth();
   const govLogin = useGovAuthStore((s) => s.login);
@@ -58,19 +64,18 @@ function LoginContent() {
   const [showGovPass, setShowGovPass] = useState(false);
   const [govLoading, setGovLoading] = useState(false);
 
-  // Warga Demo Login
+  // Warga Demo Login: pertahankan loading tetap true agar spinner tidak mati mendahului routing
   const handleCitizenDemo = async () => {
     try {
       setCitizenLoading(true);
       await citizenDemoLogin("/dashboard");
     } catch {
-      toast.error("Gagal memulai demo warga. Silakan coba lagi.");
-    } finally {
       setCitizenLoading(false);
+      toast.error("Gagal memulai demo warga. Silakan coba lagi.");
     }
   };
 
-  // Warga Manual Submit
+  // Warga Manual Submit: pertahankan loading tetap true selama navigasi
   const handleCitizenSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!citizenEmail || !citizenPassword) {
@@ -85,31 +90,30 @@ function LoginContent() {
         redirectTo: "/dashboard",
       });
     } catch {
-      toast.error("Email atau kata sandi tidak sesuai.");
-    } finally {
       setCitizenLoading(false);
+      toast.error("Email atau kata sandi tidak sesuai.");
     }
   };
 
-  // Gov Demo Login
+  // Gov Demo Login: pertahankan loading tetap true selama navigasi
   const handleGovDemo = async () => {
     try {
       setGovLoading(true);
       const res = await govLogin(DEMO_GOV_ACCOUNT.email, DEMO_GOV_ACCOUNT.password);
       if (res.success) {
         toast.success("Masuk sebagai Petugas DLH (Demo)");
-        router.push("/gov/dashboard");
+        router.replace("/gov/dashboard");
       } else {
+        setGovLoading(false);
         toast.error(res.error || "Gagal masuk portal.");
       }
     } catch {
-      toast.error("Kendala autentikasi.");
-    } finally {
       setGovLoading(false);
+      toast.error("Kendala autentikasi.");
     }
   };
 
-  // Gov Manual Submit
+  // Gov Manual Submit: pertahankan loading tetap true selama navigasi
   const handleGovSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!govEmail || !govPassword) {
@@ -121,14 +125,14 @@ function LoginContent() {
       const res = await govLogin(govEmail, govPassword);
       if (res.success) {
         toast.success("Berhasil masuk");
-        router.push("/gov/dashboard");
+        router.replace("/gov/dashboard");
       } else {
+        setGovLoading(false);
         toast.error(res.error || "Email atau kata sandi tidak sesuai.");
       }
     } catch {
-      toast.error("Kendala autentikasi.");
-    } finally {
       setGovLoading(false);
+      toast.error("Kendala autentikasi.");
     }
   };
 
@@ -301,7 +305,7 @@ function LoginContent() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <span className="text-sm font-bold text-[#0F3D2E]">
-                      {citizenLoading ? "Mempersiapkan akun…" : "Masuk Cepat Demo: Rendra Pratama"}
+                      {citizenLoading ? "Mengarahkan ke Dasbor…" : "Masuk Cepat Demo: Rendra Pratama"}
                     </span>
                     <ArrowRight size={15} className="text-[#1D9E75] transition-transform group-hover:translate-x-1" />
                   </div>
@@ -368,7 +372,7 @@ function LoginContent() {
                     disabled={citizenLoading}
                     className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F3D2E] py-2.5 text-sm font-bold text-white transition hover:bg-[#18533F] disabled:opacity-50"
                   >
-                    {citizenLoading ? "Memverifikasi…" : "Masuk"}
+                    {citizenLoading ? "Mengarahkan…" : "Masuk"}
                   </button>
                 </form>
 
@@ -407,7 +411,7 @@ function LoginContent() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <span className="text-sm font-bold text-[#0F3D2E]">
-                      {govLoading ? "Mempersiapkan akun…" : "Masuk Cepat Demo: Budi Hartono"}
+                      {govLoading ? "Mengarahkan ke Portal…" : "Masuk Cepat Demo: Ir. Hendro Gunawan, M.Si"}
                     </span>
                     <ArrowRight size={15} className="text-[#1D9E75] transition-transform group-hover:translate-x-1" />
                   </div>
@@ -474,7 +478,7 @@ function LoginContent() {
                     disabled={govLoading}
                     className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F3D2E] py-2.5 text-sm font-bold text-white transition hover:bg-[#18533F] disabled:opacity-50"
                   >
-                    {govLoading ? "Memverifikasi…" : "Masuk"}
+                    {govLoading ? "Mengarahkan…" : "Masuk"}
                   </button>
                 </form>
 

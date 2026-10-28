@@ -129,3 +129,31 @@ Berdasarkan tinjauan kendala antarmuka pada modul Pelacak Karbon & Struk Listrik
    - **`profile/edit/page.tsx`**: Menyesuaikan teks dialog konfirmasi penghapusan akun dari kata kunci bahasa Inggris `DELETE` menjadi `HAPUS`.
 
 
+
+
+---
+
+## 9. Rekayasa Tata Letak Berimbang Pelacak Karbon & Eliminasi Jeda Autentikasi Demo
+
+1. **Rekayasa Ulang Arsitektur Grid Pelacak Karbon (`TrackerPageClient.tsx`)**:
+   - **Diagnosis Celah Tata Letak**: Sebelumnya pada tab aktivitas maupun listrik, kolom kiri dan kanan digabungkan dalam satu kontainer vertikal tanpa pembagian baris. Akibat perbedaan tinggi antara form input dan panel grafik, kolom kiri berakhir lebih awal dan meninggalkan ruang kosong (*blank void gap*) sebesar 600–1.000 px di sisi kiri bawah.
+   - **Solusi Tata Letak Multi-Tingkat (Multi-Tier Layout)**:
+     - **Tab Catat Aktivitas**:
+       - *Tingkat 1 (Monitor & Input Harian)*: Grid 12 kolom responsif (`lg:grid-cols-12`). Kolom kiri (7 kolom) menampung Grafik Tren Emisi dan Distribusi Kategori (~650 px), sementara kolom kanan (5 kolom) menampung Form Catat Aktivitas Baru (~680 px). Kedua kolom berakhir pada ketinggian horizontal yang presisi.
+       - *Tingkat 2 (Analitik & Tolok Ukur Wilayah)*: Grid 2 kolom berimbang (`md:grid-cols-2 gap-5 lg:gap-6`). Menyejajarkan Target Reduksi Emisi Rumah Tangga (50%) berdampingan langsung dengan Tolok Ukur Emisi Surabaya & Konversi EcoPoints (50%). Keduanya memiliki profil ketinggian setara (~500 px) dan menyatu rapi.
+       - *Tingkat 3 (Panduan Praktis Warga)*: Komponen `PanduanEfisiensiCard` membentang penuh (*full-width banner*) dengan layout 3 kartu horizontal (Efisiensi AC 25°C, Mobilitas Jarak Dekat, dan Dampak Mangrove Wonorejo) tanpa ada sisa ruang kosong.
+     - **Tab Struk Listrik PLN**:
+       - *Tingkat 1*: Kolom kiri (7 kolom) menampung modul `DataListrik` (Input Manual, Pindai Struk OCR, Analisis Pemakaian), berhadapan dengan kolom kanan (5 kolom) yang menampung Target Simulasi Penghematan Listrik PLN dan Tolok Ukur Surabaya.
+       - *Tingkat 2*: Komponen Panduan Efisiensi Energi Warga membentang penuh di bagian dasar.
+   - **Koreksi Kontras Ikon Anggota Keluarga (`InputListrikManual.tsx`)**:
+     - Memperbaiki kelas warna ikon `MemberStepper` dari `text-white` di atas latar putih menjadi dinamis `i < value ? "text-[#2D5F3F]" : "text-gray-300"`, sehingga jumlah anggota keluarga terlihat kontras dan terbaca jelas.
+
+2. **Eliminasi Jeda Autentikasi & Penyempurnaan Indikator Loading (`login/page.tsx` & `useAuth.ts`)**:
+   - **Akar Masalah Jeda Delay**: Tombol demo login sebelumnya mematikan spinner di blok `finally { setLoading(false) }` sesaat setelah data lokal disiapkan, sementara router Next.js masih membutuhkan 1–2 detik untuk mengunduh dan merender chunk Javascript halaman dashboard. Pengguna mengalami momen di mana animasi putaran tombol sudah berhenti, namun layar masih terpaku di form login.
+   - **Solusi & Optimasi Terpadu**:
+     1. **Route Prefetching Proaktif**: Menambahkan `router.prefetch("/dashboard")` dan `router.prefetch("/gov/dashboard")` saat halaman login dimuat, sehingga berkas bundle Javascript dashboard sudah tersimpan di cache peramban sebelum pengguna menekan tombol.
+     2. **Kelangsungan Indikator Visual (State Continuity)**: Menghapus pelepasan loading prematur pada blok `finally`. Tombol mempertahankan status aktif dengan label status transisi yang jelas: `"Mengarahkan ke Dasbor…"` (Warga) dan `"Mengarahkan ke Portal…"` (Pemkot), dan hanya dinonaktifkan jika terjadi kegagalan otentikasi (*catch block*).
+     3. **Transisi Instan (Zero-Flicker)**: Mengganti `router.push` dengan `router.replace` pada alur demo auth untuk mempercepat pemrosesan navigasi riwayat peramban.
+     4. **Penyesuaian Durasi Mock Auth**: Mengurangi delay simulasi `demoDelay` dari 350–400 ms menjadi 80 ms untuk menghadirkan respon klik yang seketika (*instantaneous*).
+     5. **Penyelarasan Identitas Akun Demo Pemkot**: Memperbarui teks tombol dari `"Masuk Cepat Demo: Budi Hartono"` menjadi `"Masuk Cepat Demo: Ir. Hendro Gunawan, M.Si"` sesuai profil resmi Kepala Seksi DLH Kota Surabaya.
+     6. **Lokalisasi Notifikasi Masuk**: Menerjemahkan notifikasi toast login (`Selamat datang, [Nama]!` dan `Email atau kata sandi tidak sesuai.`) ke Bahasa Indonesia.

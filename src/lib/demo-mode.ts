@@ -14,6 +14,6 @@ export const DEMO_ACCOUNT = { email: "demo@pacul.app", password: "Demo1234!" } a
 /** Demo government account for evaluation purposes only. */
 export const DEMO_GOV_ACCOUNT = { email: "gov-demo@pacul.app", password: "GovDemo1234!" } as const;
 
-export function demoDelay(ms = 350): Promise<void> {
+export function demoDelay(ms = 80): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }

@@ -78,7 +78,7 @@ export const demoAuth = {
   },
 
   register: async (data: RegisterDTO): Promise<AuthResponse> => {
-    await demoDelay(500);
+    await demoDelay(120);
     if (findByEmail(data.email)) {
       throw {
         message: "This email is already registered",
@@ -198,7 +198,7 @@ export const demoAuth = {
    * accepted; it represents a fictional responder, not a real agency.
    */
   govLogin: async (email: string, password: string) => {
-    await demoDelay(400);
+    await demoDelay(80);
     if (email.trim().toLowerCase() !== DEMO_GOV_ACCOUNT.email || password !== DEMO_GOV_ACCOUNT.password) {
       throw { message: "Invalid government demo credentials", errors: {} };
     }

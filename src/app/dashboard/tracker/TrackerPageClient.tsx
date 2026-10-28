@@ -24,6 +24,71 @@ const TABS: { id: TrackerTab; label: string }[] = [
   { id: "riwayat",   label: "Riwayat Catatan" },
 ];
 
+function PanduanEfisiensiCard() {
+  return (
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 shadow-xs flex flex-col gap-3.5">
+      <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div className="flex items-center gap-2">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#0F3D2E]">
+            <Leaf size={16} />
+          </span>
+          <h3 className="text-sm font-bold text-[#0F3D2E]">
+            Panduan Efisiensi Energi Warga Kota Surabaya
+          </h3>
+        </div>
+        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+          Kota Surabaya
+        </span>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3 text-xs text-gray-600">
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-600 shrink-0 mt-0.5">
+            <Lightbulb size={13} />
+          </span>
+          <div className="flex-1">
+            <p className="font-bold text-gray-800">Efisiensi AC & Pendingin Ruangan</p>
+            <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+              Atur suhu AC pada 25°C dan matikan saat ruangan kosong. Mereduksi emisi sekitar 2,5 kg CO₂e per hari.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-50 text-blue-600 shrink-0 mt-0.5">
+            <Bike size={13} />
+          </span>
+          <div className="flex-1">
+            <p className="font-bold text-gray-800">Mobilitas Jarak Dekat</p>
+            <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+              Bersepeda atau jalan kaki untuk rute di bawah 2 km mereduksi rata-rata 0,46 kg CO₂e dibanding sepeda motor.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 shrink-0 mt-0.5">
+            <TreePine size={13} />
+          </span>
+          <div className="flex-1">
+            <p className="font-bold text-gray-800">Dampak Setara Lingkungan</p>
+            <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+              Pengurangan emisi keluarga Anda setara daya serap 3 bibit mangrove di kawasan pesisir Wonorejo Surabaya.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
+        <span className="text-gray-500 font-medium">Punya foto aksi nyata pelestarian lingkungan hari ini?</span>
+        <Link href="/dashboard/eco-action" className="font-bold text-[#1D9E75] hover:text-[#15803D] hover:underline">
+          Verifikasi Foto Aksi →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function TrackerPageClient() {
   const [chartView, setChartView] = useState<"weekly" | "monthly">("weekly");
   const [activeTab, setActiveTab] = useState<TrackerTab>("aktivitas");
@@ -31,7 +96,7 @@ export default function TrackerPageClient() {
 
   return (
     <PageWrapper>
-      <div className="flex flex-col gap-4 lg:gap-6">
+      <div className="flex flex-col gap-5 lg:gap-6">
         <header>
           <div className="flex items-center gap-2 mb-1">
             <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#1D9E75] border border-emerald-200">
@@ -94,7 +159,7 @@ export default function TrackerPageClient() {
           ))}
         </div>
 
-        {/* Tab Riwayat Penuh */}
+        {/* ── Tab Riwayat: Tampilan Tabel Riwayat Penuh ── */}
         <AnimatePresence mode="wait">
           {activeTab === "riwayat" && (
             <motion.div
@@ -109,107 +174,72 @@ export default function TrackerPageClient() {
           )}
         </AnimatePresence>
 
-        {/* Tab Aktivitas / Listrik: 2 Kolom Sejajar & Rapi (Tanpa Gap Kosong) */}
-        {activeTab !== "riwayat" && (
-          <div className="grid gap-5 lg:gap-6 lg:grid-cols-[60fr_40fr] items-start">
-            {/* Kolom Kiri: Tren Grafik, Distribusi Kategori, & Target Pengurangan Emisi */}
-            <div className="flex flex-col gap-5 lg:gap-6">
-              <ErrorBoundary>
-                <TrendEmisiChart
-                  data={emptyData}
-                  view={chartView}
-                  onViewChange={setChartView}
-                />
-              </ErrorBoundary>
-              <BreakdownKategori />
-              <TargetEmisiDanSimulasi />
-            </div>
-
-            {/* Kolom Kanan: Form Input + Panduan & Dampak Setara Sejajar */}
-            <div className="flex flex-col gap-5 lg:gap-6">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  {activeTab === "aktivitas" && (
-                    <CatatAktivitasBaru
-                      onGoToListrik={() => setActiveTab("listrik")}
-                    />
-                  )}
-                  {activeTab === "listrik" && <DataListrik />}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Panel Pelengkap Sejajar: Panduan Efisiensi & Ekuivalensi Karbon */}
-              <div className="rounded-2xl border border-gray-200/90 bg-white p-5 shadow-xs flex flex-col gap-3.5">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#0F3D2E]">
-                      <Leaf size={16} />
-                    </span>
-                    <h3 className="text-sm font-bold text-[#0F3D2E]">
-                      Panduan Efisiensi Energi Warga
-                    </h3>
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                    Kota Surabaya
-                  </span>
-                </div>
-
-                <div className="grid gap-2.5 text-xs text-gray-600">
-                  <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-600 shrink-0 mt-0.5">
-                      <Lightbulb size={13} />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800">Efisiensi AC & Pendingin Ruangan</p>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
-                        Atur suhu AC pada 25°C dan matikan saat ruangan kosong. Dapat menghemat sekitar 2,5 kg CO₂e per hari.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-50 text-blue-600 shrink-0 mt-0.5">
-                      <Bike size={13} />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800">Mobilitas Jarak Dekat</p>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
-                        Bersepeda atau jalan kaki untuk perjalanan di bawah 2 km mereduksi rata-rata 0,46 kg CO₂e dibanding sepeda motor.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 shrink-0 mt-0.5">
-                      <TreePine size={13} />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800">Dampak Setara Lingkungan</p>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
-                        Pengurangan emisi keluarga Anda setara dengan daya serap 3 bibit mangrove di kawasan pesisir Wonorejo Surabaya.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
-                  <span className="text-gray-500 font-medium">Punya foto aksi nyata hari ini?</span>
-                  <Link href="/dashboard/eco-action" className="font-bold text-[#1D9E75] hover:text-[#15803D] hover:underline">
-                    Verifikasi Foto Aksi →
-                  </Link>
-                </div>
+        {/* ── Tab Aktivitas: Layout 2 Baris Seimbang Sempurna ── */}
+        {activeTab === "aktivitas" && (
+          <motion.div
+            key="tab-aktivitas"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15 }}
+            className="flex flex-col gap-5 lg:gap-6"
+          >
+            {/* Baris 1: Grafik & Distribusi Emisi (Kiri) berhadapan dengan Form Catat Aktivitas (Kanan) */}
+            <div className="grid gap-5 lg:gap-6 lg:grid-cols-12 items-start">
+              <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
+                <ErrorBoundary>
+                  <TrendEmisiChart
+                    data={emptyData}
+                    view={chartView}
+                    onViewChange={setChartView}
+                  />
+                </ErrorBoundary>
+                <BreakdownKategori />
               </div>
 
-              {/* Panel Tolok Ukur Emisi Surabaya & Peluang EcoPoints (Sejajar dengan Target di Kolom Kiri) */}
+              <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6">
+                <CatatAktivitasBaru
+                  onGoToListrik={() => setActiveTab("listrik")}
+                />
+              </div>
+            </div>
+
+            {/* Baris 2: Target Reduksi Emisi & Tolok Ukur Surabaya Berdampingan (50% - 50%) */}
+            <div className="grid gap-5 lg:gap-6 md:grid-cols-2 items-start">
+              <TargetEmisiDanSimulasi />
               <BenchmarkEmisiSurabaya />
             </div>
-          </div>
+
+            {/* Baris 3: Panduan Efisiensi Energi Warga Melebar Penuh (3 Kolom Sejajar) */}
+            <PanduanEfisiensiCard />
+          </motion.div>
+        )}
+
+        {/* ── Tab Struk Listrik PLN: Layout Proporsional Tanpa Ruang Kosong ── */}
+        {activeTab === "listrik" && (
+          <motion.div
+            key="tab-listrik"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15 }}
+            className="flex flex-col gap-5 lg:gap-6"
+          >
+            {/* Baris 1: Form & Analisis Listrik (Kiri 58%) berhadapan dengan Target & Tolok Ukur (Kanan 42%) */}
+            <div className="grid gap-5 lg:gap-6 lg:grid-cols-12 items-start">
+              <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
+                <DataListrik />
+              </div>
+
+              <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6">
+                <TargetEmisiDanSimulasi />
+                <BenchmarkEmisiSurabaya />
+              </div>
+            </div>
+
+            {/* Baris 2: Panduan Efisiensi Energi Warga Melebar Penuh */}
+            <PanduanEfisiensiCard />
+          </motion.div>
         )}
       </div>
     </PageWrapper>
