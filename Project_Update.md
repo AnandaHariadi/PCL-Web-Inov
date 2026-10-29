@@ -232,3 +232,28 @@ Berdasarkan evaluasi terhadap tangkapan layar antarmuka:
    - Mengubah susunan deretan 6 bulan menjadi grid 3 kolom x 2 baris yang simetris (`grid-cols-2 sm:grid-cols-3 gap-2`). Seluruh bulan (Nov–Jan di baris 1 dan Feb–Apr di baris 2) terdistribusi secara seimbang tanpa rongga kosong.
    - Menambahkan kotak catatan analisis efisiensi (*ShieldCheck* evaluasi konsistensi) sebelum legenda indikator, menjamin kesinambungan visual dari atas ke bawah kartu secara utuh dan padat karya.
    - Mengubah penyelarasan grid utama dari `items-stretch` menjadi `items-start` sehingga kartu mengambil tinggi proporsional sesuai kontennya.
+
+
+---
+
+## 14. Harmonisasi Baris Horizontal Modul Struk Listrik (`InputListrikManual.tsx`)
+
+Berdasarkan tinjauan visual celah sisa (*leftover void space*) antara kartu riwayat dan kartu tolok ukur di bawahnya:
+1. **Identifikasi Masalah**:
+   - Menumpuk formulir profil dan form input bulanan secara vertikal di kolom kiri menghasilkan ketinggian kolom kiri yang jauh lebih tinggi (~750 px) daripada dua kartu di kolom kanan (~550 px).
+   - Akibatnya, pada kolom kanan terbentuk rongga kosong setinggi 200 px di bawah kartu riwayat sebelum baris berikutnya (Target Reduksi & Tolok Ukur Surabaya) dimulai.
+
+2. **Solusi Restrukturisasi Baris Independen (Zero Void Gap)**:
+   - **Baris 1 (50% - 50% Sejajar Penuh)**:
+     - *Kolom Kiri*: Formulir Catat Pemakaian Listrik PLN yang terintegrasi langsung dengan strip parameter profil hunian (Daya, Stepper Anggota hingga 20 orang, Tipe Tempat Tinggal), kWh, Tagihan Rp, Sumber Data, dan Tombol Simpan Laporan.
+     - *Kolom Kanan*: Kartu Evaluasi Efisiensi Real-Time & Tolok Ukur ESDM Surabaya (Status, Emisi CO₂e, Selisih vs Acuan, ComparisonBar, dan Tips Praktis).
+     - Menggunakan `items-stretch` dan `h-full flex flex-col justify-between`, menghasilkan batas bawah rata sempurna di ketinggian setara (~510 px).
+   - **Baris 2 (100% Membentang Penuh)**:
+     - Kartu Tren Pemakaian Listrik 6 Bulan Terakhir membentang penuh 100% selebar halaman.
+     - *Di Dalamnya*: Kolom Kiri berupa grafik garis Recharts 6 bulan (`lg:col-span-7`), dan Kolom Kanan berupa 3 kartu metrik efisiensi, grid 6 chips bulanan, serta catatan evaluasi konsistensi ESDM (`lg:col-span-5`).
+   - **Susunan Rapi Antar Baris**:
+     - Baris 1: Form Input (50%) <---> Evaluasi Real-Time (50%) [SEJAJAR RATA]
+     - Baris 2: Tren 6 Bulan Terakhir (100%) [LEBAR PENUH]
+     - Baris 3: Target Reduksi Emisi (50%) <---> Tolok Ukur Surabaya (50%) [SEJAJAR RATA]
+     - Baris 4: Panduan Efisiensi Energi Warga Surabaya (100%) [LEBAR PENUH]
+   - Seluruh celah kosong antar-kartu dan antar-baris berhasil dihilangkan 100% secara permanen.
