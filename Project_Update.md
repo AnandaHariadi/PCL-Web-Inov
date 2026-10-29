@@ -216,3 +216,19 @@ Berdasarkan tinjauan interaksi pada modul pencatatan listrik mandiri:
    - Mengatasi masalah spasi kosong masif (*void gap*) di bawah grafik garis dengan menambahkan panel ringkasan analitik 3 metrik efisiensi (Rata-rata Riil 203 kWh/bln, Bulan Terhemat Apr 170 kWh, Total Reduksi -340 kWh).
    - Menambahkan deretan *chips* riwayat 6 bulan dengan indikator bulanan.
    - Memperbaiki konfigurasi `LineChart` Recharts: Menambahkan garis grid horizontal (`CartesianGrid`), skala `YAxis` seimbang (`domain={[120, 290]}`), serta titik dot stabil (`activeDot={{ r: 6.5 }}`) untuk mencegah terpotongnya kurva pada kanvas SVG.
+
+
+---
+
+## 13. Eliminasi Celah Kosong Internal Kartu Riwayat Listrik & Perataan Grid Bulanan (`InputListrikManual.tsx`)
+
+Berdasarkan evaluasi terhadap tangkapan layar antarmuka:
+1. **Penyebab Celah Putih Kosong (*Void Space*)**:
+   - Pemakaian kelas utilitas `flex-1` dan `justify-between` pada kartu Riwayat 6 Bulan memaksa batas footer (*legend*) terdorong jauh ke bagian bawah kartu, sehingga menghasilkan rongga putih kosong di antara daftar riwayat dan teks legenda.
+   - Perilaku `flex-wrap justify-between` pada daftar bulanan membagi 6 kartu menjadi 4 di baris pertama dan 2 di baris kedua, memicu lubang kosong di tengah baris kedua antara bulan Maret dan April.
+
+2. **Perbaikan Presisi Tata Letak**:
+   - Menghapus ketergantungan `justify-between` dan `flex-1` pada kartu, menggantinya dengan alur tumpukan vertikal alami (`flex flex-col gap-3.5`).
+   - Mengubah susunan deretan 6 bulan menjadi grid 3 kolom x 2 baris yang simetris (`grid-cols-2 sm:grid-cols-3 gap-2`). Seluruh bulan (Nov–Jan di baris 1 dan Feb–Apr di baris 2) terdistribusi secara seimbang tanpa rongga kosong.
+   - Menambahkan kotak catatan analisis efisiensi (*ShieldCheck* evaluasi konsistensi) sebelum legenda indikator, menjamin kesinambungan visual dari atas ke bawah kartu secara utuh dan padat karya.
+   - Mengubah penyelarasan grid utama dari `items-stretch` menjadi `items-start` sehingga kartu mengambil tinggi proporsional sesuai kontennya.

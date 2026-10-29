@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Gauge, Home, Lightbulb, Star, UserRound, Users, CheckCircle2 } from "lucide-react";
+import { Gauge, Home, Lightbulb, Star, UserRound, Users, CheckCircle2, ShieldCheck } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -368,9 +368,9 @@ export default function InputListrikManual() {
   const years = [2025, 2026];
 
   return (
-    <div className="grid gap-5 lg:gap-6 lg:grid-cols-2 items-stretch">
+    <div className="grid gap-5 lg:gap-6 lg:grid-cols-2 items-start">
       {/* ── KOLOM KIRI: Profil Rumah Tangga & Form Input Bulanan ── */}
-      <div className="flex flex-col gap-5 justify-between">
+      <div className="flex flex-col gap-5">
         {/* SECTION 1: Profil Rumah Tangga */}
         <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs">
           <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
@@ -480,7 +480,7 @@ export default function InputListrikManual() {
         </div>
 
         {/* SECTION 2: Input Bulanan */}
-        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex-1 flex flex-col justify-between">
+        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex flex-col gap-4">
           <div>
             <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
               <h3 className="text-sm font-bold text-[#0F3D2E]">Catat Pemakaian Listrik Bulanan</h3>
@@ -574,7 +574,7 @@ export default function InputListrikManual() {
           </div>
 
           {/* Submit Button */}
-          <div className="mt-5">
+          <div className="mt-1">
             {kwh && parseFloat(kwh) > 0 ? (
               <motion.button
                 initial={{ opacity: 0, y: 6 }}
@@ -599,129 +599,137 @@ export default function InputListrikManual() {
       </div>
 
       {/* ── KOLOM KANAN: Hasil Benchmark & Riwayat 6 Bulan ── */}
-      <div className="flex flex-col gap-5 justify-between">
+      <div className="flex flex-col gap-5">
         {/* SECTION 3: Benchmark Result Card */}
-        <div>
-          <AnimatePresence mode="wait">
-            {result ? (
-              <BenchmarkCard result={result} />
-            ) : (
-              <div className="rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/50 p-6 text-center flex flex-col items-center justify-center gap-2.5 h-[280px]">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-[#0F3D2E]">
-                  <Gauge size={24} />
-                </span>
-                <h4 className="text-sm font-bold text-[#0F3D2E]">Kalkulasi Efisiensi Energi Real-Time</h4>
-                <p className="text-xs text-gray-500 max-w-sm leading-relaxed">
-                  Ketikkan angka pemakaian kWh pada formulir di sebelah kiri untuk melihat evaluasi otomatis apakah konsumsi listrik Anda tergolong Sangat Hemat, Sesuai Acuan, atau Berlebih.
-                </p>
-                <div className="flex items-center gap-2 mt-1 text-[11px] text-emerald-800 font-semibold bg-white border border-emerald-200 px-3 py-1 rounded-full">
-                  <CheckCircle2 size={13} className="text-[#1D9E75]" />
-                  <span>Dihitung berdasarkan profil {members} anggota keluarga</span>
-                </div>
-              </div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* SECTION 4: Riwayat 6 Bulan & Ringkasan Analitik */}
-        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex-1 flex flex-col justify-between">
-          <div>
-            <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-3">
-              <div>
-                <h3 className="text-sm font-bold text-[#0F3D2E]">Tren Pemakaian 6 Bulan Terakhir</h3>
-                <p className="text-[11px] text-gray-400 mt-0.5">Evaluasi perbandingan konsumsi kWh bulanan Anda</p>
-              </div>
-              <DataBadge variant="demo" label="Data Sampel" />
-            </div>
-
-            {/* Grafik Garis Recharts dengan grid dan domain proporsional */}
-            <div className="py-2">
-              <ResponsiveContainer width="100%" height={210}>
-                <LineChart data={MOCK_HISTORY} margin={{ top: 16, right: 12, left: -14, bottom: 4 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tick={{ fill: "#6B7280", fontSize: 11, fontWeight: 600 }}
-                    axisLine={{ stroke: "#E5E7EB" }}
-                    tickLine={false}
-                    dy={4}
-                  />
-                  <YAxis
-                    domain={[120, 290]}
-                    tick={{ fill: "#9CA3AF", fontSize: 10 }}
-                    axisLine={false}
-                    tickLine={false}
-                    unit=" kWh"
-                    width={48}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: 10,
-                      border: "1px solid #E5E7EB",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-                      fontSize: 12,
-                      padding: "8px 12px",
-                    }}
-                    formatter={(v: number, name: string) => [
-                      `${v} kWh`,
-                      name === "usage" ? "Pemakaian Riil Anda" : "Batas Acuan Rata-rata",
-                    ]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="usage"
-                    name="usage"
-                    stroke="#0F3D2E"
-                    strokeWidth={2.5}
-                    dot={{ r: 4.5, fill: "#10B981", stroke: "#0F3D2E", strokeWidth: 1.5 }}
-                    activeDot={{ r: 6.5, fill: "#0F3D2E" }}
-                    isAnimationActive={true}
-                    animationDuration={1000}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="avg"
-                    name="avg"
-                    stroke="#9CA3AF"
-                    strokeWidth={2}
-                    strokeDasharray="4 3"
-                    dot={false}
-                    isAnimationActive={true}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Ringkasan 3 Metrik Efisiensi Konsumsi */}
-            <div className="grid grid-cols-3 gap-2 mt-2 pt-3 border-t border-gray-100">
-              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
-                <span className="text-[10px] text-gray-500 block">Rata-rata Riil</span>
-                <p className="text-xs sm:text-sm font-black text-[#0F3D2E] mt-0.5">203 <span className="text-[10px] font-normal text-gray-500">kWh/bln</span></p>
-              </div>
-              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
-                <span className="text-[10px] text-gray-500 block">Bulan Terhemat</span>
-                <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">Apr <span className="text-[10px] font-normal text-gray-500">(170 kWh)</span></p>
-              </div>
-              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
-                <span className="text-[10px] text-gray-500 block">Total Reduksi</span>
-                <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">-340 <span className="text-[10px] font-normal text-gray-500">kWh</span></p>
+        <AnimatePresence mode="wait">
+          {result ? (
+            <BenchmarkCard result={result} />
+          ) : (
+            <div className="rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/50 p-5 text-center flex flex-col items-center justify-center gap-2">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-[#0F3D2E]">
+                <Gauge size={22} />
+              </span>
+              <h4 className="text-sm font-bold text-[#0F3D2E]">Kalkulasi Efisiensi Energi Real-Time</h4>
+              <p className="text-xs text-gray-500 max-w-sm leading-relaxed">
+                Ketikkan angka pemakaian kWh pada formulir di sebelah kiri untuk melihat evaluasi otomatis apakah konsumsi listrik Anda tergolong Sangat Hemat, Sesuai Acuan, atau Berlebih.
+              </p>
+              <div className="flex items-center gap-2 mt-0.5 text-[11px] text-emerald-800 font-semibold bg-white border border-emerald-200 px-3 py-1 rounded-full">
+                <CheckCircle2 size={13} className="text-[#1D9E75]" />
+                <span>Dihitung berdasarkan profil {members} anggota keluarga</span>
               </div>
             </div>
+          )}
+        </AnimatePresence>
 
-            {/* Mini Chips Riwayat 6 Bulan */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 rounded-xl bg-gray-50/80 p-2 border border-gray-100 text-[11px]">
-              {MOCK_HISTORY.map((item) => (
-                <div key={item.month} className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-gray-200/60 shadow-xs">
-                  <span className="font-semibold text-gray-700">{item.month}:</span>
-                  <span className="font-bold text-[#0F3D2E]">{item.usage} kWh</span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" title="Di bawah batas acuan" />
-                </div>
-              ))}
+        {/* SECTION 4: Riwayat 6 Bulan & Ringkasan Analitik Padat Karya */}
+        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex flex-col gap-3.5">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#0F3D2E]">Tren Pemakaian 6 Bulan Terakhir</h3>
+              <p className="text-[11px] text-gray-400 mt-0.5">Evaluasi perbandingan konsumsi kWh bulanan Anda</p>
+            </div>
+            <DataBadge variant="demo" label="Data Sampel" />
+          </div>
+
+          {/* Grafik Garis Recharts dengan grid dan domain proporsional */}
+          <div className="py-1">
+            <ResponsiveContainer width="100%" height={190}>
+              <LineChart data={MOCK_HISTORY} margin={{ top: 14, right: 12, left: -14, bottom: 4 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fill: "#6B7280", fontSize: 11, fontWeight: 600 }}
+                  axisLine={{ stroke: "#E5E7EB" }}
+                  tickLine={false}
+                  dy={4}
+                />
+                <YAxis
+                  domain={[120, 290]}
+                  tick={{ fill: "#9CA3AF", fontSize: 10 }}
+                  axisLine={false}
+                  tickLine={false}
+                  unit=" kWh"
+                  width={48}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 10,
+                    border: "1px solid #E5E7EB",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    fontSize: 12,
+                    padding: "8px 12px",
+                  }}
+                  formatter={(v: number, name: string) => [
+                    `${v} kWh`,
+                    name === "usage" ? "Pemakaian Riil Anda" : "Batas Acuan Rata-rata",
+                  ]}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="usage"
+                  name="usage"
+                  stroke="#0F3D2E"
+                  strokeWidth={2.5}
+                  dot={{ r: 4.5, fill: "#10B981", stroke: "#0F3D2E", strokeWidth: 1.5 }}
+                  activeDot={{ r: 6.5, fill: "#0F3D2E" }}
+                  isAnimationActive={true}
+                  animationDuration={1000}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="avg"
+                  name="avg"
+                  stroke="#9CA3AF"
+                  strokeWidth={2}
+                  strokeDasharray="4 3"
+                  dot={false}
+                  isAnimationActive={true}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Ringkasan 3 Metrik Efisiensi Konsumsi */}
+          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100">
+            <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+              <span className="text-[10px] text-gray-500 block">Rata-rata Riil</span>
+              <p className="text-xs sm:text-sm font-black text-[#0F3D2E] mt-0.5">203 <span className="text-[10px] font-normal text-gray-500">kWh/bln</span></p>
+            </div>
+            <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+              <span className="text-[10px] text-gray-500 block">Bulan Terhemat</span>
+              <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">Apr <span className="text-[10px] font-normal text-gray-500">(170 kWh)</span></p>
+            </div>
+            <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+              <span className="text-[10px] text-gray-500 block">Total Reduksi</span>
+              <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">-340 <span className="text-[10px] font-normal text-gray-500">kWh</span></p>
             </div>
           </div>
 
-          {/* Legend Indikator */}
-          <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+          {/* Grid Riwayat 6 Bulan Terstruktur (3 kolom x 2 baris seimbang) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 rounded-xl bg-gray-50/80 p-2.5 border border-gray-100 text-[11px]">
+            {MOCK_HISTORY.map((item) => (
+              <div key={item.month} className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white border border-gray-200/60 shadow-xs">
+                <span className="font-semibold text-gray-700">{item.month}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[#0F3D2E]">{item.usage} kWh</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" title="Di bawah batas acuan" />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Catatan Insight Evaluasi Efisiensi */}
+          <div className="flex items-start gap-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200/70 p-3 text-xs">
+            <ShieldCheck size={16} className="text-emerald-700 shrink-0 mt-0.5" />
+            <div className="text-[11px] text-emerald-900 leading-relaxed">
+              <span className="font-bold text-[#0F3D2E]">Evaluasi Konsistensi Efisiensi: </span>
+              Seluruh 6 bulan pemakaian konsisten berada di bawah batas acuan Surabaya dengan rata-rata selisih efisiensi 21,9%.
+            </div>
+          </div>
+
+          {/* Legend Indikator Langsung Berdampingan */}
+          <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
             <span className="flex items-center gap-1.5">
               <span className="inline-block h-2 w-3 rounded bg-[#0F3D2E]" /> Pemakaian Riil Anda
             </span>
