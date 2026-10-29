@@ -197,3 +197,22 @@ Berdasarkan tinjauan visual ornamen antarmuka:
   - Ikon sebelumnya menggunakan timbangan kehakiman/hukum (`Scale` ⚖️), yang tidak kontekstual dan tampak seperti pilihan acak model AI generatif (*AI slop*) untuk menerjemahkan kata "tolok ukur/scale".
   - Ikon tersebut telah diganti dengan **`BarChart2`** (tiga batang komparasi data statistik) dari pustaka resmi Lucide.
   - Ikon `BarChart2` merepresentasikan data acuan komparasi emisi kota (DLH Surabaya & ESDM) secara presisi, profesional, dan serasi berdampingan dengan ikon `<Target />` pada kartu Target Reduksi Emisi di baris yang sama.
+
+
+---
+
+## 12. Penyempurnaan Stepper Anggota Adaptif & Pembenahan Riwayat Listrik 6 Bulan (`InputListrikManual.tsx` & `electricityBenchmark.ts`)
+
+Berdasarkan tinjauan interaksi pada modul pencatatan listrik mandiri:
+1. **Antisipasi Jumlah Anggota Keluarga > 10 Orang**:
+   - Batas maksimum pemilihan anggota dinaikkan dari 6 menjadi 20 orang (mengakomodasi variasi keluarga inti, keluarga besar 3 generasi, hingga rumah kontrakan/komunal mahasiswa dan pekerja di Surabaya).
+   - Penerapan visualisasi avatar adaptif:
+     - 1–5 orang: Menampilkan deretan ikon individual aktif (`#0F3D2E`) beserta bayangan abu-abu.
+     - Lebih dari 5 orang: Menampilkan 4 ikon avatar hijau diikuti lencana pil dinamis `+{value - 5}` sehingga tidak memakan tempat horizontal atau merusak kerapian tata letak.
+     - Label klasifikasi kontekstual: *Keluarga Inti* (1–4), *Keluarga Besar* (5–8), dan *Komunal / Asrama* (> 8).
+   - Penyesuaian kalkulasi acuan di `electricityBenchmark.ts`: Fungsi `getBenchmarkAverage` kini menghitung beban dasar hunian secara proporsional ditambah variabel per orang (~30–65 kWh/orang tergantung golongan daya), menghilangkan fallback kaku pada keluarga besar.
+
+2. **Penyempurnaan Kartu Riwayat 6 Bulan Terakhir**:
+   - Mengatasi masalah spasi kosong masif (*void gap*) di bawah grafik garis dengan menambahkan panel ringkasan analitik 3 metrik efisiensi (Rata-rata Riil 203 kWh/bln, Bulan Terhemat Apr 170 kWh, Total Reduksi -340 kWh).
+   - Menambahkan deretan *chips* riwayat 6 bulan dengan indikator bulanan.
+   - Memperbaiki konfigurasi `LineChart` Recharts: Menambahkan garis grid horizontal (`CartesianGrid`), skala `YAxis` seimbang (`domain={[120, 290]}`), serta titik dot stabil (`activeDot={{ r: 6.5 }}`) untuk mencegah terpotongnya kurva pada kanvas SVG.

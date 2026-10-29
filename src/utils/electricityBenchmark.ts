@@ -2,7 +2,7 @@ import { IMPACT_FACTORS } from "@/config/impact-factors";
 import { SUPPORTING_ECOPOINT_SOURCES } from "@/config/eco-points";
 
 export interface HouseholdProfile {
-  members: 1 | 2 | 3 | 4 | 5 | 6;
+  members: number;
   daya: 450 | 900 | 1300 | 2200 | 3500 | 4400 | 5500;
   type: "apartment" | "rumah_kecil" | "rumah_sedang" | "rumah_besar";
 }
@@ -28,6 +28,24 @@ export const BENCHMARK_DATA: Record<string, number> = {
   default: 180,
 };
 
+/**
+ * Menghitung batas acuan kWh bulanan secara dinamis dan adaptif.
+ * Mendukung keluarga inti (1-4 orang), keluarga besar (5-8 orang), hingga hunian komunal (> 8-20 orang).
+ */
+export function getBenchmarkAverage(members: number, daya: number): number {
+  const key = `${members}_${daya}`;
+  if (BENCHMARK_DATA[key]) {
+    return BENCHMARK_DATA[key];
+  }
+
+  // Estimasi beban dasar fasilitas hunian (kulkas bersama, penerangan utama, modem/router)
+  const baseOverhead = daya <= 900 ? 40 : daya <= 1300 ? 60 : daya <= 2200 ? 80 : 120;
+  // Estimasi beban variabel pemakaian per anggota keluarga (gadget, kipas/AC, penerangan kamar)
+  const perPersonKwh = daya <= 900 ? 30 : daya <= 1300 ? 40 : daya <= 2200 ? 50 : 65;
+
+  return Math.round(baseOverhead + Math.max(1, members) * perPersonKwh);
+}
+
 export interface BenchmarkResult {
   yourUsage: number;
   averageUsage: number;
@@ -47,8 +65,7 @@ export function analyzePowerUsage(
   usage: number,
   profile: HouseholdProfile
 ): BenchmarkResult {
-  const key = `${profile.members}_${profile.daya}`;
-  const average = BENCHMARK_DATA[key] ?? BENCHMARK_DATA["default"];
+  const average = getBenchmarkAverage(profile.members, profile.daya);
 
   const diff = usage - average;
   const percentDiff = (diff / average) * 100;

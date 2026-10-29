@@ -9,6 +9,7 @@ import {
   Line,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
@@ -20,7 +21,10 @@ import {
   type BenchmarkResult,
 } from "@/utils/electricityBenchmark";
 
-/* ─────────────── constants ─────────────── */
+/* -------------------------------------------------------------------------- */
+/* Constants & Options                                                        */
+/* -------------------------------------------------------------------------- */
+
 const DAYA_OPTIONS: { va: HouseholdProfile["daya"]; label: string; golongan: string }[] = [
   { va: 450,  label: "450 VA",   golongan: "R1/Subsidi" },
   { va: 900,  label: "900 VA",   golongan: "R1/Subsidi" },
@@ -31,9 +35,9 @@ const DAYA_OPTIONS: { va: HouseholdProfile["daya"]; label: string; golongan: str
 ];
 
 const HUNIAN_OPTIONS: { value: HouseholdProfile["type"]; label: string; sub: string }[] = [
-  { value: "rumah_kecil",  label: "Rumah Kecil",     sub: "< 36 m²" },
-  { value: "rumah_sedang", label: "Rumah Sedang",    sub: "36–100 m²" },
-  { value: "rumah_besar",  label: "Rumah Besar",     sub: "> 100 m²" },
+  { value: "rumah_kecil",  label: "Rumah Kecil",       sub: "< 36 m²" },
+  { value: "rumah_sedang", label: "Rumah Sedang",      sub: "36–100 m²" },
+  { value: "rumah_besar",  label: "Rumah Besar",       sub: "> 100 m²" },
   { value: "apartment",    label: "Apartemen / Rusun", sub: "Semua Unit" },
 ];
 
@@ -49,53 +53,106 @@ function currentMonthYear() {
   return { month: d.getMonth() + 1, year: d.getFullYear() };
 }
 
-/* ─────────────── sample history (demo data) ─────────────── */
+/* -------------------------------------------------------------------------- */
+/* Sample 6-Month Historical Data (Data Riwayat Sampel)                       */
+/* -------------------------------------------------------------------------- */
+
 const MOCK_HISTORY = [
-  { month: "Nov", usage: 220, avg: 260 },
-  { month: "Des", usage: 195, avg: 260 },
-  { month: "Jan", usage: 240, avg: 260 },
-  { month: "Feb", usage: 185, avg: 260 },
-  { month: "Mar", usage: 210, avg: 260 },
-  { month: "Apr", usage: 170, avg: 260 },
+  { month: "Nov", usage: 220, avg: 260, status: "hemat" },
+  { month: "Des", usage: 195, avg: 260, status: "sangat_hemat" },
+  { month: "Jan", usage: 240, avg: 260, status: "hemat" },
+  { month: "Feb", usage: 185, avg: 260, status: "sangat_hemat" },
+  { month: "Mar", usage: 210, avg: 260, status: "hemat" },
+  { month: "Apr", usage: 170, avg: 260, status: "sangat_hemat" },
 ];
 
-/* ─────────────── sub-components ─────────────── */
+/* -------------------------------------------------------------------------- */
+/* Sub-komponen: MemberStepper (Adaptif untuk Anggota > 10)                   */
+/* -------------------------------------------------------------------------- */
 
 function MemberStepper({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const maxLimit = 20;
+  const isLarge = value > 5;
+  const categoryLabel =
+    value <= 4
+      ? "Keluarga Inti"
+      : value <= 8
+      ? "Keluarga Besar"
+      : "Komunal / Asrama";
+
   return (
-    <div className="flex items-center gap-4">
-      <button
-        type="button"
-        onClick={() => onChange(Math.max(1, value - 1))}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-lg font-bold text-gray-500 hover:border-[#2D5F3F] hover:text-[#2D5F3F] transition-colors"
-        aria-label="Kurangi anggota keluarga"
-      >
-        −
-      </button>
-      <div className="flex gap-1">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <motion.span
-            key={i}
-            animate={{ scale: i < value ? 1 : 0.7, opacity: i < value ? 1 : 0.25 }}
-            className={i < value ? "text-[#2D5F3F]" : "text-gray-300"}
-            aria-hidden
-          >
-            <UserRound size={18} />
-          </motion.span>
-        ))}
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-gray-100 bg-[#FAFCFB] p-3">
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(1, value - 1))}
+          disabled={value <= 1}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-base font-bold text-gray-600 hover:border-[#1D9E75] hover:text-[#0F3D2E] disabled:opacity-40 transition-colors shadow-xs"
+          aria-label="Kurangi anggota keluarga"
+        >
+          -
+        </button>
+
+        {/* Visualisasi Avatar Adaptif */}
+        <div className="flex items-center gap-1">
+          {/* Ikon Aktif Terisi */}
+          {Array.from({ length: Math.min(5, value) }).map((_, i) => (
+            <motion.span
+              key={i}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-[#0F3D2E]"
+              aria-hidden
+            >
+              <UserRound size={18} />
+            </motion.span>
+          ))}
+
+          {/* Sisa bayangan jika keluarga standar (<= 5 orang) */}
+          {!isLarge &&
+            Array.from({ length: 5 - value }).map((_, i) => (
+              <span key={`empty-${i}`} className="text-gray-300" aria-hidden>
+                <UserRound size={18} />
+              </span>
+            ))}
+
+          {/* Lencana pil adaptif jika anggota keluarga > 5 (antisipasi 6-20+ orang) */}
+          {isLarge && (
+            <motion.span
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="ml-1 inline-flex items-center gap-1 rounded-full bg-emerald-100 border border-emerald-200 px-2 py-0.5 text-[11px] font-bold text-[#0F3D2E]"
+            >
+              +{value - 5}
+            </motion.span>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(maxLimit, value + 1))}
+          disabled={value >= maxLimit}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-base font-bold text-gray-600 hover:border-[#1D9E75] hover:text-[#0F3D2E] disabled:opacity-40 transition-colors shadow-xs"
+          aria-label="Tambah anggota keluarga"
+        >
+          +
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={() => onChange(Math.min(6, value + 1))}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-lg font-bold text-gray-500 hover:border-[#2D5F3F] hover:text-[#2D5F3F] transition-colors"
-        aria-label="Tambah anggota keluarga"
-      >
-        +
-      </button>
-      <span className="text-sm font-semibold text-[#1A1A1A]">{value} orang</span>
+
+      {/* Nilai dan label klasifikasi hunian */}
+      <div className="flex items-center sm:justify-end gap-2 text-right">
+        <span className="text-sm font-extrabold text-gray-900">{value} orang</span>
+        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 border border-emerald-200/60">
+          {categoryLabel}
+        </span>
+      </div>
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/* Sub-komponen: ComparisonBar                                                */
+/* -------------------------------------------------------------------------- */
 
 function ComparisonBar({ yourUsage, avgUsage, color }: { yourUsage: number; avgUsage: number; color: string }) {
   const max = Math.max(yourUsage, avgUsage) * 1.15;
@@ -120,14 +177,14 @@ function ComparisonBar({ yourUsage, avgUsage, color }: { yourUsage: number; avgU
       </div>
       <div>
         <div className="mb-1 flex items-center justify-between text-xs">
-          <span className="font-semibold text-white/60">Rata-rata Acuan</span>
-          <span className="font-bold text-white/60">{avgUsage} kWh</span>
+          <span className="font-semibold text-white/80">Batas Acuan Rata-rata</span>
+          <span className="font-bold text-white">{avgUsage} kWh</span>
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-white/10">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${avgPct}%` }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="h-full rounded-full bg-white/40"
           />
         </div>
@@ -135,6 +192,10 @@ function ComparisonBar({ yourUsage, avgUsage, color }: { yourUsage: number; avgU
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/* Sub-komponen: BenchmarkCard (Hasil Analisis Real-Time)                     */
+/* -------------------------------------------------------------------------- */
 
 function BenchmarkCard({ result }: { result: BenchmarkResult }) {
   const isGood = result.status === "sangat_hemat" || result.status === "hemat";
@@ -202,7 +263,10 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
   );
 }
 
-/* ─────────────── main component ─────────────── */
+/* -------------------------------------------------------------------------- */
+/* Main Component: InputListrikManual                                         */
+/* -------------------------------------------------------------------------- */
+
 export default function InputListrikManual() {
   const earn = useEcoPointsStore((s) => s.earn);
   const transactions = useEcoPointsStore((s) => s.transactions);
@@ -303,13 +367,6 @@ export default function InputListrikManual() {
   const showProfileForm = !profileSaved || editProfile;
   const years = [2025, 2026];
 
-  /* ── History chart custom dot ── */
-  const HistoryDot = (props: { cx?: number; cy?: number; payload?: { usage: number; avg: number } }) => {
-    const { cx = 0, cy = 0, payload } = props;
-    const good = (payload?.usage ?? 0) <= (payload?.avg ?? 0);
-    return <circle cx={cx} cy={cy} r={5} fill={good ? "#7AC74F" : "#EF4444"} stroke="none" />;
-  };
-
   return (
     <div className="grid gap-5 lg:gap-6 lg:grid-cols-2 items-stretch">
       {/* ── KOLOM KIRI: Profil Rumah Tangga & Form Input Bulanan ── */}
@@ -340,7 +397,7 @@ export default function InputListrikManual() {
                 </label>
                 <MemberStepper
                   value={members}
-                  onChange={(v) => setMembers(v as HouseholdProfile["members"])}
+                  onChange={(v) => setMembers(v)}
                 />
               </div>
 
@@ -566,7 +623,7 @@ export default function InputListrikManual() {
           </AnimatePresence>
         </div>
 
-        {/* SECTION 4: Riwayat 6 Bulan */}
+        {/* SECTION 4: Riwayat 6 Bulan & Ringkasan Analitik */}
         <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex-1 flex flex-col justify-between">
           <div>
             <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-3">
@@ -577,45 +634,100 @@ export default function InputListrikManual() {
               <DataBadge variant="demo" label="Data Sampel" />
             </div>
 
-            <div className="my-auto py-2">
-              <ResponsiveContainer width="100%" height={170}>
-                <LineChart data={MOCK_HISTORY} margin={{ top: 8, bottom: 0, left: -24, right: 8 }}>
+            {/* Grafik Garis Recharts dengan grid dan domain proporsional */}
+            <div className="py-2">
+              <ResponsiveContainer width="100%" height={210}>
+                <LineChart data={MOCK_HISTORY} margin={{ top: 16, right: 12, left: -14, bottom: 4 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
                   <XAxis
                     dataKey="month"
-                    tick={{ fill: "#9CA3AF", fontSize: 11 }}
+                    tick={{ fill: "#6B7280", fontSize: 11, fontWeight: 600 }}
+                    axisLine={{ stroke: "#E5E7EB" }}
+                    tickLine={false}
+                    dy={4}
+                  />
+                  <YAxis
+                    domain={[120, 290]}
+                    tick={{ fill: "#9CA3AF", fontSize: 10 }}
                     axisLine={false}
                     tickLine={false}
+                    unit=" kWh"
+                    width={48}
                   />
-                  <YAxis hide />
                   <Tooltip
-                    contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 12 }}
-                    formatter={(v: number, name: string) => [`${v} kWh`, name === "usage" ? "Pemakaian Anda" : "Batas Acuan"]}
+                    contentStyle={{
+                      borderRadius: 10,
+                      border: "1px solid #E5E7EB",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                      fontSize: 12,
+                      padding: "8px 12px",
+                    }}
+                    formatter={(v: number, name: string) => [
+                      `${v} kWh`,
+                      name === "usage" ? "Pemakaian Riil Anda" : "Batas Acuan Rata-rata",
+                    ]}
                   />
                   <Line
                     type="monotone"
                     dataKey="usage"
-                    stroke="#2D5F3F"
-                    strokeWidth={2.5}
                     name="usage"
-                    dot={(p) => <HistoryDot key={`u-${p.cx}`} {...p} />}
+                    stroke="#0F3D2E"
+                    strokeWidth={2.5}
+                    dot={{ r: 4.5, fill: "#10B981", stroke: "#0F3D2E", strokeWidth: 1.5 }}
+                    activeDot={{ r: 6.5, fill: "#0F3D2E" }}
+                    isAnimationActive={true}
+                    animationDuration={1000}
                   />
                   <Line
                     type="monotone"
                     dataKey="avg"
-                    stroke="#D1D5DB"
-                    strokeWidth={2}
-                    strokeDasharray="4 2"
                     name="avg"
+                    stroke="#9CA3AF"
+                    strokeWidth={2}
+                    strokeDasharray="4 3"
                     dot={false}
+                    isAnimationActive={true}
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
+
+            {/* Ringkasan 3 Metrik Efisiensi Konsumsi */}
+            <div className="grid grid-cols-3 gap-2 mt-2 pt-3 border-t border-gray-100">
+              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+                <span className="text-[10px] text-gray-500 block">Rata-rata Riil</span>
+                <p className="text-xs sm:text-sm font-black text-[#0F3D2E] mt-0.5">203 <span className="text-[10px] font-normal text-gray-500">kWh/bln</span></p>
+              </div>
+              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+                <span className="text-[10px] text-gray-500 block">Bulan Terhemat</span>
+                <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">Apr <span className="text-[10px] font-normal text-gray-500">(170 kWh)</span></p>
+              </div>
+              <div className="rounded-xl bg-[#FAFCFB] border border-gray-100 p-2.5 text-center">
+                <span className="text-[10px] text-gray-500 block">Total Reduksi</span>
+                <p className="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">-340 <span className="text-[10px] font-normal text-gray-500">kWh</span></p>
+              </div>
+            </div>
+
+            {/* Mini Chips Riwayat 6 Bulan */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 rounded-xl bg-gray-50/80 p-2 border border-gray-100 text-[11px]">
+              {MOCK_HISTORY.map((item) => (
+                <div key={item.month} className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-gray-200/60 shadow-xs">
+                  <span className="font-semibold text-gray-700">{item.month}:</span>
+                  <span className="font-bold text-[#0F3D2E]">{item.usage} kWh</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" title="Di bawah batas acuan" />
+                </div>
+              ))}
+            </div>
           </div>
 
+          {/* Legend Indikator */}
           <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
-            <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-3 rounded bg-[#2D5F3F]" /> Pemakaian Anda</span>
-            <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-3 rounded border-t-2 border-dashed border-[#9CA3AF]" /> Batas Acuan Rata-rata</span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-2 w-3 rounded bg-[#0F3D2E]" /> Pemakaian Riil Anda
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-2 w-3 rounded border-t-2 border-dashed border-[#9CA3AF]" /> Batas Acuan Rata-rata
+            </span>
           </div>
         </div>
       </div>
