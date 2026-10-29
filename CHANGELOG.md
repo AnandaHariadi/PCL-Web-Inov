@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-30] refactor: perbarui nomor versi platform menjadi v1.0.0-pilot Surabaya
+- [2026-10-30] finalisasi panduan evaluasi teknis dan alur demonstrasi dewan juri
