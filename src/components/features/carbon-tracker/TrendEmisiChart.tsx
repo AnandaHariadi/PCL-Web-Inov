@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo } from "react";
+import { memo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -82,7 +82,8 @@ function CustomTooltip({
   );
 }
 
-const TrendEmisiChart = memo(function TrendEmisiChart({
+/* ── 1. Kartu Utama: Grafik Batang Estimasi Tren Emisi ── */
+export const TrendEmisiChart = memo(function TrendEmisiChart({
   data,
   view,
   onViewChange,
@@ -98,13 +99,12 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
   const targetLine = view === "weekly" ? 50 : TARGET;
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* ── Main Chart Card ── */}
-      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
-        {/* Card header */}
-        <div className="mb-5 flex items-center justify-between">
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between">
+      {/* Header */}
+      <div>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3.5">
           <div>
-            <h3 className="flex items-center gap-2 text-base font-bold text-[#1A1A1A]">
+            <h3 className="flex items-center gap-2 text-base font-bold text-[#0F3D2E]">
               Estimasi Tren Emisi Karbon <DataBadge variant="demo" label="Data Sampel" />
             </h3>
             <p className="text-xs text-gray-400 mt-0.5">
@@ -112,7 +112,7 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
             </p>
           </div>
           {/* Toggle */}
-          <div className="flex items-center gap-1 rounded-lg border border-gray-200 p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50/80 p-1">
             {(["weekly", "monthly"] as const).map((v) => (
               <button
                 key={v}
@@ -133,126 +133,143 @@ const TrendEmisiChart = memo(function TrendEmisiChart({
 
         {/* Bar chart */}
         <div role="img" aria-label={`Grafik batang sampel estimasi emisi ${view === "weekly" ? "mingguan" : "bulanan"} dalam kg CO₂e`}>
-        <ResponsiveContainer width="100%" height={290}>
-          <BarChart
-            data={chartData}
-            margin={{ top: 22, right: 12, left: -10, bottom: 0 }}
-            barCategoryGap="30%"
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-            <XAxis
-              dataKey={xKey}
-              tick={{ fontSize: 10, fill: "#9CA3AF" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fontSize: 10, fill: "#9CA3AF" }}
-              axisLine={false}
-              tickLine={false}
-              label={{
-                value: "kg CO₂e",
-                angle: -90,
-                position: "insideLeft",
-                offset: 14,
-                style: { fontSize: 9, fill: "#9CA3AF" },
-              }}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(168,213,186,0.15)" }} />
-            <ReferenceLine
-              y={targetLine}
-              stroke="#EF4444"
-              strokeDasharray="6 3"
-              label={{
-                value: `Batas Target: ${targetLine} kg CO₂e`,
-                position: "top",
-                dy: -6,
-                style: { fontSize: 10, fill: "#DC2626", fontWeight: 600 },
-              }}
-            />
-            <Bar
-              dataKey="value"
-              radius={[4, 4, 0, 0]}
-              isAnimationActive={true}
-              animationBegin={0}
-              animationDuration={1000}
-              animationEasing="ease-out"
+          <ResponsiveContainer width="100%" height={270}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 22, right: 12, left: -10, bottom: 0 }}
+              barCategoryGap="30%"
             >
-              {chartData.map((_, i) => (
-                <Cell
-                  key={i}
-                  fill={i === ACTIVE_INDEX ? "#2D5F3F" : "#A8D5BA"}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+              <XAxis
+                dataKey={xKey}
+                tick={{ fontSize: 10, fill: "#9CA3AF" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 10, fill: "#9CA3AF" }}
+                axisLine={false}
+                tickLine={false}
+                label={{
+                  value: "kg CO₂e",
+                  angle: -90,
+                  position: "insideLeft",
+                  offset: 14,
+                  style: { fontSize: 9, fill: "#9CA3AF" },
+                }}
+              />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(168,213,186,0.15)" }} />
+              <ReferenceLine
+                y={targetLine}
+                stroke="#EF4444"
+                strokeDasharray="6 3"
+                label={{
+                  value: `Batas Target: ${targetLine} kg CO₂e`,
+                  position: "top",
+                  dy: -6,
+                  style: { fontSize: 10, fill: "#DC2626", fontWeight: 600 },
+                }}
+              />
+              <Bar
+                dataKey="value"
+                radius={[4, 4, 0, 0]}
+                isAnimationActive={true}
+                animationBegin={0}
+                animationDuration={1000}
+                animationEasing="ease-out"
+              >
+                {chartData.map((_, i) => (
+                  <Cell
+                    key={i}
+                    fill={i === ACTIVE_INDEX ? "#2D5F3F" : "#A8D5BA"}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      {/* ── Comparison Chart Card ── */}
-      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-        <div className="mb-3 flex items-center justify-between">
-          <h4 className="text-sm font-bold text-[#1A1A1A]">
+      {/* Footer info note */}
+      <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+        <span>Garis merah: ambang batas target emisi harian keluarga</span>
+        <span className="font-semibold text-[#0F3D2E]">Target: {targetLine} kg CO₂e</span>
+      </div>
+    </div>
+  );
+});
+
+/* ── 2. Kartu Pendamping: Grafik Garis Perbandingan Emisi Anda vs Surabaya ── */
+export const ComparisonEmisiChart = memo(function ComparisonEmisiChart() {
+  return (
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between">
+      <div>
+        <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-3.5">
+          <h4 className="text-sm font-bold text-[#0F3D2E]">
             Perbandingan Emisi Anda vs Rata-rata Surabaya
           </h4>
           <DataBadge variant="demo" label="Ilustratif" />
         </div>
 
         <div role="img" aria-label="Grafik perbandingan sampel emisi Anda dengan rata-rata Surabaya">
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart
-            data={mockComparisonWeekly}
-            margin={{ top: 4, right: 8, left: -20, bottom: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-            <XAxis
-              dataKey="day"
-              tick={{ fontSize: 9, fill: "#9CA3AF" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis hide />
-            <Tooltip
-              contentStyle={{
-                fontSize: 11,
-                border: "1px solid #A8D5BA",
-                borderRadius: 8,
-              }}
-            />
-            <Legend
-              wrapperStyle={{ fontSize: 10, paddingTop: 4 }}
-              iconType="circle"
-              iconSize={8}
-            />
-            <Line
-              type="monotone"
-              dataKey="you"
-              name="Anda"
-              stroke="#2D5F3F"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              isAnimationActive={true}
-              animationDuration={1000}
-              animationEasing="ease-out"
-            />
-            <Line
-              type="monotone"
-              dataKey="reference"
-              name="Rata-rata Warga Kota"
-              stroke="#A8D5BA"
-              strokeWidth={2}
-              strokeDasharray="5 5"
-              dot={false}
-              activeDot={{ r: 4 }}
-              isAnimationActive={true}
-              animationDuration={1000}
-              animationEasing="ease-out"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={215}>
+            <LineChart
+              data={mockComparisonWeekly}
+              margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+              <XAxis
+                dataKey="day"
+                tick={{ fontSize: 10, fill: "#9CA3AF" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis hide />
+              <Tooltip
+                contentStyle={{
+                  fontSize: 11,
+                  border: "1px solid #A8D5BA",
+                  borderRadius: 8,
+                }}
+              />
+              <Legend
+                wrapperStyle={{ fontSize: 11, paddingTop: 6 }}
+                iconType="circle"
+                iconSize={8}
+              />
+              <Line
+                type="monotone"
+                dataKey="you"
+                name="Keluarga Anda"
+                stroke="#2D5F3F"
+                strokeWidth={2.5}
+                dot={false}
+                activeDot={{ r: 4 }}
+                isAnimationActive={true}
+                animationDuration={1000}
+                animationEasing="ease-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="reference"
+                name="Rata-rata Warga Kota"
+                stroke="#A8D5BA"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+                activeDot={{ r: 4 }}
+                isAnimationActive={true}
+                animationDuration={1000}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
+      </div>
+
+      <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+        <span>Garis hijau solid: jejak riil emisi keluarga Anda</span>
+        <span className="font-semibold text-emerald-700">33% Lebih Hemat</span>
       </div>
     </div>
   );

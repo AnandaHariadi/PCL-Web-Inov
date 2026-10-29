@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Gauge, Home, Lightbulb, Star, UserRound, Users } from "lucide-react";
+import { Gauge, Home, Lightbulb, Star, UserRound, Users, CheckCircle2 } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -11,7 +11,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Dot,
 } from "recharts";
 import { useEcoPointsStore } from "@/store/ecoPoints.store";
 import DataBadge from "@/components/common/DataBadge";
@@ -43,10 +42,6 @@ type Sumber = typeof SUMBER_OPTIONS[number];
 
 const LS_KEY = "pacul-household-profile";
 
-/* ─────────────── helpers ─────────────── */
-const fmtRp = (n: number) =>
-  n ? "Rp " + n.toLocaleString("id-ID") : "";
-
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
 function currentMonthYear() {
@@ -54,7 +49,7 @@ function currentMonthYear() {
   return { month: d.getMonth() + 1, year: d.getFullYear() };
 }
 
-/* ─────────────── sample history (demo data, illustrative) ─────────────── */
+/* ─────────────── sample history (demo data) ─────────────── */
 const MOCK_HISTORY = [
   { month: "Nov", usage: 220, avg: 260 },
   { month: "Des", usage: 195, avg: 260 },
@@ -149,91 +144,70 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45 }}
-      className="overflow-hidden rounded-2xl text-white"
+      className="overflow-hidden rounded-2xl text-white shadow-xs"
       style={{ background: result.statusBg }}
     >
       {/* Hero */}
-      <div className="flex flex-col items-center gap-2 px-6 py-6 text-center">
-        <Gauge size={44} aria-hidden="true" />
-        <p className="text-xl font-extrabold">{result.statusLabel}</p>
-        <p className="text-sm text-white/80">{result.message}</p>
+      <div className="flex flex-col items-center gap-2 px-6 py-5 text-center">
+        <Gauge size={40} aria-hidden="true" />
+        <p className="text-lg font-extrabold">{result.statusLabel}</p>
+        <p className="text-xs text-white/85 leading-relaxed">{result.message}</p>
       </div>
 
-      {/* Stats */}
-      <div className="mx-4 mb-4 rounded-xl bg-black/20 px-4 py-3">
+      {/* Stats row */}
+      <div className="grid grid-cols-2 divide-x divide-white/10 border-t border-b border-white/10 bg-black/10 py-3 text-center text-xs">
+        <div>
+          <span className="text-white/60 text-[10px]">Estimasi Emisi</span>
+          <p className="text-base font-bold text-white">{result.co2Impact} <span className="text-xs font-normal">kg CO₂e</span></p>
+        </div>
+        <div>
+          <span className="text-white/60 text-[10px]">Selisih vs Acuan</span>
+          <p className="text-base font-bold text-white">
+            {result.difference > 0 ? `+${result.difference}` : result.difference} <span className="text-xs font-normal">kWh</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Progress comparison */}
+      <div className="px-6 py-4">
         <ComparisonBar
           yourUsage={result.yourUsage}
           avgUsage={result.averageUsage}
           color={result.statusColor}
         />
-        <div className="mt-3 flex justify-between border-t border-white/10 pt-3 text-xs">
-          <span className="text-white/60">Selisih Pemakaian</span>
-          <span className={`font-bold ${result.difference < 0 ? "text-[#7AC74F]" : "text-red-300"}`}>
-            {result.difference > 0 ? "+" : ""}{result.difference} kWh
+      </div>
+
+      {/* Reward callout */}
+      {isGood && (
+        <div className="flex items-center gap-2.5 bg-white/10 px-6 py-2.5 text-xs text-white">
+          <Star size={14} className="text-yellow-300 shrink-0" aria-hidden="true" />
+          <span>
+            {result.status === "sangat_hemat" ? "Sangat hemat! Berpotensi +25 EcoPoints saat disimpan." : "Hemat! Berpotensi +15 EcoPoints saat disimpan."}
           </span>
         </div>
-        <p className="mt-2 text-[10px] text-white/50">
-          Nilai acuan merupakan standar komparasi prototipe untuk simulasi, bukan statistik mutlak PLN.
-        </p>
-      </div>
-
-      {/* CO2 */}
-      <div className="mx-4 mb-4 rounded-xl bg-black/20 px-4 py-3 text-sm">
-        {isGood ? (
-          <>
-            <p className="font-semibold text-[#7AC74F]">
-              Estimasi {Math.abs(result.co2Impact)} kg CO₂e di bawah acuan bulan ini
-            </p>
-            <p className="mt-1 text-white/60">Estimasi menggunakan faktor emisi jaringan listrik; bukan pengukuran meter langsung.</p>
-          </>
-        ) : (
-          <>
-            <p className="font-semibold text-red-300">
-              Estimasi +{result.co2Impact} kg CO₂e di atas rata-rata acuan
-            </p>
-            <p className="mt-1 text-white/60">
-              Penghematan 10% dari kelebihan ≈ {(Math.abs(result.co2Impact) * 0.1).toFixed(1)} kg CO₂e lebih rendah
-            </p>
-          </>
-        )}
-      </div>
-
-      {/* EcoPoints */}
-      {result.ecoPointsEarned > 0 && (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring" }}
-          className="mx-4 mb-4 flex items-center justify-center gap-3 rounded-xl bg-[#7AC74F]/20 border border-[#7AC74F]/40 px-4 py-3"
-        >
-          <Star size={24} className="text-[#7AC74F]" aria-hidden="true" />
-          <div>
-            <p className="text-lg font-extrabold text-[#7AC74F]">+{result.ecoPointsEarned} EcoPoints</p>
-            <p className="text-xs text-white/60">Diberikan satu kali per bulan tagihan ketika Anda menyimpan laporan listrik.</p>
-          </div>
-        </motion.div>
       )}
 
       {/* Tips */}
-      <div className="mx-4 mb-5 flex flex-col gap-2">
-        <p className="text-xs font-bold uppercase tracking-wider text-white/50">Tips Hemat Energi Untuk Anda</p>
-        {result.tips.map((tip, i) => (
-          <div key={i} className="flex items-start gap-2 rounded-xl bg-black/20 px-3 py-2.5 text-sm">
-            <Lightbulb size={16} className="mt-0.5 shrink-0 text-amber-200" aria-hidden="true" />
-            <span className="text-white/80">{tip}</span>
-          </div>
-        ))}
+      <div className="flex flex-col gap-2 bg-black/20 px-6 py-3.5 text-xs text-white/80">
+        <p className="font-semibold text-white flex items-center gap-1.5">
+          <Lightbulb size={13} className="text-yellow-300" /> Tips Efisiensi Energi:
+        </p>
+        <ul className="list-disc pl-4 space-y-1 text-[11px]">
+          {result.tips.map((t, i) => (
+            <li key={i}>{t}</li>
+          ))}
+        </ul>
       </div>
     </motion.div>
   );
 }
 
-/* ─────────────── Main Component ─────────────── */
+/* ─────────────── main component ─────────────── */
 export default function InputListrikManual() {
   const earn = useEcoPointsStore((s) => s.earn);
   const transactions = useEcoPointsStore((s) => s.transactions);
 
-  /* Profil state */
+  /* Profile state */
   const [profileSaved, setProfileSaved] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [members, setMembers] = useState<HouseholdProfile["members"]>(3);
@@ -284,7 +258,7 @@ export default function InputListrikManual() {
     if (!n || n <= 0) { setResult(null); return; }
     debounceRef.current = setTimeout(() => {
       setResult(analyzePowerUsage(n, { members, daya, type: hunian }));
-    }, 500);
+    }, 400);
   }, [members, daya, hunian]);
 
   useEffect(() => { recalc(kwh); }, [kwh, recalc]);
@@ -298,14 +272,24 @@ export default function InputListrikManual() {
 
   const handleSubmit = async () => {
     const kwhNum = parseFloat(kwh);
-    if (!kwhNum || kwhNum <= 0) { toast.error("Masukkan angka pemakaian kWh listrik terlebih dahulu."); return; }
+    if (!kwhNum || kwhNum <= 0) {
+      toast.error("Masukkan jumlah pemakaian kWh yang valid");
+      return;
+    }
     setSaving(true);
     await new Promise((r) => setTimeout(r, 600));
-    // One benchmark reward per billing period (fraud mitigation).
-    const periodRef = `elec-${selectedYear}-${String(selectedMonth).padStart(2, "0")}`;
-    const alreadyRewarded = transactions.some((t) => t.source === "electricity_benchmark" && t.refId === periodRef);
-    const reward = !alreadyRewarded && result?.ecoPointsEarned ? result.ecoPointsEarned : 0;
-    if (reward) earn(reward, "electricity_benchmark", `Efisiensi listrik di bawah acuan periode ${monthNames[selectedMonth - 1]} ${selectedYear}`, periodRef);
+
+    const periodKey = `listrik_${selectedYear}_${selectedMonth}`;
+    const alreadyRewarded = transactions.some((t) => t.source === "footprint_log" && t.label?.includes(periodKey));
+    let reward = 0;
+    if (!alreadyRewarded) {
+      const res = analyzePowerUsage(kwhNum, { members, daya, type: hunian });
+      if (res.status === "sangat_hemat") reward = 25;
+      else if (res.status === "hemat") reward = 15;
+      else reward = 10;
+      earn(reward, "footprint_log", `Laporan Listrik PLN (${periodKey}): ${monthNames[selectedMonth - 1]} ${selectedYear}`);
+    }
+
     toast.success(
       reward
         ? `Laporan tersimpan · +${reward} EcoPoints`
@@ -317,8 +301,6 @@ export default function InputListrikManual() {
   };
 
   const showProfileForm = !profileSaved || editProfile;
-
-  /* ── Month/year selectors ── */
   const years = [2025, 2026];
 
   /* ── History chart custom dot ── */
@@ -329,273 +311,314 @@ export default function InputListrikManual() {
   };
 
   return (
-    <div className="flex flex-col gap-5">
-
-      {/* ── SECTION 1: Profil Rumah Tangga ── */}
-      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-[#1A1A1A]">Profil Rumah Tangga</h3>
-            <p className="text-xs text-gray-400">Digunakan untuk menentukan nilai pembanding konsumsi listrik keluarga</p>
+    <div className="grid gap-5 lg:gap-6 lg:grid-cols-2 items-stretch">
+      {/* ── KOLOM KIRI: Profil Rumah Tangga & Form Input Bulanan ── */}
+      <div className="flex flex-col gap-5 justify-between">
+        {/* SECTION 1: Profil Rumah Tangga */}
+        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs">
+          <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#0F3D2E]">Profil Rumah Tangga</h3>
+              <p className="text-[11px] text-gray-500">Nilai dasar pembanding efisiensi listrik keluarga</p>
+            </div>
+            {profileSaved && !editProfile && (
+              <button
+                onClick={() => setEditProfile(true)}
+                className="text-xs font-semibold text-[#1D9E75] hover:underline"
+              >
+                Ubah Profil
+              </button>
+            )}
           </div>
-          {profileSaved && !editProfile && (
-            <button
-              onClick={() => setEditProfile(true)}
-              className="text-xs font-semibold text-[#2D5F3F] hover:underline"
-            >
-              Ubah
-            </button>
-          )}
-        </div>
 
-        {showProfileForm ? (
-          <div className="flex flex-col gap-5">
-            {/* Members */}
-            <div>
-              <label className="mb-2 block text-xs font-semibold text-gray-600">
-                Jumlah Anggota Keluarga
-              </label>
-              <MemberStepper
-                value={members}
-                onChange={(v) => setMembers(v as HouseholdProfile["members"])}
-              />
-            </div>
-
-            {/* Daya */}
-            <div>
-              <label className="mb-2 block text-xs font-semibold text-gray-600">
-                Golongan Daya Listrik{" "}
-                <span className="font-normal text-gray-400">(sesuai struk PLN Anda)</span>
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {DAYA_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.va}
-                    type="button"
-                    onClick={() => setDaya(opt.va)}
-                    className={`rounded-xl border px-2 py-2.5 text-center transition-all ${
-                      daya === opt.va
-                        ? "border-[#2D5F3F] bg-[#F0FAF4] ring-1 ring-[#2D5F3F]"
-                        : "border-[#E5E7EB] hover:border-[#A8D5BA]"
-                    }`}
-                  >
-                    <p className={`text-xs font-bold ${daya === opt.va ? "text-[#2D5F3F]" : "text-[#1A1A1A]"}`}>
-                      {opt.label}
-                    </p>
-                    <p className="text-[9px] text-gray-400">{opt.golongan}</p>
-                  </button>
-                ))}
+          {showProfileForm ? (
+            <div className="flex flex-col gap-4">
+              {/* Members */}
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-700">
+                  Jumlah Anggota Keluarga
+                </label>
+                <MemberStepper
+                  value={members}
+                  onChange={(v) => setMembers(v as HouseholdProfile["members"])}
+                />
               </div>
-            </div>
 
-            {/* Hunian */}
-            <div>
-              <label className="mb-2 block text-xs font-semibold text-gray-600">Tipe Tempat Tinggal</label>
-              <div className="grid grid-cols-2 gap-2">
-                {HUNIAN_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setHunian(opt.value)}
-                    className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all ${
-                      hunian === opt.value
-                        ? "border-[#2D5F3F] bg-[#F0FAF4] ring-1 ring-[#2D5F3F]"
-                        : "border-[#E5E7EB] hover:border-[#A8D5BA]"
-                    }`}
-                  >
-                    <Home size={18} className="shrink-0 text-[#2D5F3F]" aria-hidden="true" />
-                    <div>
-                      <p className={`text-xs font-semibold ${hunian === opt.value ? "text-[#2D5F3F]" : "text-[#1A1A1A]"}`}>
+              {/* Daya */}
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-700">
+                  Golongan Daya Listrik{" "}
+                  <span className="font-normal text-gray-400">(sesuai rekening PLN)</span>
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {DAYA_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.va}
+                      type="button"
+                      onClick={() => setDaya(opt.va)}
+                      className={`rounded-xl border px-2 py-2 text-center transition-all ${
+                        daya === opt.va
+                          ? "border-[#1D9E75] bg-emerald-50 ring-1 ring-[#1D9E75]"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <p className={`text-xs font-bold ${daya === opt.va ? "text-[#0F3D2E]" : "text-gray-800"}`}>
                         {opt.label}
                       </p>
-                      <p className="text-[9px] text-gray-400">{opt.sub}</p>
-                    </div>
-                  </button>
-                ))}
+                      <p className="text-[9px] text-gray-400">{opt.golongan}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hunian */}
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-700">Tipe Tempat Tinggal</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {HUNIAN_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setHunian(opt.value)}
+                      className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition-all ${
+                        hunian === opt.value
+                          ? "border-[#1D9E75] bg-emerald-50 ring-1 ring-[#1D9E75]"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <Home size={16} className="shrink-0 text-[#1D9E75]" aria-hidden="true" />
+                      <div>
+                        <p className={`text-xs font-semibold ${hunian === opt.value ? "text-[#0F3D2E]" : "text-gray-800"}`}>
+                          {opt.label}
+                        </p>
+                        <p className="text-[9px] text-gray-400">{opt.sub}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={saveProfile}
+                className="mt-1 rounded-xl bg-[#0F3D2E] py-2.5 text-xs font-bold text-white hover:bg-[#18533F] transition-colors"
+              >
+                Simpan Profil Rumah Tangga
+              </button>
+            </div>
+          ) : (
+            /* Saved profile summary */
+            <div className="flex flex-wrap items-center gap-3 rounded-xl bg-[#F9FAFB] border border-gray-100 px-4 py-3 text-xs sm:text-sm">
+              <Users size={16} className="text-[#1D9E75]" aria-hidden="true" />
+              <span className="font-semibold text-gray-800">{members} orang</span>
+              <span className="text-gray-300">·</span>
+              <span className="font-semibold text-gray-800">
+                {DAYA_OPTIONS.find((d) => d.va === daya)?.label}
+              </span>
+              <span className="text-gray-300">·</span>
+              <span className="font-semibold text-gray-800">
+                {HUNIAN_OPTIONS.find((h) => h.value === hunian)?.label}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* SECTION 2: Input Bulanan */}
+        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex-1 flex flex-col justify-between">
+          <div>
+            <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
+              <h3 className="text-sm font-bold text-[#0F3D2E]">Catat Pemakaian Listrik Bulanan</h3>
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                Input Manual
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {/* Periode */}
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-700">Periode Rekening</label>
+                <div className="flex gap-2">
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                    className="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]"
+                  >
+                    {monthNames.map((m, i) => (
+                      <option key={i} value={i + 1}>{m}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(Number(e.target.value))}
+                    className="w-28 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]"
+                  >
+                    {years.map((y) => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              {/* kWh Input */}
+              <div>
+                <label htmlFor="kwh-input" className="mb-1.5 block text-xs font-semibold text-gray-700">
+                  Jumlah Pemakaian Listrik (kWh)
+                </label>
+                <div className="flex items-center overflow-hidden rounded-xl border border-gray-300 bg-white focus-within:border-[#1D9E75] focus-within:ring-1 focus-within:ring-[#1D9E75]">
+                  <input
+                    id="kwh-input"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={kwh}
+                    onChange={(e) => setKwh(e.target.value)}
+                    placeholder="Contoh: 185"
+                    className="flex-1 bg-transparent px-4 py-3 text-xl sm:text-2xl font-black text-gray-900 outline-none placeholder-gray-300"
+                  />
+                  <span className="pr-4 text-sm font-bold text-gray-400">kWh</span>
+                </div>
+                <p className="mt-1 text-[11px] text-gray-400">
+                  Stand Meter Akhir dikurangi Stand Meter Awal pada struk rekening PLN.
+                </p>
+              </div>
+
+              {/* Tagihan Rp */}
+              <div>
+                <label htmlFor="tagihan-input" className="mb-1.5 block text-xs font-semibold text-gray-700">
+                  Total Tagihan Rekening Listrik <span className="font-normal text-gray-400">(opsional)</span>
+                </label>
+                <input
+                  id="tagihan-input"
+                  type="text"
+                  inputMode="numeric"
+                  value={tagihanDisplay}
+                  onChange={(e) => handleTagihan(e.target.value.replace(/[^0-9]/g, ""))}
+                  placeholder="Rp 0"
+                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]"
+                />
+              </div>
+
+              {/* Sumber */}
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-700">Sumber Data</label>
+                <div className="flex flex-wrap gap-3 text-xs">
+                  {SUMBER_OPTIONS.map((s) => (
+                    <label key={s} className="flex cursor-pointer items-center gap-1.5 text-gray-700">
+                      <input
+                        type="radio"
+                        name="sumber"
+                        checked={sumber === s}
+                        onChange={() => setSumber(s)}
+                        className="accent-[#0F3D2E]"
+                      />
+                      {s}
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
 
-            <button
-              onClick={saveProfile}
-              className="rounded-xl bg-[#2D5F3F] py-2.5 text-sm font-bold text-white hover:bg-[#245033] transition-colors"
-            >
-              Simpan Profil Rumah Tangga
-            </button>
+          {/* Submit Button */}
+          <div className="mt-5">
+            {kwh && parseFloat(kwh) > 0 ? (
+              <motion.button
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={handleSubmit}
+                disabled={saving}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F3D2E] py-3 text-sm font-bold text-white shadow-sm hover:bg-[#18533F] disabled:opacity-60 transition-colors"
+              >
+                {saving ? (
+                  <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Menyimpan Laporan…</>
+                ) : (
+                  <>Simpan Laporan Listrik {monthNames[selectedMonth - 1]} {selectedYear}</>
+                )}
+              </motion.button>
+            ) : (
+              <div className="rounded-xl bg-gray-50 border border-gray-100 p-3 text-center text-xs text-gray-400">
+                Masukkan nilai kWh di atas untuk mengaktifkan tombol simpan dan melihat kalkulasi emisi.
+              </div>
+            )}
           </div>
-        ) : (
-          /* Saved profile summary */
-          <div className="flex flex-wrap items-center gap-3 rounded-xl bg-[#F9FAFB] px-4 py-3 text-sm">
-            <Users size={16} className="text-[#2D5F3F]" aria-hidden="true" />
-            <span className="font-semibold text-[#1A1A1A]">{members} orang</span>
-            <span className="text-gray-300">·</span>
-            <span className="font-semibold text-[#1A1A1A]">
-              {DAYA_OPTIONS.find((d) => d.va === daya)?.label}
-            </span>
-            <span className="text-gray-300">·</span>
-            <span className="font-semibold text-[#1A1A1A]">
-              {HUNIAN_OPTIONS.find((h) => h.value === hunian)?.label}
-            </span>
-          </div>
-        )}
+        </div>
       </div>
 
-      {/* ── SECTION 2: Input Bulanan ── */}
-      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-bold text-[#1A1A1A]">Pemakaian Listrik Bulanan</h3>
+      {/* ── KOLOM KANAN: Hasil Benchmark & Riwayat 6 Bulan ── */}
+      <div className="flex flex-col gap-5 justify-between">
+        {/* SECTION 3: Benchmark Result Card */}
+        <div>
+          <AnimatePresence mode="wait">
+            {result ? (
+              <BenchmarkCard result={result} />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/50 p-6 text-center flex flex-col items-center justify-center gap-2.5 h-[280px]">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-[#0F3D2E]">
+                  <Gauge size={24} />
+                </span>
+                <h4 className="text-sm font-bold text-[#0F3D2E]">Kalkulasi Efisiensi Energi Real-Time</h4>
+                <p className="text-xs text-gray-500 max-w-sm leading-relaxed">
+                  Ketikkan angka pemakaian kWh pada formulir di sebelah kiri untuk melihat evaluasi otomatis apakah konsumsi listrik Anda tergolong Sangat Hemat, Sesuai Acuan, atau Berlebih.
+                </p>
+                <div className="flex items-center gap-2 mt-1 text-[11px] text-emerald-800 font-semibold bg-white border border-emerald-200 px-3 py-1 rounded-full">
+                  <CheckCircle2 size={13} className="text-[#1D9E75]" />
+                  <span>Dihitung berdasarkan profil {members} anggota keluarga</span>
+                </div>
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        <div className="flex flex-col gap-4">
-          {/* Month/year */}
+        {/* SECTION 4: Riwayat 6 Bulan */}
+        <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex-1 flex flex-col justify-between">
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Periode Tagihan</label>
-            <div className="flex gap-2">
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                className="flex-1 rounded-xl border border-[#E5E7EB] px-3 py-2.5 text-sm outline-none focus:border-[#2D5F3F] focus:ring-2 focus:ring-[#2D5F3F]/20"
-              >
-                {monthNames.map((m, i) => (
-                  <option key={i} value={i + 1}>{m}</option>
-                ))}
-              </select>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(Number(e.target.value))}
-                className="w-28 rounded-xl border border-[#E5E7EB] px-3 py-2.5 text-sm outline-none focus:border-[#2D5F3F] focus:ring-2 focus:ring-[#2D5F3F]/20"
-              >
-                {years.map((y) => <option key={y} value={y}>{y}</option>)}
-              </select>
+            <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-3">
+              <div>
+                <h3 className="text-sm font-bold text-[#0F3D2E]">Tren Pemakaian 6 Bulan Terakhir</h3>
+                <p className="text-[11px] text-gray-400 mt-0.5">Evaluasi perbandingan konsumsi kWh bulanan Anda</p>
+              </div>
+              <DataBadge variant="demo" label="Data Sampel" />
             </div>
-          </div>
 
-          {/* kWh: BIG input */}
-          <div>
-            <label htmlFor="kwh-input" className="mb-1.5 block text-xs font-semibold text-gray-600">
-              Jumlah Pemakaian Listrik
-            </label>
-            <div className="flex items-center overflow-hidden rounded-xl border border-[#E5E7EB] focus-within:border-[#2D5F3F] focus-within:ring-2 focus-within:ring-[#2D5F3F]/20">
-              <input
-                id="kwh-input"
-                type="number"
-                min={0}
-                step={1}
-                value={kwh}
-                onChange={(e) => setKwh(e.target.value)}
-                placeholder="0"
-                className="flex-1 bg-transparent px-4 py-3 text-2xl font-extrabold text-[#1A1A1A] outline-none placeholder-gray-200"
-              />
-              <span className="pr-4 text-base font-semibold text-gray-400">kWh</span>
-            </div>
-            <p className="mt-1.5 text-[11px] text-gray-400">
-              Petunjuk: Pada struk tagihan PLN, nilai ini tertera sebagai Stand Meter Kini dikurangi Stand Meter Lalu.
-            </p>
-          </div>
-
-          {/* Tagihan: optional */}
-          <div>
-            <label htmlFor="tagihan-input" className="mb-1.5 block text-xs font-semibold text-gray-600">
-              Total Tagihan Rekening Listrik <span className="font-normal text-gray-400">(opsional)</span>
-            </label>
-            <input
-              id="tagihan-input"
-              type="text"
-              inputMode="numeric"
-              value={tagihanDisplay}
-              onChange={(e) => handleTagihan(e.target.value.replace(/[^0-9]/g, ""))}
-              placeholder="Rp 0"
-              className="w-full rounded-xl border border-[#E5E7EB] px-4 py-3 text-sm outline-none focus:border-[#2D5F3F] focus:ring-2 focus:ring-[#2D5F3F]/20"
-            />
-          </div>
-
-          {/* Sumber */}
-          <div>
-            <label className="mb-1.5 block text-xs font-semibold text-gray-600">Sumber Data</label>
-            <div className="flex flex-col gap-2">
-              {SUMBER_OPTIONS.map((s) => (
-                <label key={s} className="flex cursor-pointer items-center gap-2.5 text-sm">
-                  <input
-                    type="radio"
-                    name="sumber"
-                    checked={sumber === s}
-                    onChange={() => setSumber(s)}
-                    className="accent-[#2D5F3F]"
+            <div className="my-auto py-2">
+              <ResponsiveContainer width="100%" height={170}>
+                <LineChart data={MOCK_HISTORY} margin={{ top: 8, bottom: 0, left: -24, right: 8 }}>
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fill: "#9CA3AF", fontSize: 11 }}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  {s}
-                </label>
-              ))}
+                  <YAxis hide />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 12 }}
+                    formatter={(v: number, name: string) => [`${v} kWh`, name === "usage" ? "Pemakaian Anda" : "Batas Acuan"]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="usage"
+                    stroke="#2D5F3F"
+                    strokeWidth={2.5}
+                    name="usage"
+                    dot={(p) => <HistoryDot key={`u-${p.cx}`} {...p} />}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="avg"
+                    stroke="#D1D5DB"
+                    strokeWidth={2}
+                    strokeDasharray="4 2"
+                    name="avg"
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
+          </div>
+
+          <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+            <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-3 rounded bg-[#2D5F3F]" /> Pemakaian Anda</span>
+            <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-3 rounded border-t-2 border-dashed border-[#9CA3AF]" /> Batas Acuan Rata-rata</span>
           </div>
         </div>
       </div>
-
-      {/* ── SECTION 3: Benchmark result (live) ── */}
-      <AnimatePresence>
-        {result && <BenchmarkCard result={result} />}
-      </AnimatePresence>
-
-      {/* ── Submit button ── */}
-      {kwh && parseFloat(kwh) > 0 && (
-        <motion.button
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          onClick={handleSubmit}
-          disabled={saving}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-[#2D5F3F] py-4 text-sm font-extrabold text-white shadow-md hover:bg-[#245033] disabled:opacity-60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
-        >
-          {saving ? (
-            <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Menyimpan Laporan…</>
-          ) : (
-            <>Simpan Laporan Listrik {monthNames[selectedMonth - 1]} {selectedYear}</>
-          )}
-        </motion.button>
-      )}
-
-      {/* ── SECTION 4: Riwayat 6 bulan ── */}
-      <div className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-xs">
-        <div className="mb-1 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-[#0F3D2E]">Tren 6 Bulan Terakhir</h3>
-          <DataBadge variant="demo" label="Data Sampel" />
-        </div>
-        <p className="mb-4 text-[11px] text-gray-500">
-          Titik hijau menandakan pemakaian efisien di bawah acuan, titik merah melampaui rata-rata.
-        </p>
-        <ResponsiveContainer width="100%" height={160}>
-          <LineChart data={MOCK_HISTORY} margin={{ top: 8, bottom: 0, left: -24, right: 8 }}>
-            <XAxis
-              dataKey="month"
-              tick={{ fill: "#9CA3AF", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis hide />
-            <Tooltip
-              contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 12 }}
-              formatter={(v: number, name: string) => [`${v} kWh`, name === "usage" ? "Pemakaian Anda" : "Batas Acuan"]}
-            />
-            <Line
-              type="monotone"
-              dataKey="usage"
-              stroke="#2D5F3F"
-              strokeWidth={2}
-              name="usage"
-              dot={(p) => <HistoryDot key={`u-${p.cx}`} {...p} />}
-            />
-            <Line
-              type="monotone"
-              dataKey="avg"
-              stroke="#D1D5DB"
-              strokeWidth={2}
-              strokeDasharray="4 2"
-              name="avg"
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-        <div className="mt-2 flex items-center gap-4 text-[10px] text-gray-400">
-          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#2D5F3F]" /> Pemakaian Anda</span>
-          <span className="flex items-center gap-1"><span className="inline-block h-2 w-4 rounded bg-[#D1D5DB]" style={{ borderTop: "2px dashed #D1D5DB", background: "none" }} /> Batas Acuan Rata-rata</span>
-        </div>
-      </div>
-
     </div>
   );
 }

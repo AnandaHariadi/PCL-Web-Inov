@@ -157,3 +157,32 @@ Berdasarkan tinjauan kendala antarmuka pada modul Pelacak Karbon & Struk Listrik
      4. **Penyesuaian Durasi Mock Auth**: Mengurangi delay simulasi `demoDelay` dari 350–400 ms menjadi 80 ms untuk menghadirkan respon klik yang seketika (*instantaneous*).
      5. **Penyelarasan Identitas Akun Demo Pemkot**: Memperbarui teks tombol dari `"Masuk Cepat Demo: Budi Hartono"` menjadi `"Masuk Cepat Demo: Ir. Hendro Gunawan, M.Si"` sesuai profil resmi Kepala Seksi DLH Kota Surabaya.
      6. **Lokalisasi Notifikasi Masuk**: Menerjemahkan notifikasi toast login (`Selamat datang, [Nama]!` dan `Email atau kata sandi tidak sesuai.`) ke Bahasa Indonesia.
+
+
+---
+
+## 10. Harmonisasi Simetris & Penjajaran Penuh Tata Letak Pelacak Karbon
+
+Berdasarkan evaluasi terhadap kesejajaran visual antarmuka modul Pelacak Karbon & Struk Listrik PLN (`/dashboard/tracker`):
+
+1. **Pemisahan Modul & Penjajaran Kartu Berpasangan (*Paired Equal Rows*)**:
+   - **Diagnosis**: Sebelumnya di Tab Catat Aktivitas, komponen `TrendEmisiChart` menggabungkan grafik batang dan grafik garis perbandingan dalam satu file (~720 px) serta ditumpuk dengan `BreakdownKategori` (~360 px), sehingga kolom kiri mencapai 1.080 px sementara `CatatAktivitasBaru` di kolom kanan hanya berukuran 470 px. Hal ini menciptakan rongga kosong putih masif di bawah form.
+   - **Solusi Arsitektur**:
+     - Memisahkan komponen grafik menjadi dua komponen independen: `TrendEmisiChart` (Grafik Batang Tren Emisi) dan `ComparisonEmisiChart` (Grafik Garis Perbandingan vs Surabaya).
+     - **Baris 1**: Grafik Batang Tren Emisi (Kiri, 58%) berpasangan sejajar dengan Form Catat Aktivitas Emisi Harian (Kanan, 42%). Keduanya memiliki profil ketinggian seimbang (~440 px vs ~440 px) dan menggunakan `h-full flex flex-col justify-between`.
+     - **Baris 2**: Grafik Garis Perbandingan Emisi vs Surabaya (Kiri, 50%) berpasangan sejajar dengan Distribusi Emisi per Kategori (Kanan, 50%). Keduanya menyajikan wawasan analitis dengan tinggi setara (~380 px vs ~380 px).
+     - **Baris 3**: Target Reduksi Emisi Rumah Tangga (Kiri, 50%) berpasangan sejajar dengan Tolok Ukur Emisi Warga Surabaya & Potensi EcoPoints (Kanan, 50%) (~490 px vs ~490 px).
+     - **Baris 4**: Banner Panduan Efisiensi Energi Warga membentang penuh dengan grid 3 kartu tips praktis Surabaya.
+
+2. **Rekayasa Ulang Modul Struk Listrik PLN ke Grid 2 Kolom Sejajar**:
+   - **Mode Input Manual (`InputListrikManual.tsx`)**:
+     - Mengubah susunan satu kolom vertikal yang panjang menjadi 2 kolom simetris (`lg:grid-cols-2`):
+       - *Kolom Kiri*: Profil Rumah Tangga + Formulir Periode, kWh, Tagihan Rp, dan Tombol Simpan Laporan.
+       - *Kolom Kanan*: Kartu Evaluasi Efisiensi Real-Time (Gauge status & emisi kg CO₂e) + Grafik Riwayat 6 Bulan Terakhir.
+   - **Mode Pindai Struk OCR (`ScanStrukListrik.tsx`)**:
+     - *Kondisi Idle*: Kolom kiri berupa area Dropzone berkas & tombol kamera/upload; kolom kanan berupa Panduan 3 Langkah Ekstraksi OCR Otomatis & contoh data struk PLN yang diterima.
+     - *Kondisi Terbaca*: Kolom kiri berupa status keyakinan deteksi AI Vision & tombol pindai ulang; kolom kanan berupa highlight angka kWh, grid detail data pelanggan, serta tombol simpan data.
+   - **Mode Analisis Pemakaian (`DataListrik.tsx`)**:
+     - *Kolom Kiri*: Kartu Ringkasan Rata-rata 6 Bulan Terakhir & Rekomendasi Efisiensi; *Kolom Kanan*: Tabel Riwayat Pemakaian 6 Bulan (Bulan, kWh, Status).
+   - Di bawah modul `DataListrik`, Baris 2 menampilkan Target Reduksi Emisi dan Tolok Ukur Surabaya berdampingan sejajar (50% - 50%), diikuti oleh Panduan Efisiensi Energi Warga di Baris 3.
+   - Seluruh celah kosong (*blank void space*) di kedua tab berhasil dihilangkan sepenuhnya, menghasilkan tata letak yang proporsional, padat karya, dan sejajar di seluruh tingkat.

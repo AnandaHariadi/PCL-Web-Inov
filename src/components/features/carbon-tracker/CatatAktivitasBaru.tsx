@@ -126,133 +126,140 @@ export default function CatatAktivitasBaru({
   const labelBase = "mb-1.5 block text-xs font-semibold text-gray-600";
 
   return (
-    <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between">
       {/* Toast */}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
-      {/* Header */}
-      <h3 className="mb-4 text-base font-bold text-[#0F3D2E]">
-        Catat Aktivitas Emisi Harian
-      </h3>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-
-        {/* Field 1: Kategori */}
+      <div className="flex flex-col justify-between h-full">
         <div>
-          <label htmlFor="catat-category" className={labelBase}>Kategori Aktivitas</label>
-          <div className="relative">
-            <select
-              id="catat-category"
-              {...register("category")}
-              className={`${inputBase} appearance-none pr-9 bg-white font-medium`}
-              defaultValue=""
-            >
-              <option value="" disabled>
-                -- Pilih Kategori Aktivitas --
-              </option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={16}
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
+          {/* Header */}
+          <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5">
+            <h3 className="text-base font-bold text-[#0F3D2E]">
+              Catat Aktivitas Emisi Harian
+            </h3>
+            <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+              Input Warga
+            </span>
           </div>
-          {errors.category && (
-            <p className="mt-1 text-xs text-[#EF4444]">{errors.category.message}</p>
-          )}
-          {/* Category color indicator */}
-          {selectedCategory && (
-            <div className="mt-1.5 flex items-center gap-1.5">
-              <span
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: CATEGORY_COLORS[selectedCategory] }}
-              />
-              <span className="text-xs text-gray-400">{selectedCategory}</span>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+            {/* Field 1: Kategori */}
+            <div>
+              <label htmlFor="catat-category" className={labelBase}>Kategori Aktivitas</label>
+              <div className="relative">
+                <select
+                  id="catat-category"
+                  {...register("category")}
+                  className={`${inputBase} appearance-none pr-9 bg-white font-medium`}
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    -- Pilih Kategori Aktivitas --
+                  </option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+              </div>
+              {errors.category && (
+                <p className="mt-1 text-xs text-[#EF4444]">{errors.category.message}</p>
+              )}
+              {selectedCategory && (
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: CATEGORY_COLORS[selectedCategory] }}
+                  />
+                  <span className="text-xs text-gray-400">{selectedCategory}</span>
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Field 2: Jumlah + Unit */}
+            <div className="grid grid-cols-[1fr_80px] gap-2">
+              <div>
+                <label htmlFor="catat-amount" className={labelBase}>Jumlah</label>
+                <input
+                  id="catat-amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="Contoh: 15"
+                  {...register("amount", { valueAsNumber: true })}
+                  className={inputBase}
+                />
+                {errors.amount && (
+                  <p className="mt-1 text-xs text-[#EF4444]">{errors.amount.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="catat-unit" className={labelBase}>Satuan</label>
+                <input
+                  id="catat-unit"
+                  type="text"
+                  {...register("unit")}
+                  className={`${inputBase} text-center font-bold text-[#0F3D2E]`}
+                  readOnly
+                />
+              </div>
+            </div>
+
+            {/* Field 3: Catatan */}
+            <div>
+              <label htmlFor="catat-notes" className={labelBase}>
+                Catatan{" "}
+                <span className="font-normal text-gray-400">(opsional)</span>
+              </label>
+              <textarea
+                id="catat-notes"
+                rows={2}
+                placeholder="Contoh: Bersepeda ke kampus, belanja tanpa kantong plastik…"
+                {...register("notes")}
+                className={`${inputBase} resize-none`}
+              />
+            </div>
+
+            <p className="rounded-xl bg-emerald-50 border border-emerald-200/80 px-3 py-2 text-xs text-[#0F3D2E]">
+              Melakukan aksi nyata seperti pilah sampah atau tanam pohon?{" "}
+              <Link href="/dashboard/eco-action" className="font-bold underline">Verifikasi Aksi Hijau</Link> untuk mendapatkan EcoPoints.
+            </p>
+
+            {/* Listrik redirect note */}
+            <p className="text-xs text-gray-500">
+              Ingin memantau rekening listrik PLN?{" "}
+              <button
+                type="button"
+                onClick={onGoToListrik}
+                className="font-bold text-[#1D9E75] underline underline-offset-2"
+              >
+                Buka tab Struk Listrik PLN
+              </button>
+            </p>
+
+            {/* Submit */}
+            <motion.button
+              type="submit"
+              disabled={isSubmitting}
+              whileTap={{ scale: 0.97 }}
+              className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-70 bg-[#0F3D2E] hover:bg-[#18533F] shadow-sm"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Menyimpan…
+                </>
+              ) : (
+                "Simpan Catatan Aktivitas"
+              )}
+            </motion.button>
+          </form>
         </div>
-
-        {/* Field 2: Jumlah + Unit */}
-        <div className="grid grid-cols-[1fr_80px] gap-2">
-          <div>
-            <label htmlFor="catat-amount" className={labelBase}>Jumlah</label>
-            <input
-              id="catat-amount"
-              type="number"
-              step="0.01"
-              placeholder="Contoh: 15"
-              {...register("amount", { valueAsNumber: true })}
-              className={inputBase}
-            />
-            {errors.amount && (
-              <p className="mt-1 text-xs text-[#EF4444]">{errors.amount.message}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="catat-unit" className={labelBase}>Satuan</label>
-            <input
-              id="catat-unit"
-              type="text"
-              {...register("unit")}
-              className={`${inputBase} text-center font-bold text-[#0F3D2E]`}
-              readOnly
-            />
-          </div>
-        </div>
-
-        {/* Field 3: Catatan */}
-        <div>
-          <label htmlFor="catat-notes" className={labelBase}>
-            Catatan{" "}
-            <span className="font-normal text-gray-400">(opsional)</span>
-          </label>
-          <textarea
-            id="catat-notes"
-            rows={2}
-            placeholder="Contoh: Bersepeda ke kampus, belanja tanpa kantong plastik…"
-            {...register("notes")}
-            className={`${inputBase} resize-none`}
-          />
-        </div>
-
-        <p className="rounded-xl bg-emerald-50 border border-emerald-200/80 px-3 py-2 text-xs text-[#0F3D2E]">
-          Melakukan aksi nyata seperti pilah sampah atau tanam pohon?{" "}
-          <Link href="/dashboard/eco-action" className="font-bold underline">Verifikasi Aksi Hijau</Link> untuk mendapatkan EcoPoints.
-        </p>
-
-        {/* Listrik redirect note */}
-        <p className="text-xs text-gray-500">
-          Ingin memantau rekening listrik PLN?{" "}
-          <button
-            type="button"
-            onClick={onGoToListrik}
-            className="font-bold text-[#1D9E75] underline underline-offset-2"
-          >
-            Buka tab Struk Listrik PLN
-          </button>
-        </p>
-
-        {/* Submit */}
-        <motion.button
-          type="submit"
-          disabled={isSubmitting}
-          whileTap={{ scale: 0.97 }}
-          className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-70 bg-[#0F3D2E] hover:bg-[#18533F] shadow-sm"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 size={16} className="animate-spin" />
-              Menyimpan…
-            </>
-          ) : (
-            "Simpan Catatan Aktivitas"
-          )}
-        </motion.button>
-      </form>
+      </div>
     </div>
   );
 }

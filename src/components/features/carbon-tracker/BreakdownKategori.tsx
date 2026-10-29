@@ -40,65 +40,75 @@ export default function BreakdownKategori() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-xs"
+      className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between"
     >
-      {/* Header */}
-      <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-[#0F3D2E]">
-        Distribusi Emisi per Kategori <DataBadge variant="demo" label="Data Sampel" />
-      </h3>
+      <div>
+        {/* Header */}
+        <div className="mb-3.5 flex items-center justify-between border-b border-gray-100 pb-3.5">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-[#0F3D2E]">
+            Distribusi Emisi per Kategori
+          </h3>
+          <DataBadge variant="demo" label="Data Sampel" />
+        </div>
 
-      {/* Chart + center overlay */}
-      <div className="relative">
-        <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
-            <Pie
-              data={breakdownData}
-              cx="50%"
-              cy="50%"
-              innerRadius={55}
-              outerRadius={88}
-              startAngle={90}
-              endAngle={-270}
-              paddingAngle={2}
-              dataKey="value"
-              isAnimationActive={true}
-              animationBegin={0}
-              animationDuration={800}
-              animationEasing="ease-out"
-              labelLine={false}
-            >
-              {breakdownData.map((entry) => (
-                <Cell key={entry.name} fill={entry.color} stroke="white" strokeWidth={2} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-          </PieChart>
-        </ResponsiveContainer>
+        {/* Chart + center overlay */}
+        <div className="relative my-1">
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={breakdownData}
+                cx="50%"
+                cy="50%"
+                innerRadius={55}
+                outerRadius={88}
+                startAngle={90}
+                endAngle={-270}
+                paddingAngle={2}
+                dataKey="value"
+                isAnimationActive={true}
+                animationBegin={0}
+                animationDuration={800}
+                animationEasing="ease-out"
+                labelLine={false}
+              >
+                {breakdownData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} stroke="white" strokeWidth={2} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
 
-        {/* Center text: CSS overlay */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-[22px] font-extrabold leading-none text-[#0F3D2E]">{TOTAL}</p>
-            <p className="mt-0.5 text-[11px] text-gray-500 font-medium">kg CO₂e</p>
+          {/* Center text: CSS overlay */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-[22px] font-extrabold leading-none text-[#0F3D2E]">{TOTAL}</p>
+              <p className="mt-0.5 text-[11px] text-gray-500 font-medium">kg CO₂e</p>
+            </div>
           </div>
         </div>
+
+        {/* Legend */}
+        <ul className="mt-3 flex flex-col gap-2">
+          {breakdownData.map(({ name, value, color, pct }) => (
+            <li key={name} className="flex items-center justify-between text-xs sm:text-sm">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                <span className="text-gray-700 font-medium">{name}</span>
+              </div>
+              <div className="text-right">
+                <span className="font-bold text-[#0F3D2E]">{value} kg</span>
+                <span className="ml-1.5 text-xs text-gray-400">({pct}%)</span>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* Legend */}
-      <ul className="mt-3 flex flex-col gap-2">
-        {breakdownData.map(({ name, value, color, pct }) => (
-          <li key={name} className="flex items-center justify-between text-xs sm:text-sm">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-              <span className="text-gray-700 font-medium">{name}</span>
-            </div>
-            <div className="text-right">
-              <span className="font-bold text-[#0F3D2E]">{value} kg</span>
-              <span className="ml-1.5 text-xs text-gray-400">({pct}%)</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+        <span>Kontributor terbesar: Energi Rumah Tangga</span>
+        <span className="font-semibold text-[#0F3D2E]">50% dari total</span>
+      </div>
     </motion.div>
   );
 }

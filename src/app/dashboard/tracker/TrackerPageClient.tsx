@@ -5,7 +5,7 @@ import Link from "next/link";
 import { BarChart3, ShieldCheck, Leaf, Lightbulb, Bike, TreePine } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/common/PageWrapper";
-import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
+import TrendEmisiChart, { ComparisonEmisiChart } from "@/components/features/carbon-tracker/TrendEmisiChart";
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
 import DataListrik from "@/components/features/carbon-tracker/DataListrik";
 import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
@@ -26,7 +26,7 @@ const TABS: { id: TrackerTab; label: string }[] = [
 
 function PanduanEfisiensiCard() {
   return (
-    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 shadow-xs flex flex-col gap-3.5">
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-5 sm:p-6 shadow-xs flex flex-col gap-3.5">
       <div className="flex items-center justify-between border-b border-gray-100 pb-3">
         <div className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#0F3D2E]">
@@ -42,7 +42,7 @@ function PanduanEfisiensiCard() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3 text-xs text-gray-600">
-        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3.5">
           <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-600 shrink-0 mt-0.5">
             <Lightbulb size={13} />
           </span>
@@ -54,7 +54,7 @@ function PanduanEfisiensiCard() {
           </div>
         </div>
 
-        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3.5">
           <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-50 text-blue-600 shrink-0 mt-0.5">
             <Bike size={13} />
           </span>
@@ -66,7 +66,7 @@ function PanduanEfisiensiCard() {
           </div>
         </div>
 
-        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3">
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#FAFCFB] border border-gray-100 p-3.5">
           <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 shrink-0 mt-0.5">
             <TreePine size={13} />
           </span>
@@ -79,7 +79,7 @@ function PanduanEfisiensiCard() {
         </div>
       </div>
 
-      <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
+      <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs">
         <span className="text-gray-500 font-medium">Punya foto aksi nyata pelestarian lingkungan hari ini?</span>
         <Link href="/dashboard/eco-action" className="font-bold text-[#1D9E75] hover:text-[#15803D] hover:underline">
           Verifikasi Foto Aksi →
@@ -174,7 +174,7 @@ export default function TrackerPageClient() {
           )}
         </AnimatePresence>
 
-        {/* ── Tab Aktivitas: Layout 2 Baris Seimbang Sempurna ── */}
+        {/* ── Tab Aktivitas: Seluruh Baris Berpasangan Sejajar (Zero Void Gap) ── */}
         {activeTab === "aktivitas" && (
           <motion.div
             key="tab-aktivitas"
@@ -184,9 +184,9 @@ export default function TrackerPageClient() {
             transition={{ duration: 0.15 }}
             className="flex flex-col gap-5 lg:gap-6"
           >
-            {/* Baris 1: Grafik & Distribusi Emisi (Kiri) berhadapan dengan Form Catat Aktivitas (Kanan) */}
-            <div className="grid gap-5 lg:gap-6 lg:grid-cols-12 items-start">
-              <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
+            {/* Baris 1: Grafik Tren Emisi (Kiri 58%) SEJAJAR DENGAN Form Catat Aktivitas (Kanan 42%) */}
+            <div className="grid gap-5 lg:gap-6 lg:grid-cols-12 items-stretch">
+              <div className="lg:col-span-7 flex flex-col">
                 <ErrorBoundary>
                   <TrendEmisiChart
                     data={emptyData}
@@ -194,28 +194,33 @@ export default function TrackerPageClient() {
                     onViewChange={setChartView}
                   />
                 </ErrorBoundary>
-                <BreakdownKategori />
               </div>
 
-              <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6">
+              <div className="lg:col-span-5 flex flex-col">
                 <CatatAktivitasBaru
                   onGoToListrik={() => setActiveTab("listrik")}
                 />
               </div>
             </div>
 
-            {/* Baris 2: Target Reduksi Emisi & Tolok Ukur Surabaya Berdampingan (50% - 50%) */}
-            <div className="grid gap-5 lg:gap-6 md:grid-cols-2 items-start">
+            {/* Baris 2: Perbandingan Emisi vs Surabaya (Kiri 50%) SEJAJAR DENGAN Distribusi Kategori (Kanan 50%) */}
+            <div className="grid gap-5 lg:gap-6 md:grid-cols-2 items-stretch">
+              <ComparisonEmisiChart />
+              <BreakdownKategori />
+            </div>
+
+            {/* Baris 3: Target Reduksi Emisi (Kiri 50%) SEJAJAR DENGAN Tolok Ukur Surabaya (Kanan 50%) */}
+            <div className="grid gap-5 lg:gap-6 md:grid-cols-2 items-stretch">
               <TargetEmisiDanSimulasi />
               <BenchmarkEmisiSurabaya />
             </div>
 
-            {/* Baris 3: Panduan Efisiensi Energi Warga Melebar Penuh (3 Kolom Sejajar) */}
+            {/* Baris 4: Panduan Efisiensi Energi Warga Melebar Penuh (3 Kolom Horizontal) */}
             <PanduanEfisiensiCard />
           </motion.div>
         )}
 
-        {/* ── Tab Struk Listrik PLN: Layout Proporsional Tanpa Ruang Kosong ── */}
+        {/* ── Tab Struk Listrik PLN: Seluruh Baris Berpasangan Sejajar (Zero Void Gap) ── */}
         {activeTab === "listrik" && (
           <motion.div
             key="tab-listrik"
@@ -225,19 +230,16 @@ export default function TrackerPageClient() {
             transition={{ duration: 0.15 }}
             className="flex flex-col gap-5 lg:gap-6"
           >
-            {/* Baris 1: Form & Analisis Listrik (Kiri 58%) berhadapan dengan Target & Tolok Ukur (Kanan 42%) */}
-            <div className="grid gap-5 lg:gap-6 lg:grid-cols-12 items-start">
-              <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
-                <DataListrik />
-              </div>
+            {/* Baris 1: Modul Data Listrik yang Masing-masing Mode-nya Sudah 2 Kolom Sejajar */}
+            <DataListrik />
 
-              <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6">
-                <TargetEmisiDanSimulasi />
-                <BenchmarkEmisiSurabaya />
-              </div>
+            {/* Baris 2: Target Reduksi Emisi (Kiri 50%) SEJAJAR DENGAN Tolok Ukur Surabaya (Kanan 50%) */}
+            <div className="grid gap-5 lg:gap-6 md:grid-cols-2 items-stretch">
+              <TargetEmisiDanSimulasi />
+              <BenchmarkEmisiSurabaya />
             </div>
 
-            {/* Baris 2: Panduan Efisiensi Energi Warga Melebar Penuh */}
+            {/* Baris 3: Panduan Efisiensi Energi Warga Melebar Penuh (3 Kolom Horizontal) */}
             <PanduanEfisiensiCard />
           </motion.div>
         )}
