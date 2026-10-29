@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Scale, TrendingDown, ArrowRight, Bus, Trash2, Zap } from "lucide-react";
+import { BarChart2, TrendingDown, ArrowRight, Bus, Trash2, Zap } from "lucide-react";
 
 export default function BenchmarkEmisiSurabaya() {
   return (
@@ -11,7 +11,7 @@ export default function BenchmarkEmisiSurabaya() {
         <div className="flex items-center justify-between border-b border-gray-100 pb-3.5 mb-4">
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-[#0F3D2E]">
-              <Scale size={16} />
+              <BarChart2 size={16} />
             </span>
             <div>
               <h3 className="text-sm font-bold text-[#0F3D2E]">

@@ -186,3 +186,14 @@ Berdasarkan evaluasi terhadap kesejajaran visual antarmuka modul Pelacak Karbon 
      - *Kolom Kiri*: Kartu Ringkasan Rata-rata 6 Bulan Terakhir & Rekomendasi Efisiensi; *Kolom Kanan*: Tabel Riwayat Pemakaian 6 Bulan (Bulan, kWh, Status).
    - Di bawah modul `DataListrik`, Baris 2 menampilkan Target Reduksi Emisi dan Tolok Ukur Surabaya berdampingan sejajar (50% - 50%), diikuti oleh Panduan Efisiensi Energi Warga di Baris 3.
    - Seluruh celah kosong (*blank void space*) di kedua tab berhasil dihilangkan sepenuhnya, menghasilkan tata letak yang proporsional, padat karya, dan sejajar di seluruh tingkat.
+
+
+---
+
+## 11. Penyelarasan Ikonik Header Tolok Ukur Emisi Surabaya (`BenchmarkEmisiSurabaya.tsx`)
+
+Berdasarkan tinjauan visual ornamen antarmuka:
+- **Penggantian Ikon Neraca Hukum (`Scale`)**:
+  - Ikon sebelumnya menggunakan timbangan kehakiman/hukum (`Scale` ⚖️), yang tidak kontekstual dan tampak seperti pilihan acak model AI generatif (*AI slop*) untuk menerjemahkan kata "tolok ukur/scale".
+  - Ikon tersebut telah diganti dengan **`BarChart2`** (tiga batang komparasi data statistik) dari pustaka resmi Lucide.
+  - Ikon `BarChart2` merepresentasikan data acuan komparasi emisi kota (DLH Surabaya & ESDM) secara presisi, profesional, dan serasi berdampingan dengan ikon `<Target />` pada kartu Target Reduksi Emisi di baris yang sama.
