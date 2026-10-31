@@ -1,3 +1,3 @@
 # Riwayat Pengembangan PACUL (Catatan Aktivitas Tim)
 
-- [2026-10-10] perbaikan: integrasikan pilar kearifan lokal Surabaya (Gotong Royong & Kampung Bersih)
+- [2026-10-31] refactor: verifikasi seluruh skenario pengujian smoke test portal warga dan pemkot
